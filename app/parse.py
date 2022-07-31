@@ -1,11 +1,11 @@
-import csv
-import os.path
 import requests
 
 from dataclasses import dataclass, astuple
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
+
+from app.writer import FileWriter
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -34,20 +34,24 @@ class Author:
 author_cache = set()
 
 
+def create_author(soup):
+    return Author(
+        name=soup.select_one(".author-title").text,
+        born_date=soup.select_one(".author-born-date").text,
+        born_location=soup.select_one(".author-born-location").text,
+        description=soup.select_one(".author-description").text
+    )
+
+
 def parse_author(author_data):
     author_name = author_data.select_one(".author").text
     author_url = author_data.select_one("span a")["href"]
+    author_writer = FileWriter(AUTHORS_OUTPUT_PATH, AUTHORS_COLUMN_NAMES)
 
     if author_url not in author_cache:
         soup = get_soup(urljoin(BASE_URL, author_url))
-        author = Author(
-            name=author_name,
-            born_date=soup.select_one(".author-born-date").text,
-            born_location=soup.select_one(".author-born-location").text,
-            description=soup.select_one(".author-description").text
-        )
-
-        write_author_to_file(author)
+        author = create_author(soup)
+        author_writer.write_elements(author)
         author_cache.add(author_url)
 
     return author_name
@@ -71,35 +75,6 @@ def get_single_page_quotes(soup):
     return all_quotes
 
 
-def write_elements_to_file(elements, path):
-    with open(path, mode="a", encoding="UTF8", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerows([astuple(element) for element in elements])
-
-
-def write_quotes_to_file(quotes, output_csv_path):
-    if not os.path.exists(output_csv_path):
-        create_empty_file(output_csv_path, QUOTES_COLUMN_NAMES)
-    write_elements_to_file(elements=quotes, path=output_csv_path)
-
-
-def write_author_to_file(author):
-    if not os.path.exists(AUTHORS_OUTPUT_PATH):
-        create_empty_file(AUTHORS_OUTPUT_PATH, AUTHORS_COLUMN_NAMES)
-    write_elements_to_file(elements=(author,), path=AUTHORS_OUTPUT_PATH)
-
-
-def create_empty_file(path, columns):
-    with open(
-            path,
-            mode="w",
-            encoding="UTF8",
-            newline=""
-    ) as file:
-        writer = csv.writer(file)
-        writer.writerow(columns)
-
-
 def get_soup(url):
     page = requests.get(url).content
     return BeautifulSoup(page, "html.parser")
@@ -107,10 +82,11 @@ def get_soup(url):
 
 def main(output_csv_path: str) -> None:
     target_url = BASE_URL
+    quotes_writer = FileWriter(output_csv_path, QUOTES_COLUMN_NAMES)
     while True:
         soup = get_soup(target_url)
         quotes = get_single_page_quotes(soup)
-        write_quotes_to_file(quotes, output_csv_path)
+        quotes_writer.write_elements(quotes)
         next_page = soup.select_one(".next")
         if not next_page:
             break

@@ -13,7 +13,7 @@ QUOTES_OUTPUT_PATH = "quotes.csv"
 QUOTES_COLUMN_NAMES = ("text", "author", "tags")
 
 AUTHORS_OUTPUT_PATH = "authors.csv"
-AUTHORS_COLUMN_NAMES = ("Name", "Birth day", "Born location", "Description")
+AUTHORS_COLUMN_NAMES = ("Name", "Birthday", "Born location", "Description")
 
 
 @dataclass
@@ -79,28 +79,25 @@ def write_elements_to_file(elements, path):
 
 def write_quotes_to_file(quotes, output_csv_path):
     if not os.path.exists(output_csv_path):
-        with open(
-                output_csv_path,
-                mode="w",
-                encoding="UTF8",
-                newline=""
-        ) as file:
-            writer = csv.writer(file)
-            writer.writerow(QUOTES_COLUMN_NAMES)
+        create_empty_file(output_csv_path, QUOTES_COLUMN_NAMES)
     write_elements_to_file(elements=quotes, path=output_csv_path)
 
 
 def write_author_to_file(author):
     if not os.path.exists(AUTHORS_OUTPUT_PATH):
-        with open(
-                AUTHORS_OUTPUT_PATH,
-                mode="w",
-                encoding="UTF8",
-                newline=""
-        ) as file:
-            writer = csv.writer(file)
-            writer.writerow(AUTHORS_COLUMN_NAMES)
+        create_empty_file(AUTHORS_OUTPUT_PATH, AUTHORS_COLUMN_NAMES)
     write_elements_to_file(elements=(author,), path=AUTHORS_OUTPUT_PATH)
+
+
+def create_empty_file(path, columns):
+    with open(
+            path,
+            mode="w",
+            encoding="UTF8",
+            newline=""
+    ) as file:
+        writer = csv.writer(file)
+        writer.writerow(columns)
 
 
 def get_soup(url):

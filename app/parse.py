@@ -1,6 +1,6 @@
 import requests
 
-from dataclasses import dataclass, astuple
+from dataclasses import dataclass
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup

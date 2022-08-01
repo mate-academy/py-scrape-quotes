@@ -18,7 +18,8 @@ AUTHORS_NAMES = []
 logging.basicConfig(
     level=logging.DEBUG,
     format="[%(levelname)8s]: %(message)s",
-    handlers=[logging.FileHandler("parser.log"), logging.StreamHandler(sys.stdout)],
+    handlers=[logging.FileHandler("parser.log"),
+              logging.StreamHandler(sys.stdout)],
 )
 
 

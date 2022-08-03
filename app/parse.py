@@ -75,8 +75,16 @@ def main(output_csv_path: str) -> None:
 
         counter += 1
 
-    create_csv_file(output_csv_path, list_of_data, ["text", "author", "tags"])
-    create_csv_file("biography.csv", biography, ["author", "born", "description"])
+    create_csv_file(
+        output_csv_path,
+        list_of_data,
+        ["text", "author", "tags"]
+    )
+    create_csv_file(
+        "biography.csv",
+        biography,
+        ["author", "born", "description"]
+    )
 
 
 if __name__ == "__main__":

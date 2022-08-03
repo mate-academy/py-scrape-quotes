@@ -35,7 +35,9 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
         tags=list(
-            quote_soup.select_one(".keywords")["content"].replace(",", " ").split()
+            quote_soup.select_one(".keywords")["content"].replace(
+                ",", " "
+            ).split()
         ),
     )
 
@@ -47,7 +49,7 @@ def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
 
 
 def parse_all_quotes():
-    logging.info(f"Start parsing...")
+    logging.info("Start parsing...")
     page = requests.get(BASE_URL).content
     first_page_soup = BeautifulSoup(page, "html.parser")
     all_quotes = get_single_page_quotes(first_page_soup)
@@ -62,7 +64,7 @@ def parse_all_quotes():
 
         page_number += 1
 
-    logging.info(f"Done!")
+    logging.info("Done!")
 
     return all_quotes
 

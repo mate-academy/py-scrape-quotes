@@ -4,7 +4,7 @@ from dataclasses import dataclass, fields, astuple
 import requests
 from bs4 import BeautifulSoup
 
-BASE_URL = "https://quotes.toscrape.com/"
+BASE_URL = "https://quotes.toscrape.com"
 
 
 @dataclass
@@ -56,7 +56,7 @@ def get_all_quotes():
     while True:
         if next_page_exists(current_page_soup):
             page = requests.get(
-                BASE_URL + "page/" + f"{next_page_num}"
+                f"{BASE_URL}/page/{next_page_num}"
             ).content
             print(f"Parsing page #{next_page_num}")
             current_page_soup = BeautifulSoup(page, "html.parser")

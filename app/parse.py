@@ -14,6 +14,7 @@ class Quote:
 
 def main(output_csv_path: str) -> None:
     i = 1
+    all_the_quotes = []
     while True:
 
         site = requests.get(f"https://quotes.toscrape.com/page/{i}").content
@@ -28,15 +29,18 @@ def main(output_csv_path: str) -> None:
                 tag_content = tag.text
                 all_tags.append(tag_content)
             quote = Quote(text=text, author=author, tags=all_tags)
-            #data = f"{quote.text}, {quote.author}"
-            # with open("output.csv", "w", newline='', encoding='utf-8') as csvfile:
-            #     writer = csv.writer(csvfile)
-            #     writer.writerow(data)
+            one_quote = [quote.text, quote.author, quote.tags]
+            all_the_quotes.append(one_quote)
+        i += 1
         next = soup.find('nav').find("li", {"class": "next"})
         if not next:
             break
-        i += 1
+    student_header = ['name', 'age', 'major', 'minor']
+    with open(output_csv_path, 'w', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(student_header)
+        writer.writerows(all_the_quotes)
 
-print(main('quotes.csv'))
-# if __name__ == "__main__":
-#     main("quotes.csv")
+
+if __name__ == "__main__":
+    main("quotes.csv")

@@ -23,7 +23,7 @@ AUTHOR_FIELDS = [field.name for field in fields(Author)]
 
 def refactor_author_name(name: str) -> str:
     if "." in name:
-        author = [i.replace(".", "-") for i in name.split()]
+        author = [part_name.replace(".", "-") for part_name in name.split()]
         return ("-".join(author)).replace("--", "-")
 
     return name.replace(" ", "-")

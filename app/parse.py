@@ -50,7 +50,7 @@ def parse_single_author(author) -> dict:
     return get_detail_of_author(page_soup)
 
 
-all_authors = {}  # dictionary in which all information about the authors is stored
+all_authors = {}
 
 
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:

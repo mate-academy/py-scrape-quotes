@@ -28,14 +28,16 @@ class Quote:
 
 
 def get_detail_of_author(author_soup: BeautifulSoup) -> dict:
-    date_of_born = author_soup.select_one(".author-born-date").text
-    place_of_born = author_soup.select_one(".author-born-location").text
+    date_born = author_soup.select_one(".author-born-date").text
+    place_born = author_soup.select_one(".author-born-location").text.replace(
+        "in ", ""
+    )
     descriptions = author_soup.select_one(".author-description").text
 
     return {
-        "date_of_born": date_of_born,
-        "place_of_born": place_of_born,
-        "descriptions": descriptions
+        "date_of_born": date_born,
+        "place_of_born": place_born,
+        "descriptions": descriptions,
     }
 
 
@@ -43,7 +45,13 @@ def parse_single_author(author) -> dict:
     if author[-1] == ".":
         author = author[:-1]
 
-    author = author.replace(". ", "-").replace(" ", "-").replace(".", "-").replace("é", "-").replace("'", "")
+    author = (
+        author.replace(". ", "-")
+        .replace(" ", "-")
+        .replace(".", "-")
+        .replace("é", "e")
+        .replace("'", "")
+    )
 
     page = requests.get(f"{HOME_PAGE}/author/{author}/").content
     page_soup = BeautifulSoup(page, "html.parser")
@@ -89,8 +97,9 @@ def get_all_authors() -> list[Author]:
             full_name=author,
             place_of_born=all_authors[author]["place_of_born"],
             date_of_born=all_authors[author]["date_of_born"],
-            descriptions=all_authors[author]["descriptions"]
-        ) for author in all_authors
+            descriptions=all_authors[author]["descriptions"],
+        )
+        for author in all_authors
     ]
 
 

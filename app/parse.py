@@ -39,11 +39,11 @@ def get_num_pages():
     while True:
         page = requests.get(url).content
         soup = BeautifulSoup(page, "html.parser")
-        next_page_element = soup.select_one('li.next > a')
+        next_page_element = soup.select_one("li.next > a")
 
         if next_page_element:
             count += 1
-            next_page_url = next_page_element.get('href')
+            next_page_url = next_page_element.get("href")
             url = urljoin(url, next_page_url)
         else:
             break
@@ -59,10 +59,9 @@ def get_single_page_quotes(page_soup):
 def get_quotes():
     all_quotes = []
     num_pages = get_num_pages()
-    url = "http://quotes.toscrape.com/page/"
 
     for page_num in range(1, num_pages + 1):
-        url = urljoin(url, str(page_num))
+        url = urljoin(URL, ("page/" + str(page_num)))
         page = requests.get(url).content
         soup = BeautifulSoup(page, "html.parser")
         all_quotes.extend(get_single_page_quotes(soup))

@@ -33,7 +33,7 @@ def parse_single_quote(quote_soup):
 
 
 def get_num_pages():
-    url = "http://quotes.toscrape.com/page/1/"
+    url = URL + "page/1/"
     count = 1
 
     while True:

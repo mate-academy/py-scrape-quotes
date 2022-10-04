@@ -51,7 +51,9 @@ def main(output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
-        writer.writerows([astuple(parse_single_quote(quote)) for quote in quotes])
+        writer.writerows(
+            [astuple(parse_single_quote(quote)) for quote in quotes]
+        )
 
 
 if __name__ == "__main__":

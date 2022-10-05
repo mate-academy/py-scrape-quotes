@@ -28,7 +28,7 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> [Quote]:
     )
 
 
-def get_page_content(page_number):
+def get_page_content(page_number: int) -> [BeautifulSoup]:
     page = requests.get(PAGE_URL.format(page_number)).content
     page_content = BeautifulSoup(page, "html.parser")
     return page_content

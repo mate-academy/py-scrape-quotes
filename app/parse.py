@@ -7,6 +7,7 @@ import csv
 import requests
 
 BASE_URL = "https://quotes.toscrape.com/"
+PAGE_URL = f"{BASE_URL}page/{{}}"
 
 
 @dataclass
@@ -28,7 +29,7 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> [Quote]:
 
 
 def get_page_content(page_number):
-    page = requests.get(f"{BASE_URL}/page/{page_number}").content
+    page = requests.get(PAGE_URL.format(page_number)).content
     page_content = BeautifulSoup(page, "html.parser")
     return page_content
 

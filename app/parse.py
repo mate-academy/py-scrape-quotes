@@ -14,7 +14,7 @@ class Quote:
     tags: list[str]
 
 
-def parse_single_page(url: str, quotes: list[Quote]):
+def parse_single_page(url: str, quotes: list[Quote]) -> None:
     page = requests.get(url).content
     soup = BeautifulSoup(page, "html.parser")
     quotes_on_page = soup.select(".quote")
@@ -37,8 +37,8 @@ def main(output_csv_path: str) -> None:
     quote_list = []
     parse_single_page(BASE_URL, quote_list)
     with open(output_csv_path, "w", encoding="utf-8", newline="") as f:
-        w = DataclassWriter(f, quote_list, Quote)
-        w.write()
+        writer = DataclassWriter(f, quote_list, Quote)
+        writer.write()
 
 
 if __name__ == "__main__":

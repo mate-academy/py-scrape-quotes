@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup, Tag
 import requests
 
 BASE_URL = "https://quotes.toscrape.com/"
-PAGE_URL = BASE_URL + "page/{page_number}"
 
 
 @dataclass

@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup, Tag
 import requests
 
 BASE_URL = "https://quotes.toscrape.com/"
+PAGE_URL = BASE_URL + "page/{page_number}"
 
 
 @dataclass
@@ -37,7 +38,7 @@ def get_quotes() -> [Quote]:
 
     while soup.select_one(".next") is not None:
         page = requests.get(
-            f"https://quotes.toscrape.com/page/{page_num}/"
+            PAGE_URL.format(page_number=page_num)
         ).content
         soup = BeautifulSoup(page, "html.parser")
         result.extend(get_single_page_quotes(soup))

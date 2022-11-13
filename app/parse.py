@@ -3,6 +3,8 @@ from dataclasses import dataclass, fields, astuple
 
 import requests
 from bs4 import BeautifulSoup, Tag
+from tqdm import tqdm
+
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -39,21 +41,13 @@ def get_single_page_quotes(page_soup: Tag) -> [Quote]:
 
 def get_all_quotes() -> [Quote]:
     page = requests.get(BASE_URL).content
-    page_soup = BeautifulSoup(page, "html.parser")
-    all_quotes = get_single_page_quotes(page_soup)
+    first_page_soup = BeautifulSoup(page, "html.parser")
+    all_quotes = get_single_page_quotes(first_page_soup)
 
-    page_number = 2
-
-    while True:
-        if page_soup.select(".next"):
-            page = requests.get(f"{BASE_URL}/page/{page_number}/").content
-            page_soup = BeautifulSoup(page, "html.parser")
-            all_quotes.extend(get_single_page_quotes(page_soup))
-
-            page_number += 1
-
-        else:
-            break
+    for page_number in tqdm(range(2, 11)):
+        page = requests.get(f"{BASE_URL}/page/{page_number}/").content
+        page_soup = BeautifulSoup(page, "html.parser")
+        all_quotes.extend(get_single_page_quotes(page_soup))
 
     return all_quotes
 

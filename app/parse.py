@@ -20,7 +20,7 @@ QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
-        text=quote_soup.select_one(".text").text[1:-1],
+        text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
         tags=[data.get_text() for data in quote_soup.select("a.tag")],
     )

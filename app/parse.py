@@ -39,7 +39,9 @@ def get_home_products() -> [Quote]:
     all_products = get_single_page_quotes(page_soup)
 
     while page_soup.select_one("li.next"):
-        next_page = requests.get(urljoin(BASE_URL, page_soup.select_one("li.next > a")["href"])).content
+        next_page = requests.get(urljoin(
+            BASE_URL, page_soup.select_one("li.next > a")["href"]
+        )).content
 
         soup = BeautifulSoup(next_page, "html.parser")
         all_products.extend(get_single_page_quotes(soup))
@@ -50,7 +52,7 @@ def get_home_products() -> [Quote]:
 
 
 def main(output_csv_path: str) -> None:
-    with open(output_csv_path, "w", encoding='utf-8', newline="") as file:
+    with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in get_home_products()])

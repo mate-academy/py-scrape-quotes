@@ -1,6 +1,5 @@
 import csv
 from dataclasses import dataclass
-from dataclass_csv import DataclassWriter
 
 import requests
 from bs4 import BeautifulSoup
@@ -27,6 +26,9 @@ class Author:
     def __str__(self) -> str:
         return self.name
 
+    def __iter__(self) -> iter:
+        return iter([self.name, self.biography])
+
 
 def get_biography(link_to_author: str) -> str:
     page = requests.get(f"{BASE_URL}/{link_to_author}").content
@@ -42,8 +44,8 @@ def save_authors(authors: list[Author]) -> None:
               10,
               "utf-8",
               newline="") as file_to_save:
-        writer = DataclassWriter(file_to_save, authors, Author)
-        writer.write()
+        writer = csv.writer(file_to_save)
+        writer.writerows(authors)
         file_to_save.close()
 
 

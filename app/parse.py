@@ -49,8 +49,8 @@ def save_authors(authors: list[Author]) -> None:
         file_to_save.close()
 
 
-def get_quites(parse_authors: bool = False) -> list[Quote]:
-    quites = []
+def get_quotes(parse_authors: bool = False) -> list[Quote]:
+    quotes = []
     authors = []
     has_next = True
     num_page = 1
@@ -62,20 +62,20 @@ def get_quites(parse_authors: bool = False) -> list[Quote]:
             text = block.select_one(".text").text
             author = block.select_one(".author").text
             if parse_authors:
-                if len([author_ for author_ in authors
-                        if author_.name == author]) == 0:
+                if len([row_author for row_author in authors
+                        if row_author.name == author]) == 0:
                     need_content = block.contents[3]
                     biography = get_biography(need_content.a.attrs["href"])
                     authors.append(Author(author, biography))
             tags = [tag.text for tag in block.select(".tag")]
-            quites.append(Quote(text=text, author=author, tags=tags))
+            quotes.append(Quote(text=text, author=author, tags=tags))
         has_next = soup.select_one(".next")
         num_page += 1
 
     if parse_authors:
         save_authors(authors)
 
-    return quites
+    return quotes
 
 
 def main(output_csv_path: str) -> None:
@@ -84,7 +84,7 @@ def main(output_csv_path: str) -> None:
         fieldnames = [" text", "author", "tags"]
         writer = csv.writer(file_to_save)
         writer.writerow(fieldnames)
-        writer.writerows(get_quites(parse_authors=False))
+        writer.writerows(get_quotes(parse_authors=False))
 
 
 if __name__ == "__main__":

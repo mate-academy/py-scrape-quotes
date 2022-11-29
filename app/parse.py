@@ -1,6 +1,7 @@
 import asyncio
 import csv
 from dataclasses import dataclass
+from typing import Any
 
 import aiohttp
 from bs4 import BeautifulSoup
@@ -19,7 +20,7 @@ class Quote:
 
 
 def parse_tag(soup: BeautifulSoup) -> list[str]:
-    return [i.get_text() for i in soup.find_all('a', 'tag')]
+    return [i.get_text() for i in soup.find_all("a", "tag")]
 
 
 def create_quote(quote_soup: BeautifulSoup) -> Quote:
@@ -34,7 +35,7 @@ def create_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-async def get_quotes(session, url) -> list[Quote]:
+async def get_quotes(session: Any, url: str) -> list[Quote]:
     async with session.get(url) as resp:
         data = await resp.text()
         soup = BeautifulSoup(data, "html.parser")
@@ -46,7 +47,7 @@ async def get_quotes(session, url) -> list[Quote]:
         return [create_quote(quote) for quote in quotes]
 
 
-async def parse_site():
+async def parse_site() -> Any:
     async with aiohttp.ClientSession() as session:
         quotes = []
         for page in range(1, 11):
@@ -61,9 +62,9 @@ async def parse_site():
 def main(output_csv_path: str) -> None:
     data = asyncio.run(parse_site())
 
-    with open(output_csv_path, 'w') as csvfile:
+    with open(output_csv_path, "w") as csvfile:
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(['text', 'author', "tags"])
+        csvwriter.writerow(["text", "author", "tags"])
         for page in data:
             for quote in page:
                 csvwriter.writerow([quote.text, quote.author, quote.tags])

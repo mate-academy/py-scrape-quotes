@@ -1,6 +1,5 @@
 import csv
 from pathlib import Path
-
 from app.parse import main, Quote
 
 BASE_DIR = Path(__file__).resolve().parent

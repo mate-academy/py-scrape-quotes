@@ -1,35 +1,15 @@
-from dataclasses import dataclass, fields, astuple
 from typing import Any
+from app.writer_csv import write_to_csv,\
+    save_to_csv,\
+    save_authors_to_csv,\
+    Author,\
+    Quote
 
 import requests
 from bs4 import BeautifulSoup, Tag
-import csv
 from urllib.parse import urljoin
 
-
 MAIN_PAGE = "https://quotes.toscrape.com/"
-
-
-@dataclass
-class Author:
-    lib = []
-    name: str
-    born_date: str
-    born_location: str
-    biography: str
-
-
-PRODUCT_FIELDS_AUTHORS = [field.name for field in fields(Author)]
-
-
-@dataclass
-class Quote:
-    text: str
-    author: str
-    tags: list[str]
-
-
-PRODUCT_FIELDS = [field.name for field in fields(Quote)]
 
 
 def parse_single_quote(soup: Tag) -> Quote:
@@ -78,16 +58,11 @@ def parse_authors(url: str) -> [Author]:
 
 
 def main(output_csv_path: str) -> None:
-    with open(output_csv_path, "w", encoding="utf-8", newline="") as quote:
-        writer = csv.writer(quote)
-        writer.writerow(PRODUCT_FIELDS)
-    with open("Authors.csv", "w", encoding="utf-8", newline="") as author:
-        writer = csv.writer(author)
-        writer.writerow(PRODUCT_FIELDS_AUTHORS)
-    new_func_to_pass_tests(output_csv_path, MAIN_PAGE)
+    write_to_csv(output_csv_path)
+    parse_with_recurtion(output_csv_path, MAIN_PAGE)
 
 
-def new_func_to_pass_tests(output_csv_path: str, url: str = None) -> Any:
+def parse_with_recurtion(output_csv_path: str, url: str = None) -> Any:
     request_for_page = requests.get(url)
     soup = BeautifulSoup(request_for_page.content, "html.parser")
     need_to_parse = soup.select(".col-md-8 .quote")
@@ -97,21 +72,9 @@ def new_func_to_pass_tests(output_csv_path: str, url: str = None) -> Any:
     save_authors_to_csv("Authors.csv", all_authors)
     try:
         page = urljoin(MAIN_PAGE, find_another_page(soup))
-        return new_func_to_pass_tests(output_csv_path, page)
+        return parse_with_recurtion(output_csv_path, page)
     except AttributeError:
         print("no more pages")
-
-
-def save_to_csv(output_csv_path: str, all_quote: [Quote]) -> None:
-    with open(output_csv_path, "a", encoding="utf-8", newline="") as quote:
-        writer = csv.writer(quote)
-        writer.writerows([astuple(x) for x in all_quote])
-
-
-def save_authors_to_csv(output_csv_path: str, all_authors: [Author]) -> None:
-    with open(output_csv_path, "a", encoding="utf-8", newline="") as author:
-        writer = csv.writer(author)
-        writer.writerows([astuple(author) for author in all_authors])
 
 
 if __name__ == "__main__":

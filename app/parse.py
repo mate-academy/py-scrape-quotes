@@ -1,9 +1,9 @@
 from typing import Any
-from app.writer_csv import write_to_csv,\
-    save_to_csv,\
-    save_authors_to_csv,\
-    Author,\
-    Quote
+from app.writer_csv import (write_to_csv,
+                            save_to_csv,
+                            save_authors_to_csv,
+                            Author,
+                            Quote)
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -16,7 +16,8 @@ def parse_single_quote(soup: Tag) -> Quote:
     return Quote(
         text=soup.select_one(".text").text,
         author=soup.select_one(".author").text,
-        tags=soup.select_one(".tags").text[32:].split())
+        tags=soup.select_one(".tags").text[32:].split()
+    )
 
 
 def find_another_page(soup: BeautifulSoup) -> str:

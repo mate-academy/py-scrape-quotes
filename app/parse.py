@@ -22,21 +22,24 @@ def get_quote(quote: BeautifulSoup) -> Quote:
     )
 
 
-def get_all_quotes_from_page(num_of_page: int) -> [Quote]:
-    page = requests.get(f"{BASE_URL}/page/{num_of_page}/").content
+def get_all_quotes_from_page(num_of_page: int) -> list[Quote]:
+    try:
+        page = requests.get(f"{BASE_URL}/page/{num_of_page}/").content
+    except ConnectionError:
+        pass
     soup = BeautifulSoup(page, "html.parser")
     quotes_soup = soup.select(".quote")
     return [get_quote(quote) for quote in quotes_soup]
 
 
-def qet_quotes_from_all_pages() -> [Quote]:
+def qet_quotes_from_all_pages() -> list[Quote]:
     num_of_page = 1
     all_quotes = []
     while True:
         page_of_quotes = get_all_quotes_from_page(num_of_page)
         if len(page_of_quotes) == 0:
             break
-        all_quotes += page_of_quotes
+        all_quotes.extend(page_of_quotes)
         num_of_page += 1
     return all_quotes
 
@@ -46,7 +49,7 @@ def main(output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(field.name for field in fields(Quote))
-        writer.writerows([astuple(quote) for quote in all_quotes])
+        writer.writerows(astuple(quote) for quote in all_quotes)
 
 
 if __name__ == "__main__":

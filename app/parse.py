@@ -26,7 +26,7 @@ def get_all_quotes_from_page(num_of_page: int) -> list[Quote]:
     try:
         page = requests.get(f"{BASE_URL}/page/{num_of_page}/").content
     except ConnectionError:
-        pass
+        page = []
     soup = BeautifulSoup(page, "html.parser")
     quotes_soup = soup.select(".quote")
     return [get_quote(quote) for quote in quotes_soup]

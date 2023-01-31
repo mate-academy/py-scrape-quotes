@@ -43,7 +43,7 @@ def get_quotes() -> [Quote]:
 def main(output_csv_path: str) -> None:
     quotes = get_quotes()
     print(quotes)
-    with open(output_csv_path, "w", encoding="utf-8") as file:
+    with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([field.name for field in fields(Quote)])
         writer.writerows([astuple(quote) for quote in quotes])

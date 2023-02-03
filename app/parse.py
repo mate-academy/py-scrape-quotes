@@ -48,7 +48,7 @@ def parse_quotes_on_the_page(page_soup: BeautifulSoup) -> list[Quote]:
 
 def get_next_quotes_from_pages(
         current_page_soup: BeautifulSoup
-) -> collections.Iterable:
+) -> collections:
     next_page_tag = current_page_soup.select_one(".pager > .next > a")
     while next_page_tag:
         next_page_url = get_absolute_url(BASE_URL, next_page_tag["href"])

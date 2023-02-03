@@ -6,17 +6,12 @@ from urllib.parse import urljoin
 import requests
 from bs4 import Tag, BeautifulSoup
 
-BASE_URL = "https://quotes.toscrape.com/"
-
 
 @dataclass
 class Quote:
     text: str
     author: str
     tags: list[str]
-
-
-QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
 def get_absolute_url(base_url: str, relative_url: str) -> str:
@@ -47,11 +42,12 @@ def parse_quotes_on_the_page(page_soup: BeautifulSoup) -> list[Quote]:
 
 
 def get_next_quotes_from_pages(
-        current_page_soup: BeautifulSoup
+        current_page_soup: BeautifulSoup,
+        base_url: str
 ) -> collections:
     next_page_tag = current_page_soup.select_one(".pager > .next > a")
     while next_page_tag:
-        next_page_url = get_absolute_url(BASE_URL, next_page_tag["href"])
+        next_page_url = get_absolute_url(base_url, next_page_tag["href"])
         page_soup = get_page_soup(next_page_url)
         yield parse_quotes_on_the_page(page_soup)
 
@@ -62,18 +58,20 @@ def get_all_quotes(url: str) -> list[Quote]:
     page_soup = get_page_soup(url)
     quotes = parse_quotes_on_the_page(page_soup)
 
-    for page_quotes in get_next_quotes_from_pages(page_soup):
+    for page_quotes in get_next_quotes_from_pages(page_soup, url):
         quotes.extend(page_quotes)
 
     return quotes
 
 
 def main(output_csv_path: str) -> None:
-    quotes = get_all_quotes(BASE_URL)
+    quote_fields = [field.name for field in fields(Quote)]
+    base_url = "https://quotes.toscrape.com/"
+    quotes = get_all_quotes(base_url)
 
     with open(output_csv_path, "w") as csv_file:
         writer = csv.writer(csv_file)
-        writer.writerow(QUOTE_FIELDS)
+        writer.writerow(quote_fields)
         writer.writerows(
             [
                 [getattr(quote, field.name) for field in fields(Quote)]

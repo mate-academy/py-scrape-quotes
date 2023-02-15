@@ -36,19 +36,19 @@ def parse_single_quote(page_soup: BeautifulSoup) -> Quote:
 def parse_author(page_soup: BeautifulSoup) -> Author:
     return Author(
         biography=page_soup.select_one(
-            ".author-details"
+            ".author-title"
         ).text.replace("\n", " "),
     )
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> ([Quote], [str]):
+def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
     quotes = page_soup.select(".quote")
-    list_quote = []
-    list_author = []
-    for quote in quotes:
-        list_quote.append(parse_single_quote(quote))
-        list_author.append(quote.select_one("a").get("href"))
-    return list_quote, list_author
+    return [parse_single_quote(quote) for quote in quotes]
+
+
+def get_single_page_authors(page_soup: BeautifulSoup) -> [str]:
+    quotes = page_soup.select(".quote")
+    return [quote.select_one("a").get("href") for quote in quotes]
 
 
 def get_page_soup(page_soup: BeautifulSoup = None) -> BeautifulSoup:
@@ -76,22 +76,24 @@ def get_author_bio(set_author_urls: {str}) -> [Author]:
 
 def get_quotes() -> ([Quote], [Author]):
     list_quote = []
-    list_author_urls = []
+    list_authors_url = []
     page_soup = get_page_soup()
 
     next_page = True
     while next_page:
-        quote_list, author_list_urls = get_single_page_quotes(page_soup)
-
-        list_quote.extend(quote_list)
-        list_author_urls.extend(author_list_urls)
+        list_quote.extend(
+            get_single_page_quotes(page_soup)
+        )
+        list_authors_url.extend(
+            get_single_page_authors(page_soup)
+        )
 
         if not page_soup.find("li", class_="next"):
             next_page = False
         else:
             page_soup = get_page_soup(page_soup)
 
-    list_author_bio = get_author_bio(set(list_author_urls))
+    list_author_bio = get_author_bio(set(list_authors_url))
     return list_quote, list_author_bio
 
 
@@ -109,7 +111,7 @@ def write_authors_in_file(authors: [Author], output_csv_path: str) -> None:
         writer.writerows([astuple(author) for author in authors])
 
 
-def main(output_csv_path: str) -> None:
+def main(output_csv_path: str = None) -> None:
     quotes, authors = get_quotes()
     write_quotes_in_file(quotes, output_csv_path)
     write_authors_in_file(authors, "authors.csv")

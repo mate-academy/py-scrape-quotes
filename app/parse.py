@@ -5,7 +5,7 @@ from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
-session = requests_cache.CachedSession('demo_cache')
+session = requests_cache.CachedSession("cache")
 
 
 BASE_URL = "https://quotes.toscrape.com/"
@@ -23,8 +23,13 @@ class Quote:
 QUOTES_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_single_quote(quote_soup: BeautifulSoup, home_url, session) -> Quote:
-    url_about_author = urljoin(home_url, quote_soup.select_one("span > a")["href"])
+def parse_single_quote(
+        quote_soup: BeautifulSoup,
+        home_url: str,
+        session: requests_cache
+) -> Quote:
+    url_about_author = urljoin(
+        home_url, quote_soup.select_one("span > a")["href"])
     page = session.get(url_about_author).content
     soup = BeautifulSoup(page, "html.parser")
     description = soup.select_one("div.author-description").text
@@ -32,17 +37,23 @@ def parse_single_quote(quote_soup: BeautifulSoup, home_url, session) -> Quote:
         text=quote_soup.select_one("span.text").text,
         author=quote_soup.select_one("span > small.author").text,
         about_author=description.lstrip(),
-        tags=[tag_soup.text for tag_soup in quote_soup.select("div.tags > a.tag")]
+        tags=[
+            tag_soup.text for tag_soup in quote_soup.select(
+                "div.tags > a.tag")
+        ]
     )
     return quote
 
 
-def get_home_quotes():
+def get_home_quotes() -> [Quote]:
     session = requests_cache.CachedSession(BASE_URL)
     page_first = session.get(BASE_URL).content
     soup = BeautifulSoup(page_first, "html.parser")
     quotes = soup.select(".quote")
-    all_quotes = [parse_single_quote(quote_soup, BASE_URL, session) for quote_soup in quotes]
+    all_quotes = [
+        parse_single_quote(
+            quote_soup, BASE_URL, session) for quote_soup in quotes
+    ]
     url_next_page = soup.select_one("nav > ul > li.next > a")["href"]
     while url_next_page:
         home_url = urljoin(BASE_URL, url_next_page)
@@ -54,12 +65,15 @@ def get_home_quotes():
         else:
             url_next_page = 0
 
-        all_quotes.extend([parse_single_quote(quote_soup, home_url, session) for quote_soup in quotes])
+        all_quotes.extend([
+            parse_single_quote(
+                quote_soup, home_url, session) for quote_soup in quotes
+        ])
 
     return all_quotes
 
 
-def write_qoutes_to_csv(quotes: [Quote]):
+def write_qoutes_to_csv(quotes: [Quote]) -> None:
     with open(QUOTES_OUTPUT_CSV_PATH, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTES_FIELDS)

@@ -79,9 +79,9 @@ def write_qoutes_to_csv(quotes: [Quote], file_out_csv: str) -> None:
         writer.writerows([astuple(quote) for quote in quotes])
 
 
-def main(file_out_csv: str) -> None:
+def main(output_csv_path: str) -> None:
     all_quotes = get_home_quotes()
-    write_qoutes_to_csv(all_quotes, file_out_csv)
+    write_qoutes_to_csv(all_quotes, output_csv_path)
 
 
 if __name__ == "__main__":

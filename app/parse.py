@@ -6,7 +6,6 @@ from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-
 BASE_URL = "https://quotes.toscrape.com"
 AUTHORS_URL_SET = set()
 
@@ -21,6 +20,10 @@ class Quote:
 @dataclass
 class Author:
     biography: str
+
+
+QUOTE_FIELDS = [field.name for field in fields(Quote)]
+AUTHOR_FIELDS = [field.name for field in fields(Author)]
 
 
 def parse_single_quote(page_soup: BeautifulSoup) -> Quote:
@@ -39,26 +42,21 @@ def parse_single_author(page_soup: BeautifulSoup) -> Author:
     )
 
 
-def write_quotes_in_file(quotes: [Quote], output_csv_path: str) -> None:
-    quote_fields = [field.name for field in fields(Quote)]
-    with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
+def write_list_in_file(
+        name_path_file_csv: str,
+        name_file: list[object],
+        fields: list[fields],
+) -> None:
+    with open(name_path_file_csv, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(quote_fields)
-        writer.writerows([astuple(quote) for quote in quotes])
-
-
-def write_authors_in_file(authors: [Author]) -> None:
-    author_fields = [field.name for field in fields(Author)]
-    with open("authors.csv", "w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(author_fields)
-        writer.writerows([astuple(author) for author in authors])
+        writer.writerow(fields)
+        writer.writerows([astuple(name) for name in name_file])
 
 
 def get_authors_page_soup(
         page_soup: list[BeautifulSoup]
 ) -> list[BeautifulSoup]:
-    list_authors = []
+    authors = []
     for author_url in page_soup:
         url = urljoin(
             BASE_URL,
@@ -66,51 +64,60 @@ def get_authors_page_soup(
         )
         if url not in AUTHORS_URL_SET:
             page = requests.get(url).content
-            list_authors.append(BeautifulSoup(page, "html.parser"))
+            authors.append(BeautifulSoup(page, "html.parser"))
         AUTHORS_URL_SET.add(url)
-    return list_authors
+    return authors
 
 
 def get_all_page_soup() -> list[BeautifulSoup]:
-    list_page_soup = []
+    result_page_soup = []
 
     page = requests.get(BASE_URL).content
     page_soup = BeautifulSoup(page, "html.parser")
-    list_page_soup.append(page_soup.select(".quote"))
+    result_page_soup.append(page_soup.select(".quote"))
 
     while page_soup.find("li", class_="next"):
         pagination = page_soup.select_one(".next > a").get("href")
         next_url = urljoin(BASE_URL, pagination)
         page = requests.get(next_url).content
         page_soup = BeautifulSoup(page, "html.parser")
-        list_page_soup.append(page_soup.select(".quote"))
-    return list_page_soup
+        result_page_soup.append(page_soup.select(".quote"))
+    return result_page_soup
 
 
 def get_quotes(list_page_soup: BeautifulSoup) -> list[Quote]:
-    quotes_list = []
+    result_quotes = []
     for page_soup in list_page_soup:
         for quote in page_soup:
-            quotes_list.append(parse_single_quote(quote))
-    return quotes_list
+            result_quotes.append(parse_single_quote(quote))
+    return result_quotes
 
 
 def get_authors(list_page_soup: BeautifulSoup) -> list[Author]:
-    authors_list = []
+    result_authors = []
     for page_soup in list_page_soup:
         authors_page_soup = get_authors_page_soup(page_soup)
         for author in authors_page_soup:
-            authors_list.append(parse_single_author(author))
-    return authors_list
+            result_authors.append(parse_single_author(author))
+    return result_authors
 
 
 def main(output_csv_path: str) -> None:
-    list_page_soup = get_all_page_soup()
+    page_soup = get_all_page_soup()
 
-    quotes_list = get_quotes(list_page_soup)
-    authors_list = get_authors(list_page_soup)
-    write_quotes_in_file(quotes_list, output_csv_path)
-    write_authors_in_file(authors_list)
+    result_quotes = get_quotes(page_soup)
+    result_authors = get_authors(page_soup)
+
+    write_list_in_file(
+        output_csv_path,
+        result_quotes,
+        QUOTE_FIELDS
+    )
+    write_list_in_file(
+        "authors.csv",
+        result_authors,
+        AUTHOR_FIELDS
+    )
 
 
 if __name__ == "__main__":

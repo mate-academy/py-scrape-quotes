@@ -9,7 +9,6 @@ session = requests_cache.CachedSession("cache")
 
 
 BASE_URL = "https://quotes.toscrape.com/"
-QUOTES_OUTPUT_CSV_PATH = "quotes.csv"
 
 
 @dataclass
@@ -73,17 +72,17 @@ def get_home_quotes() -> [Quote]:
     return all_quotes
 
 
-def write_qoutes_to_csv(quotes: [Quote]) -> None:
-    with open(QUOTES_OUTPUT_CSV_PATH, "w") as file:
+def write_qoutes_to_csv(quotes: [Quote], file_out_csv: str) -> None:
+    with open(file_out_csv, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTES_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])
 
 
-def main() -> None:
+def main(file_out_csv) -> None:
     all_quotes = get_home_quotes()
-    write_qoutes_to_csv(all_quotes)
+    write_qoutes_to_csv(all_quotes, file_out_csv)
 
 
 if __name__ == "__main__":
-    main()
+    main("quotes.csv")

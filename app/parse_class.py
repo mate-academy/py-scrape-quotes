@@ -34,11 +34,11 @@ class ParseQuote:
 
     @staticmethod
     def _write_list_in_file(
-            name_path_file_csv: str,
+            output_csv_path: str,
             name_file: list[object],
             fields: list[fields],
     ) -> None:
-        with open(name_path_file_csv, "w", newline="", encoding="utf-8") as file:
+        with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(fields)
             writer.writerows([astuple(name) for name in name_file])

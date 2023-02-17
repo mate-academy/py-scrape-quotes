@@ -1,13 +1,14 @@
 import csv
 import time
+from concurrent.futures import ProcessPoolExecutor, wait
+
 import requests
+import threading
+import multiprocessing
 
 from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-
-BASE_URL = "https://quotes.toscrape.com"
-AUTHORS_URL_SET = set()
 
 
 @dataclass
@@ -22,102 +23,107 @@ class Author:
     biography: str
 
 
+BASE_URL = "https://quotes.toscrape.com"
+global_quotes = []
+global_authors = []
+authors_page_soup = set()
+
+
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 AUTHOR_FIELDS = [field.name for field in fields(Author)]
 
 
-def parse_single_quote(page_soup: BeautifulSoup) -> Quote:
-    return Quote(
+def parse_single_quote(page_soup: BeautifulSoup) -> None:
+    global_quotes.append(Quote(
         text=page_soup.select_one(".text").text,
         author=page_soup.select_one(".author").text,
         tags=[tag.text for tag in page_soup.select(".tag")]
-    )
+    ))
 
 
-def parse_single_author(page_soup: BeautifulSoup) -> Author:
-    return Author(
+def parse_single_author(page_soup: BeautifulSoup) -> None:
+    global_authors.append(Author(
         biography=page_soup.select_one(
             ".author-details"
         ).text.replace("\n", " "),
-    )
+    ))
 
 
 def write_list_in_file(
         output_csv_path: str,
-        name_file: list[object],
-        fields: list[fields],
+        name_file: list,
+        field: list[fields],
 ) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(fields)
-        writer.writerows([astuple(name) for name in name_file])
-
-
-def get_authors_page_soup(
-        page_soup: list[BeautifulSoup]
-) -> list[BeautifulSoup]:
-    authors = []
-    for author_url in page_soup:
-        url = urljoin(
-            BASE_URL,
-            author_url.select_one("a").get("href")
+        writer.writerow(field)
+        writer.writerows(
+            [astuple(dataclass_inst) for dataclass_inst in name_file]
         )
-        if url not in AUTHORS_URL_SET:
-            page = requests.get(url).content
-            authors.append(BeautifulSoup(page, "html.parser"))
-        AUTHORS_URL_SET.add(url)
-    return authors
+
+
+def get_author_soup(author_url: BeautifulSoup) -> None:
+    url = urljoin(
+        BASE_URL,
+        author_url.select_one("a").get("href")
+    )
+    page = requests.get(url).content
+    authors_page_soup.add(BeautifulSoup(page, "html.parser"))
 
 
 def get_all_page_soup() -> list[BeautifulSoup]:
-    result_page_soup = []
+    all_page_soup = []
 
     page = requests.get(BASE_URL).content
     page_soup = BeautifulSoup(page, "html.parser")
-    result_page_soup.append(page_soup.select(".quote"))
+    all_page_soup.append(page_soup.select(".quote"))
 
     while page_soup.find("li", class_="next"):
         pagination = page_soup.select_one(".next > a").get("href")
         next_url = urljoin(BASE_URL, pagination)
         page = requests.get(next_url).content
         page_soup = BeautifulSoup(page, "html.parser")
-        result_page_soup.append(page_soup.select(".quote"))
-    return result_page_soup
-
-
-def get_quotes(list_page_soup: BeautifulSoup) -> list[Quote]:
-    result_quotes = []
-    for page_soup in list_page_soup:
-        for quote in page_soup:
-            result_quotes.append(parse_single_quote(quote))
-    return result_quotes
-
-
-def get_authors(list_page_soup: BeautifulSoup) -> list[Author]:
-    result_authors = []
-    for page_soup in list_page_soup:
-        authors_page_soup = get_authors_page_soup(page_soup)
-        for author in authors_page_soup:
-            result_authors.append(parse_single_author(author))
-    return result_authors
+        all_page_soup.append(page_soup.select(".quote"))
+    return all_page_soup
 
 
 def main(output_csv_path: str) -> None:
     page_soup = get_all_page_soup()
 
-    result_quotes = get_quotes(page_soup)
-    result_authors = get_authors(page_soup)
+    tasks = []
+    for page in page_soup:
+        for quote in page:
+            tasks.append(threading.Thread(
+                target=parse_single_quote,
+                args=(quote,))
+            )
+            tasks[-1].start()
 
-    write_list_in_file(
-        output_csv_path,
-        result_quotes,
-        QUOTE_FIELDS
-    )
-    write_list_in_file(
-        "authors.csv",
-        result_authors,
-        AUTHOR_FIELDS
-    )
+        for author_url in page:
+            tasks.append(threading.Thread(
+                target=get_author_soup,
+                args=(author_url,))
+            )
+            tasks[-1].start()
+    for task in tasks:
+        task.join()
+
+    tasks = []
+    for authors in authors_page_soup:
+        tasks.append(threading.Thread(
+            target=parse_single_author,
+            args=(authors,))
+        )
+        tasks[-1].start()
+    for task in tasks:
+        task.join()
+
+    with ProcessPoolExecutor(multiprocessing.cpu_count() - 1) as executor:
+        futures = [executor.submit(write_list_in_file,
+                                   output_csv_path, global_quotes, QUOTE_FIELDS),
+                   executor.submit(write_list_in_file,
+                                   "authors.csv", global_authors, AUTHOR_FIELDS)]
+    wait(futures)
 
 
 if __name__ == "__main__":

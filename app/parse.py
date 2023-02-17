@@ -120,9 +120,13 @@ def main(output_csv_path: str) -> None:
 
     with ProcessPoolExecutor(multiprocessing.cpu_count() - 1) as executor:
         futures = [executor.submit(write_list_in_file,
-                                   output_csv_path, global_quotes, QUOTE_FIELDS),
+                                   output_csv_path,
+                                   global_quotes,
+                                   QUOTE_FIELDS),
                    executor.submit(write_list_in_file,
-                                   "authors.csv", global_authors, AUTHOR_FIELDS)]
+                                   "authors.csv",
+                                   global_authors,
+                                   AUTHOR_FIELDS)]
     wait(futures)
 
 

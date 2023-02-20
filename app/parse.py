@@ -14,10 +14,6 @@ class Quote:
     tags: list[str]
 
 
-BASE_URL = "https://quotes.toscrape.com/"
-QUOTES_FIELDS = [field.name for field in fields(Quote)]
-
-
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     quote = Quote(
         text=quote_soup.select_one("span.text").text,
@@ -32,7 +28,8 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
 
 
 def get_home_quotes() -> list[Quote]:
-    page_first = requests.get(BASE_URL).content
+    base_url = "https://quotes.toscrape.com/"
+    page_first = requests.get(base_url).content
     soup = BeautifulSoup(page_first, "html.parser")
     quotes_soup = soup.select(".quote")
     next_page_name = soup.select_one("nav > ul > li.next > a")["href"]
@@ -41,7 +38,7 @@ def get_home_quotes() -> list[Quote]:
             quote_soup) for quote_soup in quotes_soup
     ]
     while next_page_name:
-        url_next_page = urljoin(BASE_URL, next_page_name)
+        url_next_page = urljoin(base_url, next_page_name)
         page = requests.get(url_next_page).content
         soup = BeautifulSoup(page, "html.parser")
         quotes_soup = soup.select(".quote")
@@ -59,9 +56,10 @@ def get_home_quotes() -> list[Quote]:
 
 
 def write_qoutes_to_csv(quotes: list[Quote], file_out_csv: str) -> None:
+    quotes_fields = [field.name for field in fields(Quote)]
     with open(file_out_csv, "w") as file:
         writer = csv.writer(file)
-        writer.writerow(QUOTES_FIELDS)
+        writer.writerow(quotes_fields)
         writer.writerows([astuple(quote) for quote in quotes])
 
 

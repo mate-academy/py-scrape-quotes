@@ -32,8 +32,9 @@ def get_path_to_next_page(url: str) -> Union[str, bool]:
     return False
 
 
-def parse_single_page_quotes() -> List[Quote]:
-    quotes = get_page_html(BASE_URL).select(".quote")
+def parse_single_page_quotes(url: str) -> List[Quote]:
+    current_url = url
+    quotes = get_page_html(current_url).select(".quote")
     quotes_text = [text.select_one(".text").text for text in quotes]
     quotes_author = [
         text.select_one(".author").text for text in quotes

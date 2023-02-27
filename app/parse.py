@@ -49,15 +49,21 @@ def get_quotes_from_single_page(url: str) -> List[Quote]:
     ]
 
 
-def get_all_quotes(url: str) -> List[Quote]:
-    quotes_generator = (
-        quote
-        for page in range(1, float("inf"))
-        if (url := url + f"page/{page}/")
-        if (quotes := get_quotes_from_single_page(url))
-        for quote in quotes
-    )
-    return list(quotes_generator)
+def get_all_quotes(url: str) -> list[Quote]:
+    current_url = url
+
+    quotes = get_quotes_from_single_page(current_url)
+    page = 1
+
+    while True:
+        page += 1
+        next_page_url = url + f"page/{page}/"
+        quotes_from_page = get_quotes_from_single_page(next_page_url)
+        if not quotes_from_page:
+            break
+        quotes.extend(quotes_from_page)
+
+    return quotes
 
 
 def main(output_csv_path: str) -> None:

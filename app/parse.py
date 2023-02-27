@@ -60,7 +60,8 @@ def get_all_quotes(url: str) -> list[Quote]:
 
     while get_path_to_next_page(current_url):
         page += 1
-        quotes += parse_single_page_quotes(urljoin(current_url, f"page/{page}/"))
+        current_url = url + f"page/{page}/"
+        quotes += parse_single_page_quotes(current_url)
     return quotes
 
 

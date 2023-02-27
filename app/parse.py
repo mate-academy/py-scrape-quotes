@@ -62,6 +62,7 @@ def get_all_quotes(url: str) -> list[Quote]:
         page += 1
         current_url = url + f"page/{page}/"
         quotes += parse_single_page_quotes(current_url)
+
     return quotes
 
 

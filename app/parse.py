@@ -5,17 +5,12 @@ import csv
 import requests
 from bs4 import BeautifulSoup
 
-BASE_URL = "https://quotes.toscrape.com/"
-
 
 @dataclass
 class Quote:
     text: str
     author: str
     tags: list[str]
-
-
-QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
 def get_page_html(url: str) -> BeautifulSoup:
@@ -65,13 +60,15 @@ def get_all_quotes(url: str) -> list[Quote]:
 
 
 def main(output_csv_path: str) -> None:
-    pass
+    base_url = "https://quotes.toscrape.com/"
+    quote_fields = [field.name for field in fields(Quote)]
+
     with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
-        quotes = get_all_quotes(BASE_URL)
-        writer.writerow(QUOTE_FIELDS)
+        quotes = get_all_quotes(base_url)
+        writer.writerow(quote_fields)
         writer.writerows(astuple(quote) for quote in quotes)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main("quotes.csv")

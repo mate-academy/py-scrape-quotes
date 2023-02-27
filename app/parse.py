@@ -1,28 +1,21 @@
-from typing import List, Union
+from dataclasses import dataclass, fields, astuple
+from typing import Union
 import csv
 
 import requests
 from bs4 import BeautifulSoup
 
-
 BASE_URL = "https://quotes.toscrape.com/"
 
 
+@dataclass
 class Quote:
-    def __init__(
-            self,
-            text: str,
-            author: str,
-            tags: List[str]
-    ) -> None:
-        self.text = text
-        self.author = author
-        self.tags = tuple(tags)
+    text: str
+    author: str
+    tags: list[str]
 
-    def __repr__(self) -> str:
-        return f"Quote(text='{self.text}'," \
-               f" author='{self.author}'," \
-               f" tags={self.tags})"
+
+QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
 def get_page_html(url: str) -> BeautifulSoup:
@@ -31,51 +24,54 @@ def get_page_html(url: str) -> BeautifulSoup:
 
 
 def get_path_to_next_page(url: str) -> Union[str, bool]:
-    link_to_next_page = get_page_html(url).select_one(".pager > .next")
+    link_to_next_page = get_page_html(url).select_one(
+        ".pager > .next")
     if link_to_next_page:
-        return link_to_next_page.find_next("a")["href"][1:]
+        return str(link_to_next_page.find_next("a")["href"])[1:]
     return False
 
 
-def get_quotes_from_single_page(url: str) -> List[Quote]:
-    quotes_div = get_page_html(url).select(".quote")
+def get_quote_from_single_page(url: str) -> list[Quote]:
+    current_url = url
+    quotes = get_page_html(current_url).select(".quote")
+    quotes_text = [text.select_one(".text").text for text in quotes]
+    quotes_author = [
+        text.select_one(".author").text for text in quotes
+    ]
+    quotes_tags = [
+        [tag.text for tag in text.select(".tag")] for text in quotes
+    ]
     return [
         Quote(
-            text=text.select_one(".text").text,
-            author=text.select_one(".author").text,
-            tags=[tag.text for tag in text.select(".tag")],
-        )
-        for text in quotes_div
+            text=quotes_text[index],
+            author=quotes_author[index],
+            tags=quotes_tags[index]
+        ) for index in range(len(quotes))
     ]
 
 
 def get_all_quotes(url: str) -> list[Quote]:
     current_url = url
 
-    quotes = get_quotes_from_single_page(current_url)
+    quotes = get_quote_from_single_page(current_url)
     page = 1
 
-    while True:
+    while get_path_to_next_page(current_url):
         page += 1
-        next_page_url = url + f"page/{page}/"
-        quotes_from_page = get_quotes_from_single_page(next_page_url)
-        if not quotes_from_page:
-            break
-        quotes.extend(quotes_from_page)
+        current_url = url + f"page/{page}/"
+        quotes += get_quote_from_single_page(current_url)
 
     return quotes
 
 
 def main(output_csv_path: str) -> None:
+    pass
     with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
         quotes = get_all_quotes(BASE_URL)
-        writer.writerow(("text", "author", "tags"))
-        writer.writerows(
-            (quote.text, quote.author, quote.tags)
-            for quote in quotes
-        )
+        writer.writerow(QUOTE_FIELDS)
+        writer.writerows(astuple(quote) for quote in quotes)
 
 
-if __name__ == "__main__":
+if __name__ == "main":
     main("quotes.csv")

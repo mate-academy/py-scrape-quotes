@@ -25,15 +25,15 @@ def get_page_html(url: str) -> BeautifulSoup:
 
 def get_path_to_next_page(url: str) -> Union[str, bool]:
     link_to_next_page = get_page_html(url).select_one(
-        ".pager > .next")
+        ".pager > .next"
+    )
     if link_to_next_page:
         return str(link_to_next_page.find_next("a")["href"])[1:]
     return False
 
 
-def parse_single_page_quotes(url: str) -> List[Quote]:
-    current_url = url
-    quotes = get_page_html(current_url).select(".quote")
+def parse_single_page_quotes() -> List[Quote]:
+    quotes = get_page_html(BASE_URL).select(".quote")
     quotes_text = [text.select_one(".text").text for text in quotes]
     quotes_author = [
         text.select_one(".author").text for text in quotes
@@ -58,8 +58,7 @@ def get_all_quotes(url: str) -> list[Quote]:
 
     while get_path_to_next_page(current_url):
         page += 1
-        current_url = url + f"page/{page}/"
-        quotes += parse_single_page_quotes(current_url)
+        quotes += parse_single_page_quotes(url + f"page/{page}/")
 
     return quotes
 

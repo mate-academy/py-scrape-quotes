@@ -37,9 +37,3 @@ def save_to_csv(output_csv_path: str, all_quote: [Quote]) -> None:
     with open(output_csv_path, "a", encoding="utf-8", newline="") as quote:
         writer = csv.writer(quote)
         writer.writerows([astuple(x) for x in all_quote])
-
-
-def save_authors_to_csv(output_csv_path: str, all_authors: [Author]) -> None:
-    with open(output_csv_path, "a", encoding="utf-8", newline="") as author:
-        writer = csv.writer(author)
-        writer.writerows([astuple(author) for author in all_authors])

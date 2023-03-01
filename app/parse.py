@@ -1,7 +1,6 @@
 from typing import Any
 from app.writer_csv import (write_to_csv,
                             save_to_csv,
-                            save_authors_to_csv,
                             Author,
                             Quote)
 
@@ -70,7 +69,7 @@ def parse_with_recurtion(output_csv_path: str, url: str = None) -> Any:
     all_quote = [parse_single_quote(quote) for quote in need_to_parse]
     save_to_csv(output_csv_path, all_quote)
     all_authors = parse_authors(url)
-    save_authors_to_csv("Authors.csv", all_authors)
+    save_to_csv("Authors.csv", all_authors)
     try:
         page = urljoin(MAIN_PAGE, find_another_page(soup))
         return parse_with_recurtion(output_csv_path, page)

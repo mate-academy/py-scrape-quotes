@@ -13,9 +13,6 @@ class Quote:
     tags: list[str]
 
 
-QOTE_FIELD = [field.name for field in fields(Quote)]
-
-
 def get_parse_single_qoute(qoute: Tag) -> Quote:
     tags = qoute.select_one(".keywords")["content"].split(",")
     if tags == ['']:
@@ -47,10 +44,11 @@ def get_all_qoutes() -> [Quote]:
 
 
 def main(output_csv_path: str) -> None:
+    qote_field = [field.name for field in fields(Quote)]
     quotes = get_all_qoutes()
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(QOTE_FIELD)
+        writer.writerow(qote_field)
         writer.writerows([astuple(quote) for quote in quotes])
 
 

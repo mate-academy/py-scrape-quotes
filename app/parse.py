@@ -12,9 +12,6 @@ class Quote:
     tags: list[str]
 
 
-BASE_URL = "https://quotes.toscrape.com/"
-
-
 def get_single_quote(product_soup: Tag) -> Quote:
     tags = [product_soup.select_one(".tags > .keywords")["content"]]
     tags_with_spaces = []
@@ -43,6 +40,7 @@ def check_next_page(product_soup: BeautifulSoup) -> int:
 
 
 def get_quotes() -> list[Quote]:
+    BASE_URL = "https://quotes.toscrape.com/"
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
     next_page = check_next_page(soup)

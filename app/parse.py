@@ -40,14 +40,14 @@ def check_next_page(product_soup: BeautifulSoup) -> int:
 
 
 def get_quotes() -> list[Quote]:
-    BASE_URL = "https://quotes.toscrape.com/"
-    page = requests.get(BASE_URL).content
+    base_url = "https://quotes.toscrape.com/"
+    page = requests.get(base_url).content
     soup = BeautifulSoup(page, "html.parser")
     next_page = check_next_page(soup)
     all_quotes = get_single_page_quotes(soup)
 
     while next_page:
-        next_url = requests.get(f"{BASE_URL}page/{next_page}/").content
+        next_url = requests.get(f"{base_url}page/{next_page}/").content
         soup = BeautifulSoup(next_url, "html.parser")
         all_quotes.extend(get_single_page_quotes(soup))
         next_page = check_next_page(soup)

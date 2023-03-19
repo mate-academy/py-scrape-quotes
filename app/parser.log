@@ -1,0 +1,259 @@
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/2/ HTTP/1.1" 200 13734
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/3/ HTTP/1.1" 200 10018
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/4/ HTTP/1.1" 200 10314
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/5/ HTTP/1.1" 200 10001
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/6/ HTTP/1.1" 200 10405
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/7/ HTTP/1.1" 200 10711
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/8/ HTTP/1.1" 200 11382
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/9/ HTTP/1.1" 200 11011
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/10/ HTTP/1.1" 200 9932
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/2/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/2/ HTTP/1.1" 200 13734
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/3/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/3/ HTTP/1.1" 200 10018
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/4/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/4/ HTTP/1.1" 200 10314
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/5/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/5/ HTTP/1.1" 200 10001
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/6/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/6/ HTTP/1.1" 200 10405
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/7/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/7/ HTTP/1.1" 200 10711
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/8/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/8/ HTTP/1.1" 200 11382
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/9/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/9/ HTTP/1.1" 200 11011
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/10/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/10/ HTTP/1.1" 200 9932
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/2/ HTTP/1.1" 200 13734
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/3/ HTTP/1.1" 200 10018
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/4/ HTTP/1.1" 200 10314
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/5/ HTTP/1.1" 200 10001
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/6/ HTTP/1.1" 200 10405
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/7/ HTTP/1.1" 200 10711
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/8/ HTTP/1.1" 200 11382
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/9/ HTTP/1.1" 200 11011
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/10/ HTTP/1.1" 200 9932
+[    INFO]: Start parsing page # <Response [200]>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/2/ HTTP/1.1" 200 13734
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/2/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/3/ HTTP/1.1" 200 10018
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/3/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/4/ HTTP/1.1" 200 10314
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/4/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/5/ HTTP/1.1" 200 10001
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/5/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/6/ HTTP/1.1" 200 10405
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/6/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/7/ HTTP/1.1" 200 10711
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/7/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/8/ HTTP/1.1" 200 11382
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/8/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/9/ HTTP/1.1" 200 11011
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/9/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/10/ HTTP/1.1" 200 9932
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/10/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/2/ HTTP/1.1" 200 13734
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/3/ HTTP/1.1" 200 10018
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/4/ HTTP/1.1" 200 10314
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/5/ HTTP/1.1" 200 10001
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/6/ HTTP/1.1" 200 10405
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/7/ HTTP/1.1" 200 10711
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/8/ HTTP/1.1" 200 11382
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/9/ HTTP/1.1" 200 11011
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/10/ HTTP/1.1" 200 9932
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/2/ HTTP/1.1" 200 13734
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/2/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/3/ HTTP/1.1" 200 10018
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/3/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/4/ HTTP/1.1" 200 10314
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/4/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/5/ HTTP/1.1" 200 10001
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/5/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/6/ HTTP/1.1" 200 10405
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/6/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/7/ HTTP/1.1" 200 10711
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/7/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/8/ HTTP/1.1" 200 11382
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/8/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/9/ HTTP/1.1" 200 11011
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/9/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/10/ HTTP/1.1" 200 9932
+[    INFO]: Start parsing page # <li class="next">
+<a href="/page/10/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET / HTTP/1.1" 200 11053
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/2/ HTTP/1.1" 200 13734
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/2/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/3/ HTTP/1.1" 200 10018
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/3/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/4/ HTTP/1.1" 200 10314
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/4/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/5/ HTTP/1.1" 200 10001
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/5/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/6/ HTTP/1.1" 200 10405
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/6/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/7/ HTTP/1.1" 200 10711
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/7/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/8/ HTTP/1.1" 200 11382
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/8/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/9/ HTTP/1.1" 200 11011
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/9/">Next <span aria-hidden="true">→</span></a>
+</li>
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET //page/10/ HTTP/1.1" 200 9932
+[    INFO]: Start parsing page <li class="next">
+<a href="/page/10/">Next <span aria-hidden="true">→</span></a>
+</li>

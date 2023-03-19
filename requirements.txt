@@ -1,3 +1,4 @@
+asyncio==3.4.3
 attrs==22.2.0
 beautifulsoup4==4.11.2
 certifi==2022.12.7
@@ -8,6 +9,7 @@ flake8-quotes==3.3.1
 flake8-variables-names==0.0.5
 idna==3.4
 iniconfig==2.0.0
+logging-tree==1.9
 mccabe==0.7.0
 packaging==23.0
 pep8-naming==0.13.2

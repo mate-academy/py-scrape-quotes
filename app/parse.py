@@ -34,12 +34,12 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_single_page_quote(quote_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quote(quote_soup: BeautifulSoup) -> list[Quote]:
     quotes = quote_soup.select(".quote")
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     page = requests.get(Quote.BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
     all_quotes = get_single_page_quote(soup)

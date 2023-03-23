@@ -54,13 +54,13 @@ def main(output_csv_path: str) -> None:
                 writer.writerow(
                     [quote.text, quote.author, quote.tags],
                 )
-            try:
+            if soup.select_one(".next"):
                 page_url = urllib.parse.urljoin(
                     QUOTE_URL, soup.select_one(".next > a")["href"]
                 )
                 page = requests.get(page_url).content
                 soup = BeautifulSoup(page, "html.parser")
-            except TypeError:
+            else:
                 break
 
 

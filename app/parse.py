@@ -1,10 +1,12 @@
 import csv
 from dataclasses import dataclass, fields, astuple
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup
 
 SCRAPE_HOME_URL = "https://quotes.toscrape.com/"
+MAX_PAGE_NUM = 11
 
 
 @dataclass
@@ -17,7 +19,7 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_list_tags(quote_soup: BeautifulSoup) -> list[str]:
+def parse_list_tags(quote_soup: BeautifulSoup) -> List[str]:
     tags_soup = quote_soup.select(".tags > .tag")
     tags = [tag.text for tag in tags_soup]
 
@@ -37,18 +39,18 @@ def get_url_next_page(page_number: str) -> str:
     return url
 
 
-def get_single_page_quote(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quote(page_soup: BeautifulSoup) -> List[Quote]:
     quotes = page_soup.select(".quote")
 
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_all_quotes() -> list:
-    page_num = 0
+def get_all_quotes() -> List[Quote]:
+    current_page_num = 0
     all_quotes = []
-    while page_num < 11:
-        page_num += 1
-        url = get_url_next_page(str(page_num))
+    while current_page_num < MAX_PAGE_NUM:
+        current_page_num += 1
+        url = get_url_next_page(str(current_page_num))
         page = requests.get(url)
         page_soup = BeautifulSoup(page.text, "html.parser")
         all_quotes.extend(get_single_page_quote(page_soup))
@@ -56,7 +58,7 @@ def get_all_quotes() -> list:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote]) -> None:
+def write_quotes_to_csv(quotes: List[Quote]) -> None:
     with open("result.csv", "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)

@@ -1,8 +1,8 @@
-from dataclasses import dataclass, astuple, fields
-from bs4 import BeautifulSoup, Tag
-
-import requests
 import csv
+import requests
+
+from bs4 import BeautifulSoup, Tag
+from dataclasses import dataclass, astuple, fields
 
 
 HOME_URL = "https://quotes.toscrape.com/"

@@ -50,9 +50,9 @@ def get_all_quotes() -> list[Quote]:
 def main(output_csv_path: str) -> None:
     quotes = get_all_quotes()
     with open(output_csv_path, "w") as file:
-        file = csv.writer(file)
-        file.writerow([field.name for field in fields(Quote)])
-        file.writerows([astuple(quote) for quote in quotes])
+        csv_file = csv.writer(file)
+        csv_file.writerow([field.name for field in fields(Quote)])
+        csv_file.writerows([astuple(quote) for quote in quotes])
 
 
 if __name__ == "__main__":

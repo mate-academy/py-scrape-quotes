@@ -14,7 +14,7 @@ class Quote:
     tags: list[str]
 
 
-def get_single_page_quotes(page_soup):
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     quotes_list = []
     quotes = page_soup.select(".quote")
 

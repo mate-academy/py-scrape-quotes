@@ -1,5 +1,4 @@
 import csv
-import time
 from dataclasses import dataclass
 
 import requests
@@ -56,7 +55,4 @@ def main(output_csv_path: str) -> None:
 
 
 if __name__ == "__main__":
-    start = time.perf_counter()
     main("quotes.csv")
-    end = time.perf_counter()
-    print("Elapsed:", end - start)

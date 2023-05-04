@@ -33,6 +33,7 @@ def get_all_quotes() -> list[Quote]:
     first_page_soup = BeautifulSoup(req, "html.parser")
     all_quotes = parse_single_page_quotes(first_page_soup)
     next_page = first_page_soup.select_one(".next > a")
+
     with requests.Session() as session:
         while next_page:
             response = session.get(f'{URL}{next_page.attrs["href"]}')

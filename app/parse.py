@@ -4,7 +4,6 @@ import requests
 from dataclasses import dataclass
 from bs4 import BeautifulSoup
 
-BASE_URL = "http://quotes.toscrape.com"
 PAGES_URL = "https://quotes.toscrape.com/page/"
 
 
@@ -15,9 +14,8 @@ class Quote:
     tags: list[str]
 
 
-def get_quotes() -> tuple[list[Quote], dict]:
+def get_quotes() -> list[Quote]:
     quotes_list = []
-    biography_link = {}
 
     page_num = 1
     quotes = BeautifulSoup(
@@ -33,40 +31,26 @@ def get_quotes() -> tuple[list[Quote], dict]:
                 tags=[tag.text for tag in quote.select(".tag")]
             ))
 
-            author_link = quote.find("a", href=True)
-            biography_link[quote.select_one(
-                ".author").text] = (BASE_URL + author_link["href"])
-
         page_num += 1
         quotes = BeautifulSoup(
             requests.get(f"{PAGES_URL}{page_num}/").content,
             "html.parser"
         ).select(".quote")
 
-    return quotes_list, biography_link
+    return quotes_list
 
 
-def main(output_csv_path: str, links_csv_path: str) -> None:
+def main(output_csv_path: str) -> None:
 
-    with (open(output_csv_path, "w", newline="") as csv_quotes,
-          open(links_csv_path, "w", newline="") as csv_links):
+    with open(output_csv_path, "w", newline="") as csv_quotes:
         headers = ["text", "author", "tags"]
-        writer = csv.writer(csv_quotes, delimiter=";")
+        writer = csv.writer(csv_quotes)
         writer.writerow(headers)
-
-        for quote in get_quotes()[0]:
+        for quote in get_quotes():
             writer.writerow(
-                [quote.text.replace("“", '"').replace("”", '"')
-                 .replace("′", "'"), quote.author, quote.tags]
+                [quote.text, quote.author, quote.tags]
             )
-
-        headers = ["author", "link"]
-        writer = csv.writer(csv_links, delimiter=";")
-        writer.writerow(headers)
-
-        for author, link in get_quotes()[1].items():
-            writer.writerow([author, link])
 
 
 if __name__ == "__main__":
-    main("quotes.csv", "links.csv")
+    main("quotes.csv")

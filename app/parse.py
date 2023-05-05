@@ -27,7 +27,7 @@ def parse_single_quote(quote_soup: Tag) -> Quote:
     )
 
 
-def parse_quotes(url, list_of_quotes: list) -> list[Quote]:
+def parse_quotes(url: str, list_of_quotes: list) -> list[Quote]:
     page = requests.get(url).content
     soup = BeautifulSoup(page, "html.parser")
     quotes = soup.select(".quote")

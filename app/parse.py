@@ -92,7 +92,7 @@ def save_authors(output_csv_path: str) -> None:
             writer.writerow([author.name, author.born, author.description])
 
 
-def main(output_csv_path: str) -> None:
+def save_quotes(output_csv_path: str) -> None:
     with open(
         output_csv_path, mode="w", newline="", encoding="utf-8"
     ) as csv_file:
@@ -102,6 +102,9 @@ def main(output_csv_path: str) -> None:
         for quote in get_all_quotes():
             writer.writerow([quote.text, quote.author, quote.tags])
 
+
+def main(output_csv_path: str) -> None:
+    save_quotes(output_csv_path)
     save_authors("authors.csv")
 
 

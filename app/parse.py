@@ -1,25 +1,12 @@
 import csv
-from dataclasses import astuple, dataclass
+from dataclasses import dataclass
 from urllib.parse import urljoin
 
+import requests
 from bs4 import BeautifulSoup
-from selenium import webdriver
+
 
 BASE_URL = "https://quotes.toscrape.com/"
-
-
-class WebDriver:
-    def __enter__(self) -> object:
-        self.driver = webdriver.Chrome()
-        return self.driver
-
-    def __exit__(
-            self,
-            exc_type: object,
-            exc_value: object,
-            traceback: object
-    ) -> None:
-        self.driver.quit()
 
 
 @dataclass
@@ -37,40 +24,40 @@ def get_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
+def get_numbeer_pages(quotes: Quote) -> int:
+    count_pages = 0
+    for _ in quotes:
+        count_pages += 1
+    return count_pages
+
+
 def get_quotes_per_page(
-        num_page: int,
-        driver: webdriver.Chrome
 ) -> list[Quote]:
-    url = urljoin(BASE_URL, f"page/{num_page}/")
-    driver.get(url)
-    soup = BeautifulSoup(driver.page_source, "html.parser")
+    url = requests.get(BASE_URL).content
+    soup = BeautifulSoup(url, "html.parser")
     quotes = soup.select(".quote")
-    return [get_single_quote(quote_soup) for quote_soup in quotes]
-
-
-def get_quotes() -> list[Quote]:
-    with WebDriver() as driver:
-        num_page = 1
-        all_quotes = []
-        while True:
-            quotes = get_quotes_per_page(num_page, driver)
-            if not quotes:
-                break
-            all_quotes.extend(quotes)
-            num_page += 1
-        return all_quotes
+    number_pages = get_numbeer_pages(quotes)
+    all_quotes = []
+    for page_num in range(1, number_pages + 1):
+        url = urljoin(BASE_URL, f"page/{page_num}/")
+        page = requests.get(url).content
+        soup = BeautifulSoup(page, "html.parser")
+        quotes = soup.select(".quote")
+        quotes_per_page = [get_single_quote(quote_soup) for quote_soup in quotes]
+        all_quotes.extend(quotes_per_page)
+    return all_quotes
 
 
 def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(("text", "author", "tags"))
-        for quote in quotes:
-            writer.writerow(astuple(quote))
+        for quoter in quotes:
+            writer.writerow((quoter.text, quoter.author, quoter.tags))
 
 
 def main(output_csv_path: str) -> None:
-    quotes = get_quotes()
+    quotes = get_quotes_per_page()
     write_quotes_to_csv(output_csv_path, quotes)
 
 

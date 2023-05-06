@@ -24,7 +24,7 @@ def get_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_numbeer_pages(quotes: Quote) -> int:
+def get_number_pages(quotes: Quote) -> int:
     count_pages = 0
     for _ in quotes:
         count_pages += 1
@@ -36,14 +36,16 @@ def get_quotes_per_page(
     url = requests.get(BASE_URL).content
     soup = BeautifulSoup(url, "html.parser")
     quotes = soup.select(".quote")
-    number_pages = get_numbeer_pages(quotes)
+    number_pages = get_number_pages(quotes)
     all_quotes = []
     for page_num in range(1, number_pages + 1):
         url = urljoin(BASE_URL, f"page/{page_num}/")
         page = requests.get(url).content
         soup = BeautifulSoup(page, "html.parser")
         quotes = soup.select(".quote")
-        quotes_per_page = [get_single_quote(quote_soup) for quote_soup in quotes]
+        quotes_per_page = [
+            get_single_quote(quote_soup) for quote_soup in quotes
+        ]
         all_quotes.extend(quotes_per_page)
     return all_quotes
 

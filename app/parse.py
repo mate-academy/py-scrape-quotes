@@ -59,15 +59,15 @@ def scrap_pages(next_page: str = "") -> list[Quote]:
 def main(output_csv_path: str) -> None:
     quotes = scrap_pages()
 
-    with open(output_csv_path, "w", encoding="utf-8") as file:
+    with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(
             file, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
         )
-        writer.writerow(["author", "tags", "text"])
+        writer.writerow(["text", "author", "tags"])
         for quote in quotes:
-            writer.writerow([quote.author, ", ".join(quote.tags), quote.text])
+            writer.writerow([quote.text, quote.author, quote.tags])
 
-    with open("authors.csv", "w", encoding="utf-8") as file:
+    with open("authors.csv", "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(
             file, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
         )

@@ -14,6 +14,7 @@ class Quote:
     author: str
     tags: list[str]
 
+
 def get_single_quote(quote: BeautifulSoup) -> Quote:
     text = quote.select_one(".text").text
     author = quote.select_one(".author").text
@@ -59,13 +60,17 @@ def main(output_csv_path: str) -> None:
     quotes = scrap_pages()
 
     with open(output_csv_path, "w", encoding="utf-8") as file:
-        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer = csv.writer(
+            file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL
+        )
         writer.writerow(['author', 'tags', 'text'])
         for quote in quotes:
             writer.writerow([quote.author, ', '.join(quote.tags), quote.text])
 
     with open("authors.csv", "w", encoding="utf-8") as file:
-        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer = csv.writer(
+            file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL
+        )
         for author in AUTHORS_DESCRIPTION:
             writer.writerow([author, AUTHORS_DESCRIPTION[author]])
 

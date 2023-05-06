@@ -22,8 +22,8 @@ def get_single_quote(quote: BeautifulSoup) -> Quote:
 
     # get authors about
     if author not in AUTHORS_DESCRIPTION:
-        a_tag = quote.select_one('span a[href]')
-        link_about = a_tag.get('href')
+        a_tag = quote.select_one("span a[href]")
+        link_about = a_tag.get("href")
         page_about = requests.get(BASE_URL + link_about)
         soup_about = BeautifulSoup(page_about.content, "html.parser")
         get_author_description(author, soup_about)
@@ -46,7 +46,7 @@ def scrap_pages(next_page: str = "") -> list[Quote]:
     LIST_OF_QUOTES.extend([get_single_quote(quote) for quote in quotes])
 
     try:
-        next_page = soup.select_one(".next a")['href']
+        next_page = soup.select_one(".next a")["href"]
     except TypeError:
         next_page = ""
 
@@ -61,15 +61,15 @@ def main(output_csv_path: str) -> None:
 
     with open(output_csv_path, "w", encoding="utf-8") as file:
         writer = csv.writer(
-            file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL
+            file, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
         )
-        writer.writerow(['author', 'tags', 'text'])
+        writer.writerow(["author", "tags", "text"])
         for quote in quotes:
-            writer.writerow([quote.author, ', '.join(quote.tags), quote.text])
+            writer.writerow([quote.author, ", ".join(quote.tags), quote.text])
 
     with open("authors.csv", "w", encoding="utf-8") as file:
         writer = csv.writer(
-            file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL
+            file, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
         )
         for author in AUTHORS_DESCRIPTION:
             writer.writerow([author, AUTHORS_DESCRIPTION[author]])

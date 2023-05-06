@@ -4,13 +4,12 @@ from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.webdriver import WebDriver
 
 BASE_URL = "https://quotes.toscrape.com/"
 
 
-class Driver:
-    def __enter__(self) -> WebDriver:
+class WebDriver:
+    def __enter__(self) -> object:
         self.driver = webdriver.Chrome()
         return self.driver
 

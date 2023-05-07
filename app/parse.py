@@ -20,7 +20,7 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_single_quote(quote_soup):
+def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
@@ -29,18 +29,18 @@ def parse_single_quote(quote_soup):
     )
 
 
-def get_single_page_quotes(page_soup):
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list:
     quotes = page_soup.select(".quote")
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_quotes():
+def get_quotes() -> list[Quote]:
     page_num = 1
     all_quotes = []
     while True:
         param = f"page/{page_num}/"
-        HOME_URL = urljoin(BASE_URL, param)
-        page = requests.get(HOME_URL).content
+        home_url = urljoin(BASE_URL, param)
+        page = requests.get(home_url).content
         page_soup = BeautifulSoup(page, "html.parser")
 
         all_quotes += get_single_page_quotes(page_soup)
@@ -52,7 +52,7 @@ def get_quotes():
     return all_quotes
 
 
-def write_quotes_to_csv(quotes, path):
+def write_quotes_to_csv(quotes: list[Quote], path: str) -> None:
     with open(path, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)

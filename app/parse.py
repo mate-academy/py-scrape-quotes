@@ -5,6 +5,7 @@ import requests
 WEBSITE_URL = "http://quotes.toscrape.com"
 TOTAL_PAGES = 10
 
+
 @dataclass
 class Quote:
     text: str

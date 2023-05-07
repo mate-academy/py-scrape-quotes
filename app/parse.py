@@ -1,4 +1,7 @@
+import csv
 from dataclasses import dataclass
+from typing import Any
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -11,6 +14,10 @@ class Quote:
     text: str
     author: str
     tags: list[str]
+
+    @classmethod
+    def class_keys(cls) -> Any:
+        return cls.__annotations__.keys()
 
 
 def scrape_quotes_from_page(page_url: str) -> list[Quote]:
@@ -35,10 +42,12 @@ def scrape_quotes() -> list[Quote]:
 
 
 def save_quotes(output_csv_path: str, quotes: list) -> None:
-    with open(output_csv_path, "w") as f:
-        f.write("text,author,tags\n")
-        for quote in quotes:
-            f.write(f"{quote.text},{quote.author},{','.join(quote.tags)}\n")
+    with open(output_csv_path, "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(Quote.class_keys())
+        writer.writerows(
+            [(quote.text, quote.author, quote.tags) for quote in quotes]
+        )
 
 
 def main(output_csv_path: str) -> None:

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from bs4 import BeautifulSoup as bs
+from bs4 import BeautifulSoup
 import requests
 
 WEBSITE_URL = "http://quotes.toscrape.com"
@@ -13,10 +13,10 @@ class Quote:
     tags: list[str]
 
 
-def scrape_quotes_from_page(page_url):
+def scrape_quotes_from_page(page_url: str) -> list[Quote]:
     quotes = []
     response = requests.get(page_url)
-    soup = bs(response.text, "html.parser")
+    soup = BeautifulSoup(response.text, "html.parser")
     for quote in soup.find_all("div", class_="quote"):
         text = quote.find("span", class_="text").text
         author = quote.find("small", class_="author").text
@@ -25,7 +25,7 @@ def scrape_quotes_from_page(page_url):
     return quotes
 
 
-def scrape_quotes():
+def scrape_quotes() -> list[Quote]:
     quotes = []
     for page_number in range(1, TOTAL_PAGES + 1):
         print(f"Scraping page {page_number}...")
@@ -34,7 +34,7 @@ def scrape_quotes():
     return quotes
 
 
-def save_quotes(output_csv_path, quotes):
+def save_quotes(output_csv_path: str, quotes: list) -> None:
     with open(output_csv_path, "w") as f:
         f.write("text,author,tags\n")
         for quote in quotes:

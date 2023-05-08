@@ -26,7 +26,7 @@ def parse_single_quote(quote):
     )
 
 
-def parse_quotes(url, quotes_list):
+def parse_quotes(url):
     while url:
         with requests.get(url) as response:
             soup = BeautifulSoup(response.content, "html.parser")
@@ -44,7 +44,7 @@ def write_quotes_to_csv(quotes, output_csv_path, encoding="utf-8"):
 
 
 def main(output_csv_path: str) -> None:
-    quotes = parse_quotes(BASE_URL, [])
+    quotes = parse_quotes(BASE_URL)
     write_quotes_to_csv(quotes, output_csv_path)
 
 

@@ -1,24 +1,26 @@
 import csv
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
+from typing import List, Generator
 
 import requests
 from bs4 import BeautifulSoup
 
-BASE_URL = "https://quotes.toscrape.com/"
+
+BASE_URL: str = "https://quotes.toscrape.com/"
 
 
 @dataclass
 class Quote:
     text: str
     author: str
-    tags: list[str]
+    tags: List[str]
 
 
-QUOTE_FIELDS = [field.name for field in fields(Quote)]
+QUOTE_FIELDS: List[str] = [field.name for field in fields(Quote)]
 
 
-def parse_single_quote(quote):
+def parse_single_quote(quote: BeautifulSoup) -> Quote:
     return Quote(
         text=quote.select_one(".text").text,
         author=quote.select_one(".author").text,
@@ -26,7 +28,7 @@ def parse_single_quote(quote):
     )
 
 
-def parse_quotes(url):
+def parse_quotes(url: str) -> Generator[Quote, None, None]:
     while url:
         with requests.get(url) as response:
             soup = BeautifulSoup(response.content, "html.parser")
@@ -36,8 +38,12 @@ def parse_quotes(url):
             url = urljoin(BASE_URL, next_page["href"]) if next_page else None
 
 
-def write_quotes_to_csv(quotes, output_csv_path, encoding="utf-8"):
-    with open(output_csv_path, "w", newline='', encoding=encoding) as file:
+def write_quotes_to_csv(
+        quotes: Generator[Quote, None, None],
+        output_csv_path: str,
+        encoding: str = "utf-8"
+) -> None:
+    with open(output_csv_path, "w", newline="", encoding=encoding) as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])

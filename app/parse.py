@@ -35,11 +35,9 @@ def get_single_page(soup: BeautifulSoup) -> list[Quote]:
 
 
 def parser() -> list[Quote]:
-    request = requests.get(URL)
-    soup = BeautifulSoup(request.text, "html.parser")
-    page_url = soup.select_one("ul.pager > li.next > a")["href"]
+    page_url = "/page/1/"
 
-    quote_list = get_single_page(soup)
+    quote_list = []
 
     while True:
         request = requests.get(URL + page_url)

@@ -27,18 +27,21 @@ def parse_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     return [parse_single_quote(quote) for quote in quotes]
 
 
+def get_soup(url: str) -> BeautifulSoup:
+    with requests.Session() as session:
+        response = session.get(url)
+    return BeautifulSoup(response.content, "html.parser")
+
+
 def get_all_quotes() -> list[Quote]:
-    req = requests.get(URL).content
-    first_page_soup = BeautifulSoup(req, "html.parser")
+    first_page_soup = get_soup(URL)
     all_quotes = parse_single_page_quotes(first_page_soup)
     next_page = first_page_soup.select_one(".next > a")
 
-    with requests.Session() as session:
-        while next_page:
-            response = session.get(f'{URL}{next_page.attrs["href"]}')
-            page_soup = BeautifulSoup(response.content, "html.parser")
-            all_quotes.extend(parse_single_page_quotes(page_soup))
-            next_page = page_soup.select_one(".next > a")
+    while next_page:
+        page_soup = get_soup(f'{URL}{next_page.attrs["href"]}')
+        all_quotes.extend(parse_single_page_quotes(page_soup))
+        next_page = page_soup.select_one(".next > a")
 
     return all_quotes
 

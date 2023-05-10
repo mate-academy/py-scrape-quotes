@@ -1,10 +1,8 @@
-import csv
 from dataclasses import dataclass
 from urllib.parse import urljoin
-
+import csv
 import requests
 from bs4 import BeautifulSoup
-
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -24,29 +22,25 @@ def get_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_number_pages(quotes: Quote) -> int:
-    count_pages = 0
-    for _ in quotes:
-        count_pages += 1
-    return count_pages
-
-
-def get_quotes_per_page(
-) -> list[Quote]:
-    url = requests.get(BASE_URL).content
-    soup = BeautifulSoup(url, "html.parser")
+def get_quotes_per_page(soup: BeautifulSoup) -> list[Quote]:
     quotes = soup.select(".quote")
-    number_pages = get_number_pages(quotes)
+    return [get_single_quote(quote_soup) for quote_soup in quotes]
+
+
+def get_all_quotes() -> list[Quote]:
     all_quotes = []
-    for page_num in range(1, number_pages + 1):
-        url = urljoin(BASE_URL, f"page/{page_num}/")
+    url = BASE_URL
+
+    while True:
         page = requests.get(url).content
         soup = BeautifulSoup(page, "html.parser")
-        quotes = soup.select(".quote")
-        quotes_per_page = [
-            get_single_quote(quote_soup) for quote_soup in quotes
-        ]
-        all_quotes.extend(quotes_per_page)
+        quotes = get_quotes_per_page(soup)
+        all_quotes.extend(quotes)
+        next_button = soup.select_one("ul.pager li.next a")
+        if next_button is None:
+            break
+        url = urljoin(BASE_URL, next_button["href"])
+
     return all_quotes
 
 
@@ -59,7 +53,7 @@ def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
 
 
 def main(output_csv_path: str) -> None:
-    quotes = get_quotes_per_page()
+    quotes = get_all_quotes()
     write_quotes_to_csv(output_csv_path, quotes)
 
 

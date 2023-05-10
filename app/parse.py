@@ -14,7 +14,7 @@ class Quote:
     tags: list[str]
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
+def parse_single_page(page_soup: BeautifulSoup) -> list[Quote]:
     quotes_list = []
     quotes = page_soup.select(".quote")
 
@@ -33,14 +33,12 @@ def get_quotes() -> list[Quote]:
 
     with requests.Session() as session:
         url = BASE_URL
-        url_list = [url]
 
         while True:
             response = session.get(url)
             page_soup = BeautifulSoup(response.content, "html.parser")
-            all_quotes_list.extend(get_single_page_quotes(page_soup))
+            all_quotes_list.extend(parse_single_page(page_soup))
             next_page = page_soup.select_one(".next > a")
-            url_list.append(next_page)
             try:
                 url = f"{BASE_URL}{next_page['href']}"
             except TypeError:

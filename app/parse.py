@@ -4,7 +4,7 @@ from dataclasses import dataclass, fields, astuple
 import requests
 from bs4 import BeautifulSoup, Tag
 
-URL = "https://quotes.toscrape.com"
+URL = "https://quotes.toscrape.com/page/"
 
 
 @dataclass
@@ -40,15 +40,13 @@ def get_page_info(url: str) -> dict:
 
 def get_all_quotes() -> list[Quote]:
     quotes = []
-    page = "/page/1/"
+    page = 1
     while True:
-        page_info = get_page_info(URL + page)
+        page_info = get_page_info(URL + f"{page}/")
         quotes.extend(page_info["quotes"])
-        new_page = page_info["next"]
-        if new_page:
-            page = new_page
-        else:
+        if not page_info["next"]:
             break
+        page += 1
     return quotes
 
 

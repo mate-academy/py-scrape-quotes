@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from typing import List
+
 import requests
 import csv
 from bs4 import BeautifulSoup
@@ -22,32 +24,32 @@ def parse_single_quote(quote: BeautifulSoup) -> Quote:
     return Quote(text, author, tags)
 
 
-def main(output_csv_path: str) -> None:
-    page_num = 1
+def write_quotes_to_csv(quotes: List[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["text", "author", "tags"])
+        for quote in quotes:
+            writer.writerow([quote.text, quote.author, quote.tags])
 
-        while True:
-            page = requests.get(f"{url}/page/{page_num}/")
-            soup = BeautifulSoup(page.content, "html.parser")
-            quotes = soup.find_all(class_="quote")
 
-            for quote in quotes:
-                quote_data = parse_single_quote(quote)
-                writer.writerow(
-                    [
-                        quote_data.text,
-                        quote_data.author,
-                        quote_data.tags,
-                    ]
-                )
+def scrape_quotes(url: str) -> List[Quote]:
+    quotes = []
+    page_num = 1
+    while True:
+        page = requests.get(f"{url}/page/{page_num}/")
+        soup = BeautifulSoup(page.content, "html.parser")
+        quotes_on_page = soup.find_all(class_="quote")
+        if not quotes_on_page:
+            break
+        for quote in quotes_on_page:
+            quotes.append(parse_single_quote(quote))
+        page_num += 1
+    return quotes
 
-            next_btn = soup.find(class_="next")
-            if not next_btn:
-                break
-            else:
-                page_num += 1
+
+def main(output_csv_path: str) -> None:
+    quotes = scrape_quotes(url)
+    write_quotes_to_csv(quotes, output_csv_path)
 
 
 if __name__ == "__main__":

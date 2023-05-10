@@ -44,10 +44,9 @@ def get_quotes() -> list[Quote]:
         page_soup = BeautifulSoup(page, "html.parser")
 
         all_quotes += get_single_page_quotes(page_soup)
-        if page_soup.select(".next"):
-            page_num += 1
-        else:
+        if not page_soup.select(".next"):
             break
+        page_num += 1
 
     return all_quotes
 

@@ -32,8 +32,6 @@ def get_quotes(url: str) -> list:
 def main(output_csv_path: str) -> None:
     url = "https://quotes.toscrape.com/"
     quotes = get_quotes(url)
-    for quote in quotes:
-        author_url = urljoin(url, f"author/{quote.author.replace(' ', '-')}")
     with open(output_csv_path, "w", newline="", encoding="utf-8") as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["text", "author", "tags"])

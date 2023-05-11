@@ -29,27 +29,19 @@ def get_quotes(url: str) -> list:
     return quotes
 
 
-def get_author_bio(url: str) -> str:
-    res = requests.get(url)
-    soup = BeautifulSoup(res.text, "html.parser")
-    return soup.select_one(".author-description").text.strip()
-
-
 def main(output_csv_path: str) -> None:
     url = "https://quotes.toscrape.com/"
     quotes = get_quotes(url)
     for quote in quotes:
         author_url = urljoin(url, f"author/{quote.author.replace(' ', '-')}")
-        quote.author_bio = get_author_bio(author_url)
     with open(output_csv_path, "w", newline="", encoding="utf-8") as csv_file:
         writer = csv.writer(csv_file)
-        writer.writerow(["Text", "Author", "Tags", "Author Bio"])
+        writer.writerow(["text", "author", "tags"])
         for quote in quotes:
             writer.writerow([
                 quote.text,
                 quote.author,
-                [",".join(quote.tags)],
-                [quote.author_bio]
+                quote.tags,
             ])
 
 

@@ -74,8 +74,7 @@ def parse_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
 
 
 def button_next_exist(soup: BeautifulSoup) -> bool:
-    button_next = soup.select_one(".next")
-    return True if button_next else False
+    return bool(soup.select_one(".next"))
 
 
 def write_obj_to_csv(

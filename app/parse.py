@@ -2,10 +2,20 @@ import csv
 import logging
 import sys
 from dataclasses import dataclass, fields, astuple
+from typing import Type
 from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(levelname)8s]:   %(message)s",
+    handlers=[
+        logging.FileHandler("parser.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
+)
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -17,19 +27,39 @@ class Quote:
     tags: list[str]
 
 
-QUOTE_FIELDS = [field.name for field in fields(Quote)]
+@dataclass
+class Author:
+    name: str
+    bio: str
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)8s]:   %(message)s",
-    handlers=[
-        logging.FileHandler("parser.log"),
-        logging.StreamHandler(sys.stdout),
-    ],
-)
+    authors_links = set()
+    authors = []
+
+
+def get_obj_fields(obj: Type[Quote | Author]) -> [str]:
+    return [field.name for field in fields(obj)]
+
+
+def get_page_soup(url: str) -> BeautifulSoup:
+    page = requests.get(url).content
+    return BeautifulSoup(page, "html.parser")
+
+
+def parse_author(author_soup: BeautifulSoup) -> Author:
+    return Author(
+        name=author_soup.select_one(".author-title").text.split("\n")[0],
+        bio=author_soup.select_one(".author-description").text.strip("\n"),
+    )
 
 
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
+    author_link = quote_soup.select_one("a")["href"]
+    if author_link not in Author.authors_links:
+        Author.authors_links.add(author_link)
+        author_soup = get_page_soup(urljoin(BASE_URL, author_link))
+        author = parse_author(author_soup)
+        Author.authors.append(author)
+        logging.info(f"Author {author.name} parsed")
     return Quote(
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
@@ -48,24 +78,21 @@ def button_next_exist(soup: BeautifulSoup) -> bool:
     return True if button_next else False
 
 
-def get_page_soup(url: str) -> BeautifulSoup:
-    page = requests.get(url).content
-    return BeautifulSoup(page, "html.parser")
-
-
-def write_quotes_to_csv(output_csv_path: str, all_quotes: [Quote]) -> None:
+def write_obj_to_csv(
+    output_csv_path: str, all_obj: [Quote | Author], obj: Type[Author | Quote]
+) -> None:
     with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
-        writer.writerow(QUOTE_FIELDS)
-        writer.writerows([astuple(quote) for quote in all_quotes])
+        writer.writerow(get_obj_fields(obj))
+        writer.writerows([astuple(obj) for obj in all_obj])
 
 
-def main(output_csv_path: str) -> None:
+def main(output_quote_csv_path: str, output_author_csv_path: str) -> None:
+    logging.info(f"Start parsing quotes")
     page_soup = get_page_soup(BASE_URL)
     page_num = 1
     all_quotes = []
 
-    logging.info(f"Start parsing quotes")
     while button_next_exist(page_soup):
         logging.info(f"Start parsing page number #{page_num}")
         all_quotes.extend(parse_single_page_quotes(page_soup))
@@ -74,9 +101,11 @@ def main(output_csv_path: str) -> None:
 
     logging.info(f"Start parsing page number #{page_num}")
     all_quotes.extend(parse_single_page_quotes(page_soup))
+    print(Author.authors)
 
-    write_quotes_to_csv(output_csv_path, all_quotes)
+    write_obj_to_csv(output_quote_csv_path, all_quotes, Quote)
+    write_obj_to_csv(output_author_csv_path, Author.authors, Author)
 
 
 if __name__ == "__main__":
-    main("quotes.csv")
+    main("quotes.csv", "authors.csv")

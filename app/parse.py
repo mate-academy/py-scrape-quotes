@@ -87,7 +87,7 @@ def write_obj_to_csv(
         writer.writerows([astuple(obj) for obj in all_obj])
 
 
-def main(output_quote_csv_path: str, output_author_csv_path: str) -> None:
+def main(output_quote_csv_path: str) -> None:
     logging.info(f"Start parsing quotes")
     page_soup = get_page_soup(BASE_URL)
     page_num = 1
@@ -103,8 +103,8 @@ def main(output_quote_csv_path: str, output_author_csv_path: str) -> None:
     all_quotes.extend(parse_single_page_quotes(page_soup))
 
     write_obj_to_csv(output_quote_csv_path, all_quotes, Quote)
-    write_obj_to_csv(output_author_csv_path, Author.authors, Author)
+    write_obj_to_csv("authors.csv", Author.authors, Author)
 
 
 if __name__ == "__main__":
-    main("quotes.csv", "authors.csv")
+    main("quotes.csv")

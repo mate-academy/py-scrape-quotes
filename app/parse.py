@@ -101,7 +101,6 @@ def main(output_quote_csv_path: str, output_author_csv_path: str) -> None:
 
     logging.info(f"Start parsing page number #{page_num}")
     all_quotes.extend(parse_single_page_quotes(page_soup))
-    print(Author.authors)
 
     write_obj_to_csv(output_quote_csv_path, all_quotes, Quote)
     write_obj_to_csv(output_author_csv_path, Author.authors, Author)

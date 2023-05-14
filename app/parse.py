@@ -88,7 +88,7 @@ def write_obj_to_csv(
 
 
 def main(output_quote_csv_path: str) -> None:
-    logging.info(f"Start parsing quotes")
+    logging.info("Start parsing quotes")
     page_soup = get_page_soup(BASE_URL)
     page_num = 1
     all_quotes = []

@@ -1,8 +1,6 @@
-from dataclasses import dataclass
 import csv
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
-from typing import List, Generator
 
 import requests
 from bs4 import BeautifulSoup

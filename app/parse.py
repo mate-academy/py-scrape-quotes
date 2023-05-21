@@ -55,9 +55,7 @@ def main(output_csv_path: str) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["text", "author", "tags"])
-    for item in get_all_quotes():
-        with open(output_csv_path, "a", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file)
+        for item in get_all_quotes():
             writer.writerow([item.text, item.author, item.tags])
 
 

@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 URL = "https://quotes.toscrape.com/"
-URL_FOR_PARSE = URL + "/page/"
+URL_FOR_PARSE = URL + "page/"
 
 
 @dataclass

@@ -29,10 +29,10 @@ class Quote:
 
 @dataclass
 class Author:
-    title: str
-    birth_date: str
-    location: str
-    description: str
+    title: str | None
+    birth_date: str | None
+    location: str | None
+    description: str | None
 
     author_links = set()
     authors = []
@@ -47,15 +47,27 @@ def next_page_is_exists(page_soup: BeautifulSoup) -> bool:
 
 
 def parse_single_author(author_soup: BeautifulSoup) -> Author:
+    try:
+        title = author_soup.select_one(".author-title").text.split("\n")[0]
+    except AttributeError:
+        title = None
+    try:
+        birth_date = author_soup.select_one(".author-born-date").text.split("\n")[0]
+    except AttributeError:
+        birth_date = None
+    try:
+        location=author_soup.select_one(".author-born-location").text[3:]
+    except AttributeError:
+        location = None
+    try:
+        description = author_soup.select_one(".author-description").text.strip("\n")[8:]
+    except AttributeError:
+        description = None
     return Author(
-        title=author_soup.select_one(".author-title").text.split("\n")[0],
-        birth_date=(
-            author_soup.select_one(".author-born-date").text.split("\n")[0]
-        ),
-        location=author_soup.select_one(".author-born-location").text[3:],
-        description=(
-            author_soup.select_one(".author-description").text.strip("\n")[8:]
-        ),
+        title=title,
+        birth_date=birth_date,
+        location=location,
+        description=description,
     )
 
 

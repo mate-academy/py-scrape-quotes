@@ -25,7 +25,7 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_next_page_url(page_soup: BeautifulSoup):
+def get_next_page_url(page_soup: BeautifulSoup) -> str | None:
     pager = page_soup.find("li", class_="next")
     if pager is None:
         return None

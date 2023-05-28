@@ -8,13 +8,13 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 logging.basicConfig(
-     level=logging.INFO,
-     format="[%(levelname)8s]:   %(message)s",
-     handlers=[
-         logging.FileHandler("parser.log"),
-         logging.StreamHandler(sys.stdout),
-     ],
- )
+    level=logging.INFO,
+    format="[%(levelname)8s]:   %(message)s",
+    handlers=[
+        logging.FileHandler("parser.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
+)
 
 
 BASE_URL = "https://quotes.toscrape.com/"
@@ -31,7 +31,7 @@ class Quote:
 QUOTES_FIELDS = [field.name for field in fields(Quote)]
 
 
-def next_page_is_exist(soup: BeautifulSoup):
+def next_page_is_exist(soup: BeautifulSoup) -> bool:
     return bool(soup.select_one(".next"))
 
 

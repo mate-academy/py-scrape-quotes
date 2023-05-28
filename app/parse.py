@@ -28,7 +28,7 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
 def get_next_page_url(page_soup: BeautifulSoup) -> str | None:
     pager = page_soup.find("li", class_="next")
     if pager is None:
-        return None
+        return
     next_link = pager.find("a", href=True)["href"].split("/")[-2]
     return BASE_URL + f"/page/{next_link}/"
 
@@ -42,8 +42,6 @@ def get_home_soup() -> list[Quote]:
         soup = BeautifulSoup(page, "html.parser")
         quotes.extend(soup.select(".quote"))
         base_url = get_next_page_url(soup)
-        if base_url is None:
-            break
 
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 

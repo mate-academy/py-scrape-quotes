@@ -30,18 +30,18 @@ def parse_page(page_soup: BeautifulSoup) -> list[Quote]:
     return [parse_single_quote(quote_soap) for quote_soap in page_soup]
 
 
-def get_all_quotes() -> list:
+def get_all_quotes() -> list[Quote]:
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
 
-    i = 2
+    num_page = 2
     quotes = parse_page(soup.select(".quote"))
 
     while soup.select_one(".next"):
-        page = requests.get(urljoin(BASE_URL, f"page/{i}/")).content
+        page = requests.get(urljoin(BASE_URL, f"page/{num_page}/")).content
         soup = BeautifulSoup(page, "html.parser")
         quotes.extend(parse_page(soup.select(".quote")))
-        i += 1
+        num_page += 1
 
     return quotes
 

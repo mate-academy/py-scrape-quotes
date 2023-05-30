@@ -29,7 +29,7 @@ def get_quotes() -> [Quote]:
     base_url = BASE_URL
     quotes = []
 
-    while base_url:
+    while True:
         page = requests.get(base_url).content
         soup = BeautifulSoup(page, "html.parser")
 
@@ -42,7 +42,7 @@ def get_quotes() -> [Quote]:
             next_url = next_page["href"]
             base_url = BASE_URL + next_url
         else:
-            base_url = None
+            break
 
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 

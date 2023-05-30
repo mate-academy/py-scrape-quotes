@@ -37,12 +37,12 @@ def get_quotes() -> [Quote]:
 
         next_class = soup.find("li", class_="next")
 
-        if next_class:
-            next_page = next_class.find("a")
-            next_url = next_page["href"]
-            base_url = BASE_URL + next_url
-        else:
+        if not next_class:
             break
+
+        next_page = next_class.find("a")
+        next_url = next_page["href"]
+        base_url = BASE_URL + next_url
 
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 

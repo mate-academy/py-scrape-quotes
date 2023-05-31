@@ -50,7 +50,7 @@ def parse_all_pages() -> list[Quote]:
     return quotes_list
 
 
-def main(output_csv_path: str) -> None:
+def write_quotes_to_file(output_csv_path: str) -> None:
     with open(output_csv_path, "w") as quotes:
         fields = ["text", "author", "tags"]
         writer = csv.writer(quotes)
@@ -60,6 +60,10 @@ def main(output_csv_path: str) -> None:
 
         for quote in quotes_list:
             writer.writerow(astuple(quote))
+
+
+def main(output_csv_path: str) -> None:
+    write_quotes_to_file(output_csv_path)
 
 
 if __name__ == "__main__":

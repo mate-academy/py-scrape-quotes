@@ -5,7 +5,7 @@
 .DS_Store
 venv/
 .pytest_cache/
-**pycache/
+**__pycache__/
 app/authors.csv
 app/demo_cache.sqlite
 app/quotes.csv

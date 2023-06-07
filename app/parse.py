@@ -11,7 +11,9 @@ from bs4 import BeautifulSoup
 BASE_URL = "https://quotes.toscrape.com/"
 SESSION = requests_cache.CachedSession("demo_cache")
 
-logging.basicConfig(level=logging.INFO, handlers=[logging.StreamHandler(sys.stdout)])
+logging.basicConfig(
+    level=logging.INFO, handlers=[logging.StreamHandler(sys.stdout)]
+)
 
 
 @dataclass
@@ -38,11 +40,16 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
     author_page = SESSION.get(
-        urljoin(BASE_URL, f"/author/{quote.author.replace('.', '').replace(' ', '-')}/")
+        urljoin(
+            BASE_URL,
+            f"/author/{quote.author.replace('.', '').replace(' ', '-')}/",
+        )
     ).content
     author_soup = BeautifulSoup(author_page, "html.parser")
     description = (
-        author_soup.select_one(".author-description").text.strip().replace("“", "")
+        author_soup.select_one(".author-description")
+        .text.strip()
+        .replace("“", "")
     )
     write_author_to_csv(quote.author, description)
 

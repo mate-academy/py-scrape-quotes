@@ -6,3 +6,7 @@
 venv/
 .pytest_cache/
 **__pycache__/
+app/authors.csv
+app/demo_cache.sqlite
+app/quotes.csv
+tests/result.csv

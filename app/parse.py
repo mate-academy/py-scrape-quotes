@@ -22,7 +22,7 @@ class QuotesSpider(scrapy.Spider):
             yield {
                 "text": quote.css("span.text::text").get(),
                 "author": quote.css("span small::text").get(),
-                "tags": quote.css("div.tags a.tag::text").getall(),
+                "tags": str(quote.css("div.tags a.tag::text").getall()).split(","),
             }
 
         next_page = response.css("li.next a::attr(href)").get()

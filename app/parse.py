@@ -3,8 +3,7 @@ from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
 
 import requests
-from bs4 import BeautifulSoup
-
+from bs4 import BeautifulSoup, Tag
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -19,7 +18,7 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
+def parse_single_quote(quote_soup: Tag) -> Quote:
     return Quote(
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,

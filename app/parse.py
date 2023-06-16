@@ -38,13 +38,13 @@ def get_next_page_url(page_soup: BeautifulSoup) -> str:
     return next_page_url
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
 
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_all_quotes() -> [Quote]:
+def get_all_quotes() -> list[Quote]:
     page = requests.get(BASE_URL).content
     first_page_soup = BeautifulSoup(page, "html.parser")
 

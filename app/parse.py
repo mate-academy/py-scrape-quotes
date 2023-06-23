@@ -42,13 +42,13 @@ def next_page_exist(page_soup: BeautifulSoup) -> int:
     return bool(page_soup.select_one(".next"))
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
 
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     logging.info("Start parsing quotes")
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
@@ -66,7 +66,7 @@ def get_quotes() -> [Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote], file_path: str) -> None:
+def write_quotes_to_csv(quotes: list[Quote], file_path: str) -> None:
     with open(file_path, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)

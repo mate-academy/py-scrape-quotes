@@ -18,42 +18,42 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_single_qoute(qoute_soup: BeautifulSoup) -> Quote:
+def parse_single_qoute(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
-        text=qoute_soup.select_one(".text").text,
-        author=qoute_soup.select_one(".author").text,
-        tags=[tag.text for tag in qoute_soup.select(".tag")],
+        text=quote_soup.select_one(".text").text,
+        author=quote_soup.select_one(".author").text,
+        tags=[tag.text for tag in quote_soup.select(".tag")],
     )
 
 
-def get_list_qoute() -> [Quote]:
+def quotes_list() -> list[Quote]:
     value = []
     num_page = 1
     while num_page:
         url_num_page = urljoin(BASE_URL, f"page/{num_page}")
         page = requests.get(url_num_page).content
         soup = BeautifulSoup(page, "html.parser")
-        qoutes = soup.select(".quote")
-        if qoutes:
+        quotes = soup.select(".quote")
+        if quotes:
             print(f"Start page #{num_page}")
             value.extend(
-                [parse_single_qoute(qoute_soup) for qoute_soup in qoutes]
+                [parse_single_qoute(quote_soup) for quote_soup in quotes]
             )
             num_page += 1
         else:
             return value
 
 
-def write_qoutes_to_csv(qoutes: [Quote], output_csv_path: str) -> None:
+def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
-        writer.writerows([astuple(qoute) for qoute in qoutes])
+        writer.writerows([astuple(quote) for quote in quotes])
 
 
 def main(output_csv_path: str) -> None:
-    qoutes = get_list_qoute()
-    write_qoutes_to_csv(qoutes=qoutes, output_csv_path=output_csv_path)
+    quotes = quotes_list()
+    write_quotes_to_csv(quotes=quotes, output_csv_path=output_csv_path)
 
 
 if __name__ == "__main__":

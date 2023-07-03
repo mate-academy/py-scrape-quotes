@@ -22,11 +22,11 @@ class Quote:
             tags=[tag.text for tag in quote_soup.select(".tags > a.tag")]
         )
 
-    def get_product_on_page(self, quotes: BeautifulSoup) -> [Quote]:
+    def get_product_on_page(self, quotes: BeautifulSoup) -> list[Quote]:
         quotes = quotes.select(".quote")
         return [self.parse_single_quote(self, quote) for quote in quotes]
 
-    def get_quotes(self) -> [Quote]:
+    def get_quotes(self) -> list[Quote]:
         page = requests.get(BASE_URL).content
         soup = BeautifulSoup(page, "html.parser")
         next_page = self.get_next_page(self, soup)

@@ -106,7 +106,3 @@ def main(output_quotes_csv_path: str) -> None:
 
 if __name__ == "__main__":
     main("./result.csv")
-
-
-
-

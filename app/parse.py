@@ -40,8 +40,8 @@ def parse_quotes_from_all_pages(base_url: str) -> list:
 
 
 def main(output_csv_path: str) -> None:
-    BASE_URL = "https://quotes.toscrape.com/"
-    all_quotes = parse_quotes_from_all_pages(BASE_URL)
+    base_url = "https://quotes.toscrape.com/"
+    all_quotes = parse_quotes_from_all_pages(base_url)
 
     with open(output_csv_path, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)

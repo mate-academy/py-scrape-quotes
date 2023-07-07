@@ -26,11 +26,11 @@ def parse_all_quotes_on_page(url: str) -> list:
     return parsed_quotes
 
 
-def parse_quotes_from_all_pages(BASE_URL: str) -> list:
+def parse_quotes_from_all_pages(base_url: str) -> list:
     all_quotes = []
     page = 1
     while True:
-        url = f"{BASE_URL}page/{page}/"
+        url = f"{base_url}page/{page}/"
         parsed_quotes = parse_all_quotes_on_page(url)
         if not parsed_quotes:
             break

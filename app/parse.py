@@ -25,12 +25,12 @@ def create_quote_object(soup: Tag) -> Quote:
     )
 
 
-def get_single_data(page_soup: BeautifulSoup) -> list:
+def get_single_data(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
     return [create_quote_object(page) for page in quotes]
 
 
-def get_data() -> list:
+def get_data() -> list[Quote]:
     next_url_to_scrape = URL
     all_quotes = []
 
@@ -49,7 +49,7 @@ def get_data() -> list:
     return all_quotes
 
 
-def write_products_to_csv(qoutes: [Quote], path: str) -> None:
+def write_products_to_csv(qoutes: list[Quote], path: str) -> None:
     with open(path, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELD)

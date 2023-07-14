@@ -23,12 +23,12 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_all_products_from_single_page(page_soup: BeautifulSoup) -> [Quote]:
+def get_all_products_from_single_page(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_list_quotes() -> [Quote]:
+def get_list_quotes() -> list[Quote]:
     quotes = []
     page = 1
     while True:

@@ -56,4 +56,3 @@ def main(output_csv_path: str) -> None:
 
 if __name__ == "__main__":
     main("result.csv")
-

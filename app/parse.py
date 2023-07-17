@@ -40,15 +40,18 @@ def parse_quotes_from_all_pages(base_url: str) -> list:
     return all_quotes
 
 
-def main(output_csv_path: str) -> None:
-    base_url = "https://quotes.toscrape.com/"
-    all_quotes = parse_quotes_from_all_pages(base_url)
-
+def write_to_csv(all_quotes, output_csv_path):
     with open(output_csv_path, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(["text", "author", "tags"])
         for quote in all_quotes:
             writer.writerow([quote.text, quote.author, quote.tags])
+
+
+def main(output_csv_path: str) -> None:
+    base_url = "https://quotes.toscrape.com/"
+    all_quotes = parse_quotes_from_all_pages(base_url)
+    write_to_csv(all_quotes, output_csv_path)
 
 
 if __name__ == "__main__":

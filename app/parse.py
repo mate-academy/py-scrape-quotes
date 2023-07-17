@@ -1,6 +1,5 @@
 import csv
 from dataclasses import dataclass
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -11,47 +10,57 @@ class Quote:
     author: str
     tags: list[str]
 
-
-def parse_single_quote(quote_html: BeautifulSoup) -> Quote:
-    return Quote(
-        text=quote_html.select_one(".text").text,
-        author=quote_html.select_one(".author").text,
-        tags=[tag.text for tag in quote_html.select(".tag")],
-    )
-
-
-def parse_all_quotes_on_page(url: str) -> list:
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    quotes = soup.select(".quote")
-    return [parse_single_quote(quote) for quote in quotes]
+    @classmethod
+    def parse_single_quote(cls, quote_html: BeautifulSoup) -> "Quote":
+        return cls(
+            text=quote_html.select_one(".text").text,
+            author=quote_html.select_one(".author").text,
+            tags=[tag.text for tag in quote_html.select(".tag")],
+        )
 
 
-def parse_quotes_from_all_pages(base_url: str) -> list:
-    all_quotes = []
-    page = 1
-    while True:
-        url = f"{base_url}page/{page}/"
-        parsed_quotes = parse_all_quotes_on_page(url)
-        if not parsed_quotes:
-            break
-        all_quotes.extend(parsed_quotes)
-        page += 1
-    return all_quotes
+class QuoteScraper:
+    def __init__(self, base_url: str) -> None:
+        self.base_url = base_url
 
+    @classmethod
+    def parse_all_quotes_on_page(cls, url: str) -> [Quote]:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+        quotes = soup.select(".quote")
+        return [Quote.parse_single_quote(quote) for quote in quotes]
 
-def write_to_csv(all_quotes: list, output_csv_path: str) -> None:
-    with open(output_csv_path, mode="w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(["text", "author", "tags"])
-        for quote in all_quotes:
-            writer.writerow([quote.text, quote.author, quote.tags])
+    def parse_quotes_from_all_pages(self) -> list:
+        all_quotes = []
+        page = 1
+        while True:
+            url = f"{self.base_url}page/{page}/"
+            parsed_quotes = self.parse_all_quotes_on_page(url)
+            if not parsed_quotes:
+                break
+            all_quotes.extend(parsed_quotes)
+            page += 1
+        return all_quotes
+
+    @staticmethod
+    def write_to_csv(all_quotes: list, output_csv_path: str) -> None:
+        with open(
+                output_csv_path,
+                mode="w",
+                newline="",
+                encoding="utf-8"
+        ) as file:
+            writer = csv.writer(file)
+            writer.writerow(["text", "author", "tags"])
+            for quote in all_quotes:
+                writer.writerow([quote.text, quote.author, quote.tags])
 
 
 def main(output_csv_path: str) -> None:
     base_url = "https://quotes.toscrape.com/"
-    all_quotes = parse_quotes_from_all_pages(base_url)
-    write_to_csv(all_quotes, output_csv_path)
+    scraper = QuoteScraper(base_url)
+    all_quotes = scraper.parse_quotes_from_all_pages()
+    QuoteScraper.write_to_csv(all_quotes, output_csv_path)
 
 
 if __name__ == "__main__":

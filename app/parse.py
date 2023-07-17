@@ -40,7 +40,7 @@ def parse_quotes_from_all_pages(base_url: str) -> list:
     return all_quotes
 
 
-def write_to_csv(all_quotes, output_csv_path):
+def write_to_csv(all_quotes: list, output_csv_path: str) -> None:
     with open(output_csv_path, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(["text", "author", "tags"])

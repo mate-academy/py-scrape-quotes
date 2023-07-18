@@ -1,5 +1,6 @@
 import csv
 from dataclasses import dataclass, fields
+from typing import List
 from urllib.parse import urljoin
 
 import requests
@@ -26,12 +27,12 @@ def get_one_quote(quote: BeautifulSoup) -> Quote:
     )
 
 
-def get_one_page(page_soup: BeautifulSoup) -> [Quote]:
+def get_one_page(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
     return [get_one_quote(quote) for quote in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     num_page = 1
     all_quotes = []
     while True:
@@ -39,22 +40,21 @@ def get_quotes() -> [Quote]:
         soup = BeautifulSoup(page, "html.parser")
         result = get_one_page(soup)
         if result:
-            all_quotes.append(result)
+            all_quotes.extend(result)
             num_page += 1
         else:
-            return all_quotes
+            break
+    return all_quotes
 
 
-def save_quotes_to_csv(quotes: [Quote], output_csv_path: csv) -> None:
-
+def save_quotes_to_csv(quotes: List[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(QUOTE_FIELDS)
 
-        for quote_list in quotes:
-            for quote in quote_list:
-                row = [quote.text, quote.author, quote.tags]
-                writer.writerow(row)
+        for quote in quotes:
+            row = [quote.text, quote.author, quote.tags]
+            writer.writerow(row)
 
 
 def main(output_csv_path: str) -> None:

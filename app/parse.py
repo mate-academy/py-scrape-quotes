@@ -30,7 +30,7 @@ class QuoteScraper:
         quotes = soup.select(".quote")
         return [Quote.parse_single_quote(quote) for quote in quotes]
 
-    def parse_quotes_from_all_pages(self) -> list:
+    def parse_quotes_from_all_pages(self) -> [Quote]:
         all_quotes = []
         page = 1
         while True:

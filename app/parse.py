@@ -23,8 +23,8 @@ class QuoteScraper:
     def __init__(self, base_url: str) -> None:
         self.base_url = base_url
 
-    @classmethod
-    def parse_all_quotes_on_page(cls, url: str) -> list[Quote]:
+    @staticmethod
+    def parse_all_quotes_on_page(url: str) -> list[Quote]:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
         quotes = soup.select(".quote")

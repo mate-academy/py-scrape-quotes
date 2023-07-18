@@ -39,11 +39,10 @@ def get_quotes() -> list[Quote]:
         page = requests.get(urljoin(BASE_URL, f"page/{num_page}/")).content
         soup = BeautifulSoup(page, "html.parser")
         result = get_one_page(soup)
-        if result:
-            all_quotes.extend(result)
-            num_page += 1
-        else:
+        if not result:
             break
+        all_quotes.extend(result)
+        num_page += 1
     return all_quotes
 
 

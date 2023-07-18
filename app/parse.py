@@ -24,13 +24,13 @@ class QuoteScraper:
         self.base_url = base_url
 
     @classmethod
-    def parse_all_quotes_on_page(cls, url: str) -> [Quote]:
+    def parse_all_quotes_on_page(cls, url: str) -> list[Quote]:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
         quotes = soup.select(".quote")
         return [Quote.parse_single_quote(quote) for quote in quotes]
 
-    def parse_quotes_from_all_pages(self) -> [Quote]:
+    def parse_quotes_from_all_pages(self) -> list[Quote]:
         all_quotes = []
         page = 1
         while True:

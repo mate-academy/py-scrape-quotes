@@ -29,7 +29,7 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_next_pages(page_soup: BeautifulSoup) -> str:
+def get_next_page(page_soup: BeautifulSoup) -> str:
     pagination = page_soup.select_one(".pager")
 
     if pagination is None or not pagination.select(".next > a"):
@@ -40,7 +40,7 @@ def get_next_pages(page_soup: BeautifulSoup) -> str:
     return next_page_url
 
 
-def get_quote() -> [Quote]:
+def get_quote_name() -> List[Quote]:
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
 
@@ -52,7 +52,7 @@ def get_quote() -> [Quote]:
             [parse_single_quote(quote_soup) for quote_soup in quote]
         )
 
-        next_page_url = get_next_pages(soup)
+        next_page_url = get_next_page(soup)
         if next_page_url:
             page = requests.get(next_page_url).content
             soup = BeautifulSoup(page, "html.parser")
@@ -72,7 +72,7 @@ def write_quotes_to_csv(quotes: List[Quote], output_csv_path: str) -> None:
 
 
 def main(output_csv_path: str) -> None:
-    quotes = get_quote()
+    quotes = get_quote_name()
     write_quotes_to_csv(quotes, output_csv_path)
 
 

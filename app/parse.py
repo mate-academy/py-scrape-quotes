@@ -1,6 +1,5 @@
 import csv
 from dataclasses import dataclass, astuple, fields
-
 import requests
 from bs4 import BeautifulSoup, Tag
 
@@ -39,12 +38,11 @@ def get_data() -> list[Quote]:
         soup = BeautifulSoup(page, "html.parser")
         all_quotes.extend(get_single_data(soup))
 
-        try:
-            next_url_to_scrape = URL + soup.select_one(
-                ".next > a[href]"
-            )["href"]
-        except TypeError:
-            next_url_to_scrape = False
+        next_button = soup.find(class_="next")
+        if next_button is None:
+            break
+
+        next_url_to_scrape = URL + next_button.find("a")["href"]
 
     return all_quotes
 

@@ -1,7 +1,6 @@
 import csv
-from dataclasses import dataclass, fields, astuple
-
 import requests
+from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup
 
 
@@ -26,13 +25,13 @@ def get_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
 
     return [get_single_quote(single_quote) for single_quote in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
 
@@ -46,7 +45,7 @@ def get_quotes() -> [Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(output_csv_path: str, quotes: [Quote]) -> None:
+def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
     with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTES_FIELDS)

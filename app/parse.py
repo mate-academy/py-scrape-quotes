@@ -22,6 +22,16 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="[%(levelname)8s]: %(message)s",
+    handlers=[
+        logging.FileHandler("parser.log"),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+
 def parse_single_quote(single_quote: Tag) -> Quote:
     single_quote_data = dict(
         text=single_quote.select_one("span.text").text,

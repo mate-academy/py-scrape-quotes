@@ -23,7 +23,7 @@ QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format="[%(levelname)8s]: %(message)s",
     handlers=[
         logging.FileHandler("parser.log"),
@@ -55,14 +55,25 @@ def parse_quotes_of_one_page(page_url: str) -> list[Quote]:
 
 
 def parse_all_quotes() -> list[Quote]:
+    logging.info(
+        "Start parsing quotes\n"
+        "________________________________\n"
+    )
+
     all_quotes = []
     page = 1
 
     while True:
+        logging.info(f"Start parsing page №: {page}")
+
         page_url = f"{BASE_URL}page/{page}/"
         parsed_quotes = parse_quotes_of_one_page(page_url)
 
         if not parsed_quotes:
+            logging.info(
+                "________________________\n"
+                "Parsing is finished\n"
+            )
             break
 
         all_quotes.extend(parsed_quotes)

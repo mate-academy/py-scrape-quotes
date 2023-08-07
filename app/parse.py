@@ -1,11 +1,9 @@
 import csv
 import logging
+import requests
 import sys
 
 from dataclasses import dataclass, fields, astuple
-from pprint import pprint
-
-import requests
 from bs4 import BeautifulSoup, Tag
 
 BASE_URL = "http://quotes.toscrape.com/"
@@ -23,12 +21,12 @@ QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="[%(levelname)8s]: %(message)s",
     handlers=[
         logging.FileHandler("parser.log"),
-        logging.StreamHandler(sys.stdout)
-    ]
+        logging.StreamHandler(sys.stdout),
+    ],
 )
 
 
@@ -36,7 +34,7 @@ def parse_single_quote(single_quote: Tag) -> Quote:
     single_quote_data = dict(
         text=single_quote.select_one("span.text").text,
         author=single_quote.select_one(".author").text,
-        tags=[tag.text for tag in single_quote.find_all("a", class_="tag")]
+        tags=[tag.text for tag in single_quote.find_all("a", class_="tag")],
     )
     return Quote(**single_quote_data)
 
@@ -55,10 +53,7 @@ def parse_quotes_of_one_page(page_url: str) -> list[Quote]:
 
 
 def parse_all_quotes() -> list[Quote]:
-    logging.info(
-        "Start parsing quotes\n"
-        "________________________________\n"
-    )
+    logging.info("Start parsing quotes\n________________________________\n")
 
     all_quotes = []
     page = 1
@@ -70,10 +65,7 @@ def parse_all_quotes() -> list[Quote]:
         parsed_quotes = parse_quotes_of_one_page(page_url)
 
         if not parsed_quotes:
-            logging.info(
-                "________________________\n"
-                "Parsing is finished\n"
-            )
+            logging.info("________________________\nParsing is finished\n")
             break
 
         all_quotes.extend(parsed_quotes)
@@ -83,8 +75,8 @@ def parse_all_quotes() -> list[Quote]:
 
 
 def write_quotes_to_csv(
-        quotes: list[Quote],
-        output_path: str = OUTPUT_CSV_PATH,
+    quotes: list[Quote],
+    output_path: str = OUTPUT_CSV_PATH,
 ) -> None:
     with open(output_path, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)

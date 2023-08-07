@@ -41,33 +41,34 @@ def parse_single_quote(single_quote: Tag) -> Quote:
     return Quote(**single_quote_data)
 
 
-def parse_quotes_of_one_page() -> list[Quote]:
-    page_content = requests.get(BASE_URL).content
+def parse_quotes_of_one_page(page_url: str) -> list[Quote]:
+    page_content = requests.get(page_url).content
     base_soup = BeautifulSoup(page_content, "html.parser")
 
     page_quotes_soup = base_soup.select(".quote")
-    print(page_quotes_soup)
 
     all_page_quotes = [
         parse_single_quote(single_quote) for single_quote in page_quotes_soup
     ]
-    pprint(all_page_quotes)
 
     return all_page_quotes
 
 
 def parse_all_quotes() -> list[Quote]:
-    page_content = requests.get(BASE_URL).content
-    base_soup = BeautifulSoup(page_content, "html.parser")
+    all_quotes = []
+    page = 1
 
-    page_quotes_soup = base_soup.select(".quote")
+    while True:
+        page_url = f"{BASE_URL}page/{page}/"
+        parsed_quotes = parse_quotes_of_one_page(page_url)
 
-    all_page_quotes = [
-        parse_single_quote(single_quote) for single_quote in page_quotes_soup
-    ]
-    pprint(all_page_quotes)
+        if not parsed_quotes:
+            break
 
-    return all_page_quotes
+        all_quotes.extend(parsed_quotes)
+        page += 1
+
+    return all_quotes
 
 
 def write_quotes_to_csv(

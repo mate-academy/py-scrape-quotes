@@ -34,7 +34,9 @@ class Quote:
         single_quote_data = dict(
             text=single_quote.select_one("span.text").text,
             author=single_quote.select_one(".author").text,
-            tags=[tag.text for tag in single_quote.find_all("a", class_="tag")],
+            tags=[
+                tag.text for tag in single_quote.find_all("a", class_="tag")
+            ],
         )
         return cls(**single_quote_data)
 
@@ -45,7 +47,11 @@ class Author:
     biography: str
 
     @classmethod
-    def parse_single_author(cls, author_url: str, author_cache: dict[str: Self]) -> Self:
+    def parse_single_author(
+            cls,
+            author_url: str,
+            author_cache: dict[str: Self]
+    ) -> Self:
         if author_url in author_cache:
             return author_cache[author_url]
 

@@ -1,12 +1,12 @@
 import csv
 import logging
-from typing import Self
-
 import requests
 import sys
 
 from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup, Tag
+from typing import Self
+
 
 BASE_URL = "http://quotes.toscrape.com/"
 OUTPUT_QUOTES_CSV_PATH = "quotes_data.csv"

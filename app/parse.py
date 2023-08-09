@@ -13,6 +13,16 @@ OUTPUT_QUOTES_CSV_PATH = "quotes_data.csv"
 OUTPUT_AUTHORS_CSV_PATH = "authors_data.csv"
 
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(levelname)8s]: %(message)s",
+    handlers=[
+        logging.FileHandler("parser.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
+)
+
+
 @dataclass
 class Quote:
     text: str
@@ -54,15 +64,6 @@ class Author:
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 AUTHOR_FIELDS = [field.name for field in fields(Author)]
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)8s]: %(message)s",
-    handlers=[
-        logging.FileHandler("parser.log"),
-        logging.StreamHandler(sys.stdout),
-    ],
-)
 
 
 def parse_single_page(

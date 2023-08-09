@@ -1,5 +1,7 @@
 import csv
 import logging
+from typing import Self
+
 import requests
 import sys
 
@@ -16,6 +18,15 @@ class Quote:
     text: str
     author: str
     tags: list[str]
+
+    @classmethod
+    def parse_single_quote(cls, single_quote: Tag) -> Self:
+        single_quote_data = dict(
+            text=single_quote.select_one("span.text").text,
+            author=single_quote.select_one(".author").text,
+            tags=[tag.text for tag in single_quote.find_all("a", class_="tag")],
+        )
+        return cls(**single_quote_data)
 
 
 @dataclass
@@ -37,13 +48,13 @@ logging.basicConfig(
 )
 
 
-def parse_single_quote(single_quote: Tag) -> Quote:
-    single_quote_data = dict(
-        text=single_quote.select_one("span.text").text,
-        author=single_quote.select_one(".author").text,
-        tags=[tag.text for tag in single_quote.find_all("a", class_="tag")],
-    )
-    return Quote(**single_quote_data)
+# def parse_single_quote(single_quote: Tag) -> Quote:
+#     single_quote_data = dict(
+#         text=single_quote.select_one("span.text").text,
+#         author=single_quote.select_one(".author").text,
+#         tags=[tag.text for tag in single_quote.find_all("a", class_="tag")],
+#     )
+#     return Quote(**single_quote_data)
 
 
 def parse_single_author(author_url: str, author_cache: dict[str: Author]) -> Author:
@@ -76,7 +87,7 @@ def parse_single_page(
     author_list = []
 
     for single_quote in page_quotes_soup:
-        quote = parse_single_quote(single_quote)
+        quote = Quote.parse_single_quote(single_quote)
 
         author_url_element = single_quote.find(
             "small", class_="author"

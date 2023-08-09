@@ -34,6 +34,23 @@ class Author:
     name: str
     biography: str
 
+    @classmethod
+    def parse_single_author(cls, author_url: str, author_cache: dict[str: Self]) -> Self:
+        if author_url in author_cache:
+            return author_cache[author_url]
+
+        author_response = requests.get(author_url)
+        author_soup = BeautifulSoup(author_response.content, "html.parser")
+        author_name = author_soup.select_one("h3.author-title").text
+        author_biography = author_soup.find(
+            "div", class_="author-description"
+        ).text.strip()
+
+        author = Author(name=author_name, biography=author_biography)
+        author_cache[author_url] = author
+
+        return author
+
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 AUTHOR_FIELDS = [field.name for field in fields(Author)]
@@ -57,21 +74,21 @@ logging.basicConfig(
 #     return Quote(**single_quote_data)
 
 
-def parse_single_author(author_url: str, author_cache: dict[str: Author]) -> Author:
-    if author_url in author_cache:
-        return author_cache[author_url]
-
-    author_response = requests.get(author_url)
-    author_soup = BeautifulSoup(author_response.content, "html.parser")
-    author_name = author_soup.select_one("h3.author-title").text
-    author_biography = author_soup.find(
-        "div", class_="author-description"
-    ).text.strip()
-
-    author = Author(name=author_name, biography=author_biography)
-    author_cache[author_url] = author
-
-    return author
+# def parse_single_author(author_url: str, author_cache: dict[str: Author]) -> Author:
+#     if author_url in author_cache:
+#         return author_cache[author_url]
+#
+#     author_response = requests.get(author_url)
+#     author_soup = BeautifulSoup(author_response.content, "html.parser")
+#     author_name = author_soup.select_one("h3.author-title").text
+#     author_biography = author_soup.find(
+#         "div", class_="author-description"
+#     ).text.strip()
+#
+#     author = Author(name=author_name, biography=author_biography)
+#     author_cache[author_url] = author
+#
+#     return author
 
 
 def parse_single_page(
@@ -94,7 +111,7 @@ def parse_single_page(
         ).find_next("a")
         if author_url_element:
             author_url = BASE_URL + author_url_element["href"]
-            author = parse_single_author(author_url, author_cache)
+            author = Author.parse_single_author(author_url, author_cache)
             quotes_list.append(quote)
             author_list.append(author)
 

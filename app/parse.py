@@ -24,7 +24,7 @@ class Quote:
 QUOTES_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_quote(quote: Tag):
+def parse_quote(quote: Tag) -> Quote:
     return Quote(
         text=quote.select_one(".text").text,
         author=quote.select_one("span > .author").text,
@@ -32,17 +32,19 @@ def parse_quote(quote: Tag):
     )
 
 
-def parse_one_page(soup: BeautifulSoup):
+def parse_one_page(soup: BeautifulSoup) -> list[Quote]:
     return [parse_quote(quote) for quote in soup.select(".quote")]
 
 
-def write_data_to_csv_file(data: list[Quote], output_csv_path: str):
-    with open(output_csv_path, 'w', newline='', encoding='utf-8') as csv_file:
+def write_data_to_csv_file(data: list[Quote], output_csv_path: str) -> str:
+    with open(output_csv_path, "w", newline="", encoding="utf-8") as csv_file:
         csv_writer = csv.writer(csv_file)
         csv_writer.writerow(QUOTES_FIELDS)
 
         for quote in data:
             csv_writer.writerow(astuple(quote))
+
+    return "Data were written successfully!"
 
 
 def main(output_csv_path: str) -> str:

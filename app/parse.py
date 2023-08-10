@@ -50,7 +50,7 @@ def get_num_pages() -> int:
     return page_number
 
 
-def get_quotes_for_page(page_number: int) -> [Quote]:
+def get_quotes_for_page(page_number: int) -> list[Quote]:
     page_url = f"https://quotes.toscrape.com/page/{page_number}/"
     response = requests.get(page_url)
     response.raise_for_status()
@@ -61,7 +61,7 @@ def get_quotes_for_page(page_number: int) -> [Quote]:
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     num_pages = get_num_pages()
 
     all_quotes = []
@@ -71,7 +71,7 @@ def get_quotes() -> [Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote], output_csv_path: str) -> None:
+def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import csv
 import logging
 import requests
@@ -5,7 +7,6 @@ import sys
 
 from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup, Tag
-from typing import Self
 
 
 BASE_URL = "http://quotes.toscrape.com/"
@@ -30,7 +31,7 @@ class Quote:
     tags: list[str]
 
     @classmethod
-    def parse_single_quote(cls, single_quote: Tag) -> Self:
+    def parse_single_quote(cls, single_quote: Tag) -> Quote:
         single_quote_data = dict(
             text=single_quote.select_one("span.text").text,
             author=single_quote.select_one(".author").text,
@@ -50,8 +51,8 @@ class Author:
     def parse_single_author(
             cls,
             author_url: str,
-            author_cache: dict[str: Self]
-    ) -> Self:
+            author_cache: dict[str: Author]
+    ) -> Author:
         if author_url in author_cache:
             return author_cache[author_url]
 

@@ -1,5 +1,5 @@
 import csv
-from dataclasses import dataclass, fields, astuple
+from dataclasses import dataclass, fields
 from requests import request
 from bs4 import BeautifulSoup
 
@@ -34,7 +34,7 @@ def parse_quote(quote_soup: BeautifulSoup) -> Quote:
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
         tags=[tag.text for tag in quote_soup.select(".tag")]
-        )
+    )
     return quote
 
 

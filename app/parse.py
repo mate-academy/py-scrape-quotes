@@ -37,7 +37,7 @@ def get_all_quotes_on_page(page_url: str = None) -> List[Quote] | None:
         return [get_single_quote_data(quote) for quote in quotes]
 
 
-def get_quote_list():
+def get_quote_list() -> [Quote]:
     quote_list = []
     page_index = 1
     while True:
@@ -49,10 +49,20 @@ def get_quote_list():
     return quote_list
 
 
-def write_in_the_file(file: str, quote_list: List[Quote]) -> None:
-    with open(file, "w", newline="", encoding="utf-8") as file_to_write:
+def write_in_the_file(
+        output_csv_path: str,
+        quote_list: List[Quote]) -> None:
+    with open(
+            output_csv_path,
+            "w",
+            newline="",
+            encoding="utf-8"
+    ) as file_to_write:
         fieldnames = ["text", "author", "tags"]
-        writer = csv.DictWriter(file_to_write, fieldnames=fieldnames)
+        writer = csv.DictWriter(
+            file_to_write,
+            fieldnames=fieldnames
+        )
         writer.writeheader()
         for quote in quote_list:
             writer.writerow(
@@ -66,7 +76,10 @@ def write_in_the_file(file: str, quote_list: List[Quote]) -> None:
 
 def main(output_csv_path: str) -> None:
     quote_list = get_quote_list()
-    write_in_the_file(file=output_csv_path, quote_list=quote_list)
+    write_in_the_file(
+        output_csv_path=output_csv_path,
+        quote_list=quote_list
+    )
 
 
 if __name__ == "__main__":

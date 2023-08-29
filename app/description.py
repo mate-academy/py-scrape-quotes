@@ -10,7 +10,7 @@ HTML_PARSER = "html.parser"
 CLASS_QUOTE = ".quote"
 CLASS_AUTHOR = ".author"
 AUTHORS_FILE = "authors.csv"
-QUOTES_FILE = "quotes.csv"
+QUOTES_FILE = "correct_quotes.csv"
 
 
 @dataclass

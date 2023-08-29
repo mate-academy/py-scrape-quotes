@@ -1,4 +1,5 @@
 import csv
+import os
 
 from datetime import datetime
 
@@ -13,6 +14,8 @@ from app.description import BASE_URL, CLASS_AUTHOR
 
 
 def write_author_to_file(file_name: str, author: Author) -> None:
+    file_exists = os.path.exists(file_name)
+
     with open(file_name, "a+", newline="", encoding="utf-8") as author_file:
         field_names = [
             "name",
@@ -22,9 +25,12 @@ def write_author_to_file(file_name: str, author: Author) -> None:
             "description"
         ]
 
-        quote_writer = csv.DictWriter(author_file, fieldnames=field_names)
+        author_writer = csv.DictWriter(author_file, fieldnames=field_names)
 
-        quote_writer.writerow({
+        if not file_exists:
+            author_writer.writeheader()
+
+        author_writer.writerow({
             "name": author.name,
             "born_date": author.born_date,
             "born_city": author.born_city,

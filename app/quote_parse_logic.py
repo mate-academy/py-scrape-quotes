@@ -1,4 +1,6 @@
 import csv
+import os
+
 import requests
 
 from bs4 import BeautifulSoup, Tag
@@ -8,9 +10,14 @@ from app.description import CLASS_QUOTE, HTML_PARSER
 
 
 def write_quote_to_file(file_name: str, quote: Quote) -> None:
+    file_exists = os.path.exists(file_name)
+
     with open(file_name, "a+", newline="", encoding="utf-8") as quote_file:
         field_names = ["text", "author", "tags"]
         quote_writer = csv.DictWriter(quote_file, fieldnames=field_names)
+
+        if not file_exists:
+            quote_writer.writeheader()
 
         quote_writer.writerow({
             "text": quote.text,

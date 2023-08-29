@@ -1,6 +1,7 @@
-from app.description import BASE_URL, EXT_URL_QUOTE, QUOTES_FILE, AUTHORS_FILE
+from app.description import BASE_URL, EXT_URL_QUOTE, QUOTES_FILE
 
 from app.quote_parse_logic import get_quote_from_all_pages, write_quote_to_file
+# from app.description import AUTHORS_FILE
 # from app.author_parse_logic import (
 #     get_authors_from_all_pages,
 #     write_author_to_file

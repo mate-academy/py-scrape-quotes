@@ -27,13 +27,13 @@ def parse_single_bio(quote_description_link: str, author_name: str) -> str:
     if not AUTHORS_DICT.get(author_name):
         AUTHORS_DICT[author_name] = soup.select_one(".author-description").text
 
-    return AUTHORS_DICT[author_name]
+    return AUTHORS_DICT[author_name].replace("\n", "").strip()
 
 
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
-        text=quote_soup.select_one("span.text").text,
-        author=quote_soup.select_one(".author").text,
+        text=quote_soup.select_one("span.text").text.replace("\n", ""),
+        author=quote_soup.select_one(".author").text.replace("\n", ""),
         author_bio=parse_single_bio(
             QUOTES_BASE_URL + quote_soup.select_one("span > a")["href"],
             quote_soup.select_one(".author").text
@@ -61,8 +61,18 @@ def write_quotes_to_csv(quotes: list[Quote], path: str) -> None:
         writer.writerows([astuple(quote) for quote in quotes])
 
 
+def remove_double_newlines(filename):
+    with open(filename, "r", encoding="utf-8") as file:
+        content = file.read()
+    new_content = content.replace('\n\n', '\n')
+
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write(new_content)
+
+
 def main(output_csv_path: str) -> None:
     write_quotes_to_csv(get_quotes(), output_csv_path)
+    remove_double_newlines(output_csv_path)
 
 
 if __name__ == "__main__":

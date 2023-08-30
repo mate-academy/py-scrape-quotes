@@ -14,30 +14,16 @@ AUTHORS_DICT = {}
 class Quote:
     text: str
     author: str
-    author_bio: str
     tags: list[str]
 
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_single_bio(quote_description_link: str, author_name: str) -> str:
-    page = requests.get(quote_description_link).content
-    soup = BeautifulSoup(page, "html.parser")
-    if not AUTHORS_DICT.get(author_name):
-        AUTHORS_DICT[author_name] = soup.select_one(".author-description").text
-
-    return AUTHORS_DICT[author_name].replace("\n", "").strip()
-
-
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
         text=quote_soup.select_one("span.text").text.replace("\n", ""),
         author=quote_soup.select_one(".author").text.replace("\n", ""),
-        author_bio=parse_single_bio(
-            QUOTES_BASE_URL + quote_soup.select_one("span > a")["href"],
-            quote_soup.select_one(".author").text
-        ),
         tags=[tag.text for tag in quote_soup.select("a.tag")],
     )
 

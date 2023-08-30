@@ -1,4 +1,6 @@
 import csv
+import logging
+import sys
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
 
@@ -16,6 +18,15 @@ class Quote:
 
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(levelname)8s]: %(message)s",
+    handlers=[
+        logging.FileHandler("parser.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
+)
 
 
 def parse_singe_quote(quote_soup: Tag) -> Quote:
@@ -37,7 +48,6 @@ def get_quotes() -> [Quote]:
     page_number = 1
 
     while True:
-        print(f"Parsing page number {page_number}...")
         url = urljoin(BASE_URL, f"page/{page_number}/")
         page = requests.get(url).content
         soup = BeautifulSoup(page, "html.parser")
@@ -45,6 +55,7 @@ def get_quotes() -> [Quote]:
         if "No quotes found!" in soup.text:
             break
 
+        logging.info(f"Start parsing page #{page_number}")
         all_quotes.extend(get_single_page_quotes(page_soup=soup))
         page_number += 1
 

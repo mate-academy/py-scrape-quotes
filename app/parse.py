@@ -50,7 +50,9 @@ def get_quotes() -> list[Quote]:
 
         quotes_soup = soup.select(".quote")
 
-        quotes.extend([parse_single_quote(quote_soup) for quote_soup in quotes_soup])
+        quotes.extend(
+            [parse_single_quote(quote_soup) for quote_soup in quotes_soup]
+        )
     return quotes
 
 
@@ -61,10 +63,10 @@ def write_quotes_to_csv(quotes: list[Quote], path: str) -> None:
         writer.writerows([astuple(quote) for quote in quotes])
 
 
-def remove_double_newlines(filename):
+def remove_double_newlines(filename: str) -> None:
     with open(filename, "r", encoding="utf-8") as file:
         content = file.read()
-    new_content = content.replace('\n\n', '\n')
+    new_content = content.replace("\n\n", "\n")
 
     with open(filename, "w", encoding="utf-8") as file:
         file.write(new_content)

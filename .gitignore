@@ -8,3 +8,5 @@ venv/
 **__pycache__/
 /app/quotes.csv
 /tests/result.csv
+/app/authors.csv
+/result.csv

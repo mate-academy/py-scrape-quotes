@@ -24,13 +24,7 @@ def write_author_to_file(file_name: str, author: Author) -> None:
         if not file_exists:
             author_writer.writeheader()
 
-        author_writer.writerow({
-            "name": author.name,
-            "born_date": author.born_date,
-            "born_city": author.born_city,
-            "born_country": author.born_country,
-            "description": author.description
-        })
+        author_writer.writerow(author.__dict__)
 
 
 def insert_author_to_dict(author_soup: BeautifulSoup) -> Author:

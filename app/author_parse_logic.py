@@ -15,11 +15,13 @@ from app.description import BASE_URL, CLASS_AUTHOR, AUTHOR_FIELD_NAMES
 
 def write_author_to_file(file_name: str, author: Author) -> None:
     file_exists = os.path.exists(file_name)
-    field_names = AUTHOR_FIELD_NAMES
 
     with open(file_name, "a+", newline="", encoding="utf-8") as author_file:
 
-        author_writer = csv.DictWriter(author_file, fieldnames=field_names)
+        author_writer = csv.DictWriter(
+            author_file,
+            fieldnames=AUTHOR_FIELD_NAMES
+        )
 
         if not file_exists:
             author_writer.writeheader()

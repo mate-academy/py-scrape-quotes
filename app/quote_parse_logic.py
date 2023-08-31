@@ -10,11 +10,10 @@ from app.description import Quote, CLASS_QUOTE, HTML_PARSER, QUOTE_FIELD_NAMES
 
 def write_quote_to_file(file_name: str, quote: Quote) -> None:
     file_exists = os.path.exists(file_name)
-    field_names = QUOTE_FIELD_NAMES
 
     with open(file_name, "a+", newline="", encoding="utf-8") as quote_file:
 
-        quote_writer = csv.DictWriter(quote_file, fieldnames=field_names)
+        quote_writer = csv.DictWriter(quote_file, fieldnames=QUOTE_FIELD_NAMES)
 
         if not file_exists:
             quote_writer.writeheader()

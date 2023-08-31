@@ -11,6 +11,14 @@ CLASS_QUOTE = ".quote"
 CLASS_AUTHOR = ".author"
 AUTHORS_FILE = "authors.csv"
 QUOTES_FILE = "correct_quotes.csv"
+AUTHOR_FIELD_NAMES = [
+    "name",
+    "born_date",
+    "born_city",
+    "born_country",
+    "description"
+]
+QUOTE_FIELD_NAMES = ["text", "author", "tags"]
 
 
 @dataclass

@@ -1,5 +1,5 @@
 import csv
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, astuple
 from requests import request
 from bs4 import BeautifulSoup
 
@@ -53,15 +53,12 @@ def get_all_quotes() -> list[Quote]:
 
 
 def write_quotes(quotes_list: [Quote], output_path: str) -> None:
-    with open(output_path, "w", encoding="utf-8", newline="") as quotes_file:
-        writer = csv.DictWriter(quotes_file, QUOTE_FIELDS)
-        writer.writeheader()
-        for quote in quotes_list:
-            writer.writerow({
-                "text": quote.text,
-                "author": quote.author,
-                "tags": quote.tags
-            })
+    with open(output_path, "a+", encoding="utf-8", newline="") as quotes_file:
+        writer = csv.writer(quotes_file)
+        writer.writerow(QUOTE_FIELDS)
+        writer.writerows(
+            [quote for quote in [astuple(quote) for quote in quotes_list]]
+        )
 
 
 def main(output_csv_path: str) -> None:

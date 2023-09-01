@@ -38,18 +38,27 @@ def parse_quote(quote_soup: BeautifulSoup) -> Quote:
     return quote
 
 
+def get_next_page( next_page: int, page: BeautifulSoup = None,) -> int | None:
+    if page and not page.select(".next"):
+        next_page = None
+    else:
+        next_page += 1
+        print(next_page)
+    return next_page
+
+
 def get_all_quotes() -> list[Quote]:
-    all_qoutes = []
-    next_page = 1
+    next_page = 0
+    all_quotes = []
+    next_page = get_next_page(next_page)
     while next_page:
         page = get_page(BASE_URL, next_page)
-        qoutes_soup = get_quotes_soup(page)
-        quotes = [parse_quote(quote) for quote in qoutes_soup]
-        all_qoutes.extend(quotes)
-        next_page += 1
-        if not page.select(".next"):
-            next_page = None
-    return all_qoutes
+        quotes_soup = get_quotes_soup(page)
+        quotes = [parse_quote(quote) for quote in quotes_soup]
+        all_quotes.extend(quotes)
+        next_page = get_next_page(next_page, page)
+
+    return all_quotes
 
 
 def write_quotes(quotes_list: [Quote], output_path: str) -> None:

@@ -50,12 +50,16 @@ def get_quotes() -> list[Quote]:
     return all_quotes
 
 
-def main(output_csv_path: str) -> None:
-    quotes = get_quotes()
+def write_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])
+
+
+def main(output_csv_path: str) -> None:
+    quotes = get_quotes()
+    write_to_csv(output_csv_path, quotes)
 
 
 if __name__ == "__main__":

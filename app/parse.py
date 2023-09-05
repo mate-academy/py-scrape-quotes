@@ -38,7 +38,7 @@ def parse_quote(quote_soup: BeautifulSoup) -> Quote:
     return quote
 
 
-def get_next_page( next_page: int, page: BeautifulSoup = None,) -> int | None:
+def get_next_page(next_page: int, page: BeautifulSoup = None) -> int | None:
     if page and not page.select(".next"):
         next_page = None
     else:

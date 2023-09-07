@@ -54,7 +54,7 @@ def get_pages_number(page_soup: BeautifulSoup) -> int:
             ).get("href")
 
             url = urljoin(URL, next_page)
-            number_of_page = re.findall(r'\b\d+', next_page)[0]
+            number_of_page = re.findall(r"\b\d+", next_page)[0]
             logging.info(f"Pages counting... #{number_of_page}....{url}")
 
             page = requests.get(url).content

@@ -32,10 +32,10 @@ def find_tags(soup: BeautifulSoup) -> list[str]:
     return [tag.text for tag in tags]
 
 
-def get_page_link(soup: BeautifulSoup) -> str:
+def get_page_link(soup: BeautifulSoup) -> str | None:
     page_soup = soup.select_one(".pager > li.next > a")
     if page_soup is None:
-        return "end"
+        return None
     return page_soup.get("href")
 
 
@@ -54,7 +54,7 @@ def main(output_csv_path: str) -> None:
         soup = BeautifulSoup(page, "html.parser")
         all_quotes.extend(get_single_page_quotes(soup))
 
-        if get_page_link(soup) == "end":
+        if get_page_link(soup) is None:
             break
 
     with open(output_csv_path, "w", newline="") as file:

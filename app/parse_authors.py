@@ -2,6 +2,7 @@ import csv
 import logging
 import sys
 from dataclasses import dataclass, fields, astuple
+from typing import Callable
 from urllib.parse import urljoin
 
 import requests
@@ -31,10 +32,10 @@ class Author:
 AUTHORS_FIELDS = [field.name for field in fields(Author)]
 
 
-def memorize(func):
+def memorize(func: Callable) -> Callable:
     cache = {}
 
-    def wrapper(*args):
+    def wrapper(*args) -> Author:
         if args in cache:
             return cache[args]
         else:
@@ -71,7 +72,7 @@ def get_single_biography(name: str) -> Author:
     return author
 
 
-def get_all_authors_biography():
+def get_all_authors_biography() -> [Author]:
     page = requests.get(URL).content
     page_soup = BeautifulSoup(page, "html.parser")
 

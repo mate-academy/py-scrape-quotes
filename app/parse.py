@@ -1,5 +1,5 @@
 import csv
-from dataclasses import dataclass, fields, astuple
+from dataclasses import dataclass
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup, ResultSet

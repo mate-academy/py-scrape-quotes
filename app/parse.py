@@ -1,9 +1,7 @@
 import csv
 from dataclasses import dataclass
 from urllib.parse import urljoin
-
 from bs4 import BeautifulSoup, ResultSet
-
 import requests
 
 BASE_URL = "https://quotes.toscrape.com/"
@@ -15,17 +13,17 @@ class Quote:
     author: str
     tags: list[str]
 
-
-def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
-    return Quote(
-        text=quote_soup.select_one(".text").text,
-        author=quote_soup.select_one(".author").text,
-        tags=[tag.text for tag in quote_soup.select(".tag")],
-    )
+    @classmethod
+    def parse_single_quote(cls, quote_soup: BeautifulSoup) -> 'Quote':
+        return cls(
+            text=quote_soup.select_one(".text").text,
+            author=quote_soup.select_one(".author").text,
+            tags=[tag.text for tag in quote_soup.select(".tag")],
+        )
 
 
 def parse_single_page(target_page: ResultSet) -> list[Quote]:
-    return [parse_single_quote(quote) for quote in target_page]
+    return [Quote.parse_single_quote(quote) for quote in target_page]
 
 
 def parse_website() -> list[Quote]:

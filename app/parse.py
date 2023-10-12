@@ -92,7 +92,11 @@ def get_all_authors() -> [Author]:
     return [parse_author(get_single_page_soup(link)) for link in AUTHOR_LINKS]
 
 
-def write_quotes_to_csv(quotes: [Quote], file_path: str, class_type: dataclass) -> None:
+def write_quotes_to_csv(
+        quotes: [Quote],
+        file_path: str,
+        class_type: dataclass
+) -> None:
     with open(file_path, "w", encoding="UTF-8", newline="") as file:
         writer = csv.writer(file)
         first_row_fields = get_fields_for_column_names(class_type)

@@ -28,10 +28,8 @@ def get_fields_for_column_names(data_class: dataclass) -> [str]:
 
 
 def get_single_page_soup(address: int | str) -> BeautifulSoup:
-    if isinstance(address, int):
-        quotes_url = urljoin(BASE_URL, f"page/{address}/")
-    else:
-        quotes_url = urljoin(BASE_URL, address)
+    sub_url = f"page/{address}/" if isinstance(address, int) else address
+    quotes_url = urljoin(BASE_URL, sub_url)
     page = requests.get(quotes_url).content
     return BeautifulSoup(page, "html.parser")
 
@@ -53,11 +51,9 @@ def parse_single_quote(page_soup: BeautifulSoup) -> Quote:
 def parse_author(page_soup: BeautifulSoup) -> Author:
     return Author(
         full_name=page_soup.select_one(".author-title").text,
-        born=(
-            page_soup.select_one(".author-born-date").text
-            + " "
-            + page_soup.select_one(".author-born-location").text
-        ),
+        born=(page_soup.select_one(".author-born-date").text
+              + " "
+              + page_soup.select_one(".author-born-location").text),
         description=page_soup.select_one(".author-description").text.strip(),
     )
 
@@ -68,9 +64,7 @@ def get_single_page_quotes(soup: BeautifulSoup) -> [Quote]:
 
 
 def check_next_page(single_page_soup: BeautifulSoup) -> bool:
-    if single_page_soup.find("li", {"class": "next"}):
-        return True
-    return False
+    return single_page_soup.find("li", {"class": "next"})
 
 
 def get_all_quotes(page_number: int = 1) -> [Quote]:

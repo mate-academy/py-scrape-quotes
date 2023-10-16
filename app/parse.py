@@ -39,7 +39,7 @@ def get_path_to_next_page(url: str) -> Optional[str]:
     link_to_next_page = get_page_html(url).select_one(
         ".pager > .next")
     if link_to_next_page:
-        print(str(link_to_next_page.find_next("a")["href"])[1:])
+        return str(link_to_next_page.find_next("a")["href"])[1:]
     return None
 
 
@@ -86,7 +86,7 @@ def get_all_quotes(url: str) -> list[Quote]:
 
 
 def main(output_csv_path: str) -> None:
-    with open(output_csv_path, "w", encoding="utf-8") as file:
+    with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
         quotes = get_all_quotes(BASE_URL)
         writer.writerow(QUOTE_FIELDS)

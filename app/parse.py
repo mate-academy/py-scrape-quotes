@@ -20,12 +20,12 @@ QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 def get_page_html(url: str) -> BeautifulSoup:
     response = requests.get(url)
-    response.encoding = 'utf-8'
+    response.encoding = "utf-8"
     try:
         return BeautifulSoup(response.text, "html.parser")
     except UnicodeDecodeError:
         print("Error parsing the following content from URL:", url)
-        print(response.text)  # This will print the content that's causing the issue
+        print(response.text)
         raise
 
 

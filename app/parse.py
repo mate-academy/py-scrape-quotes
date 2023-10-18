@@ -42,12 +42,15 @@ class QuoteParser:
 
     def get_quote_from_single_page(self, url: str) -> list[Quote]:
         quotes_div = QuoteParser.get_page_html(url).select(".quote")
-        quotes_text = \
-            [text.select_one(".text").text for text in quotes_div]
-        quotes_author = \
-            [text.select_one(".author").text for text in quotes_div]
-        quotes_tags = \
-            [[tag.text for tag in text.select(".tag")] for text in quotes_div]
+        quotes_text = [
+            text.select_one(".text").text for text in quotes_div
+        ]
+        quotes_author = [
+            text.select_one(".author").text for text in quotes_div
+        ]
+        quotes_tags = [
+            [tag.text for tag in text.select(".tag")] for text in quotes_div
+        ]
         return [
             Quote(text=quotes_text[index],
                   author=quotes_author[index],

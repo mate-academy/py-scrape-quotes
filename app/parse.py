@@ -17,11 +17,18 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
+def parse_tags(tags_soup: BeautifulSoup) -> list[str]:
+    tags = tags_soup.select(".keywords")[0]["content"]
+    if tags:
+        return tags.split(",")
+    return []
+
+
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
-        tags=quote_soup.select(".keywords")[0]["content"].split(","),
+        tags=parse_tags(quote_soup),
     )
 
 

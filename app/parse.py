@@ -19,9 +19,7 @@ QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 def parse_tags(tags_soup: BeautifulSoup) -> list[str]:
     tags = tags_soup.select(".keywords")[0]["content"]
-    if tags:
-        return tags.split(",")
-    return []
+    return tags.split(",") if tags else []
 
 
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
@@ -38,19 +36,18 @@ def get_single_page(page_soup: BeautifulSoup) -> [Quote]:
 
 
 def get_info() -> [Quote]:
-    page_num = 1
-    all_quotes = []
-
-    while True:
+    page = requests.get(BASE_URL).content
+    soup = BeautifulSoup(page, "html.parser")
+    all_quotes = get_single_page(soup)
+    next_page = soup.select_one(".next")
+    page_num = 2
+    while next_page:
         url = BASE_URL + f"page/{page_num}/"
         page = requests.get(url).content
         soup = BeautifulSoup(page, "html.parser")
         all_quotes.extend(get_single_page(soup))
-        page_num += 1
         next_page = soup.select_one(".next")
-        if next_page is None:
-            break
-
+        page_num += 1
     return all_quotes
 
 

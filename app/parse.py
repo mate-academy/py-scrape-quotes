@@ -16,22 +16,22 @@ class Quote:
     tags: list[str]
 
 
-def parse_single_qoute(qoute_soup: BeautifulSoup) -> Quote:
+def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
-        text=qoute_soup.select_one(".text").text,
-        author=qoute_soup.select_one(".author").text,
-        tags=[tag.text for tag in qoute_soup.select(".tags > a")]
+        text=quote_soup.select_one(".text").text,
+        author=quote_soup.select_one(".author").text,
+        tags=[tag.text for tag in quote_soup.select(".tags > a")]
     )
 
 
-def parse_single_page_qoutes(quote_soup: BeautifulSoup) -> [Quote]:
-    qoutes = quote_soup.select(".quote")
-    if qoutes:
-        return [parse_single_qoute(qoute) for qoute in qoutes]
+def parse_single_page_qoutes(quote_soup: BeautifulSoup) -> list[Quote]:
+    quotes = quote_soup.select(".quote")
+
+    return [parse_single_quote(quote) for quote in quotes]
 
 
-def get_list_quote() -> [Quote]:
-    all_qoutes = []
+def get_list_quote() -> list[Quote]:
+    all_quotes = []
     page_number = 1
 
     while True:
@@ -39,28 +39,28 @@ def get_list_quote() -> [Quote]:
         print(f"Start parse page #{page_number}")
         page = requests.get(url).content
         soup = BeautifulSoup(page, "html.parser")
-        qoutes = parse_single_page_qoutes(soup)
+        quotes = parse_single_page_qoutes(soup)
 
-        if not qoutes:
+        if not quotes:
             break
 
-        all_qoutes.extend(qoutes)
+        all_quotes.extend(quotes)
         page_number += 1
 
-    return all_qoutes
+    return all_quotes
 
 
-def write_qoutes_to_csv(qoutes: [Quote], output_csv_path: str) -> None:
+def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
         written = csv.writer(file)
         written.writerow(["text", "author", "tags"])
-        for qoute in qoutes:
-            written.writerow([qoute.text, qoute.author, qoute.tags])
+        for quote in quotes:
+            written.writerow([quote.text, quote.author, quote.tags])
 
 
 def main(output_csv_path: str) -> None:
-    qoutes = get_list_quote()
-    write_qoutes_to_csv(qoutes, output_csv_path)
+    quotes = get_list_quote()
+    write_quotes_to_csv(quotes, output_csv_path)
 
 
 if __name__ == "__main__":

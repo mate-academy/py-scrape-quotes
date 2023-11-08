@@ -48,7 +48,6 @@ def scrape_all_pages() -> None:
     while check_page_exists(i):
         scrape_one_page(URL + f"/page/{i}/")
         i += 1
-        print(f"Scraped page {i}")
 
 
 def write_quotes_to_csv(output_csv_path: str) -> None:
@@ -56,13 +55,12 @@ def write_quotes_to_csv(output_csv_path: str) -> None:
         writer = csv.writer(csv_file)
         writer.writerow(["text", "author", "tags"])
         for quote in quotes:
-            writer.writerow([quote.text, quote.author, ', '.join(quote.tags)])
+            writer.writerow([quote.text, quote.author, str(quote.tags)])
 
 
 def main(output_csv_path: str) -> None:
     scrape_all_pages()
     write_quotes_to_csv(output_csv_path)
-    print(quotes)
 
 
 if __name__ == "__main__":

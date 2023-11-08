@@ -81,7 +81,5 @@ def main(output_csv_path: str) -> None:
 
 
 if __name__ == "__main__":
-    print(time.strftime("%X"))
     main("quotes.csv")
     get_all_quotes_instances()
-    print(time.strftime("%X"))

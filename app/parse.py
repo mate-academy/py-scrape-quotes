@@ -1,7 +1,6 @@
 import csv
 from dataclasses import dataclass
 from urllib.parse import urljoin
-import time
 
 import requests
 from bs4 import BeautifulSoup, SoupStrainer

@@ -51,7 +51,7 @@ def scrape_all_pages() -> None:
 
 
 def write_quotes_to_csv(output_csv_path: str) -> None:
-    with open(output_csv_path, "w", encoding='utf-8', newline='') as csv_file:
+    with open(output_csv_path, "w", encoding="utf-8", newline="") as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["text", "author", "tags"])
         for quote in quotes:
@@ -65,4 +65,3 @@ def main(output_csv_path: str) -> None:
 
 if __name__ == "__main__":
     main("quotes.csv")
-

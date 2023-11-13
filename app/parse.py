@@ -47,12 +47,17 @@ def get_quotes() -> list[Quote]:
     return quotes
 
 
-def write_quotes_to_csv(quotes: list[Quote]) -> None:
-    with open(QUOTES_OUTPUT_CSV_PATH, "w") as csv_file:
+def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str ) -> None:
+    with open(output_csv_path, "w") as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows(([astuple(quote) for quote in quotes]))
 
 
+def main(output_csv_path: str = QUOTES_OUTPUT_CSV_PATH) -> None:
+    write_quotes_to_csv(get_quotes(), output_csv_path)
+    print(f"Quotes saved to {output_csv_path}")
+
+
 if __name__ == "__main__":
-    write_quotes_to_csv(get_quotes())
+    main()

@@ -13,10 +13,10 @@ class Quote:
 
 
 URL = "https://quotes.toscrape.com"
-quotes = []
 
 
-def create_quotes(quotes_raw: list) -> None:
+def create_quotes(quotes_raw: list) -> list[Quote]:
+    quotes = []
     for quote in quotes_raw:
         text = quote.find("span", {"class": "text"}).text
         author = quote.find("small", {"class": "author"}).text
@@ -28,13 +28,14 @@ def create_quotes(quotes_raw: list) -> None:
             tags=tags,
         )
         quotes.append(quote)
+    return quotes
 
 
-def scrape_one_page(url: str) -> None:
+def scrape_one_page(url: str) -> list[Quote]:
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
     quotes_raw = soup.findAll("div", {"class": "quote"})
-    create_quotes(quotes_raw)
+    return create_quotes(quotes_raw)
 
 
 def check_page_exists(num_page: int) -> bool:
@@ -43,14 +44,18 @@ def check_page_exists(num_page: int) -> bool:
     return "No quotes found!" not in soup.prettify()
 
 
-def scrape_all_pages() -> None:
+def scrape_all_pages() -> list[Quote]:
+    all_quotes = []
     i = 1
     while check_page_exists(i):
-        scrape_one_page(URL + f"/page/{i}/")
+        new_quotes = scrape_one_page(URL + f"/page/{i}/")
+        all_quotes.extend(new_quotes)
         i += 1
 
+    return all_quotes
 
-def write_quotes_to_csv(output_csv_path: str) -> None:
+
+def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["text", "author", "tags"])
@@ -59,8 +64,8 @@ def write_quotes_to_csv(output_csv_path: str) -> None:
 
 
 def main(output_csv_path: str) -> None:
-    scrape_all_pages()
-    write_quotes_to_csv(output_csv_path)
+    quotes = scrape_all_pages()
+    write_quotes_to_csv(output_csv_path, quotes)
 
 
 if __name__ == "__main__":

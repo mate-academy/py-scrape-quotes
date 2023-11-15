@@ -7,7 +7,7 @@ import os
 from dataclasses import dataclass, asdict
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 
 BASE_URL = "https://quotes.toscrape.com/"
@@ -19,6 +19,14 @@ class Quote:
     text: str
     author: str
     tags: list[str]
+
+    @classmethod
+    def parse(cls, quote_raw: BeautifulSoup) -> "Quote":
+        return cls(
+            text=quote_raw.select_one(".text").text,
+            author=quote_raw.select_one(".author").text,
+            tags=[tag.text for tag in quote_raw.select(".tag")]
+        )
 
 
 @dataclass
@@ -36,7 +44,7 @@ def get_author_url(quote_info: BeautifulSoup) -> str:
     return author_url
 
 
-def get_author_bio(author_url: str) -> Author:
+def get_author_bio(author_url: str) -> Optional[Author]:
     response = requests.get(author_url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
@@ -47,14 +55,12 @@ def get_author_bio(author_url: str) -> Author:
             birth_place=soup.select_one(".author-born-location").text[3:],
             description=soup.select_one(".author-description").text
         )
-    else:
-        return None
 
 
 def fetch_and_cache_author_bio(author_url: str) -> Author:
     cache_key = hashlib.md5(author_url.encode()).hexdigest()
 
-    cache_filename = f"cache/{cache_key}.txt"
+    cache_filename = os.path.join("cache", f"{cache_key}.txt")
     os.makedirs(os.path.dirname(cache_filename), exist_ok=True)
 
     if os.path.exists(cache_filename):
@@ -64,8 +70,7 @@ def fetch_and_cache_author_bio(author_url: str) -> Author:
             if bio_text:
                 author_data = json.loads(bio_text)
                 return Author(**author_data)
-            else:
-                return None
+
     else:
         author = get_author_bio(author_url)
 
@@ -74,14 +79,6 @@ def fetch_and_cache_author_bio(author_url: str) -> Author:
                 json.dump(asdict(author), file)
 
         return author
-
-
-def parse_single_quote(quote_raw: BeautifulSoup) -> Quote:
-    return Quote(
-        text=quote_raw.select_one(".text").text,
-        author=quote_raw.select_one(".author").text,
-        tags=[tag.text for tag in quote_raw.select(".tag")]
-    )
 
 
 def scrap_text(base_url: str) -> Tuple[List[Quote], List[Author]]:
@@ -93,25 +90,25 @@ def scrap_text(base_url: str) -> Tuple[List[Quote], List[Author]]:
         page_url = urljoin(base_url, f"page/{page_number}/")
         response = requests.get(page_url)
 
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, "html.parser")
-            quotes_on_page = soup.select(".quote")
-
-            if not quotes_on_page:
-                break
-
-            quotes.extend(
-                parse_single_quote(quote) for quote in quotes_on_page
-            )
-
-            autors_urls = [get_author_url(quote) for quote in quotes_on_page]
-
-            for url in autors_urls:
-                authors.append(fetch_and_cache_author_bio(url))
-
-            page_number += 1
-        else:
+        if response.status_code != 200:
             break
+
+        soup = BeautifulSoup(response.content, "html.parser")
+        quotes_on_page = soup.select(".quote")
+
+        if not quotes_on_page:
+            break
+
+        quotes.extend(
+            Quote.parse(quote) for quote in quotes_on_page
+        )
+
+        autors_urls = [get_author_url(quote) for quote in quotes_on_page]
+
+        for url in autors_urls:
+            authors.append(fetch_and_cache_author_bio(url))
+
+        page_number += 1
 
     return quotes, authors
 

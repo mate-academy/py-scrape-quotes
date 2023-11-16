@@ -26,12 +26,12 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_all_quotes() -> [Quote]:
+def get_all_quotes() -> list[Quote]:
     quotes = []
     page_num = 1
 
@@ -47,12 +47,16 @@ def get_all_quotes() -> [Quote]:
     return quotes
 
 
-def main(output_csv_path: str) -> None:
-    quotes = get_all_quotes()
+def write_file(output_csv_path: str, quotes: list[Quote]) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])
+
+
+def main(output_csv_path: str) -> None:
+    quotes = get_all_quotes()
+    write_file(output_csv_path, quotes)
 
 
 if __name__ == "__main__":

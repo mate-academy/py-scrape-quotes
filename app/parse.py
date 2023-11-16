@@ -20,7 +20,7 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_single_quotes(quotes_soup: Tag) -> Quote:
+def parse_single_quotes(quotes_soup: Tag) -> list[Quote]:
     return (Quote(
         text=quotes_soup.select_one(".text").text,
         author=quotes_soup.select_one(".author").text,
@@ -28,13 +28,13 @@ def parse_single_quotes(quotes_soup: Tag) -> Quote:
     ))
 
 
-def get_single_page_quotes(quote_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(quote_soup: BeautifulSoup) -> list[Quote]:
     quotes = quote_soup.select(".quote")
     return [parse_single_quotes(quote_soup)
             for quote_soup in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
     result = get_single_page_quotes(soup)

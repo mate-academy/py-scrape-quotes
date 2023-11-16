@@ -28,7 +28,7 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 

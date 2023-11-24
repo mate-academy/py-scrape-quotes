@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 
 BASE_URL = "https://quotes.toscrape.com/"
 
-QUOTES_OUTPUT_CSV_PATH = "../output_data/quotes.csv"
-BIOGRAPHIES_OUTPUT_CSV_PATH = "../output_data/biographies.csv"
+QUOTES_OUTPUT_CSV_PATH = "quotes.csv"
+BIOGRAPHIES_OUTPUT_CSV_PATH = "biographies.csv"
 
 
 @dataclass

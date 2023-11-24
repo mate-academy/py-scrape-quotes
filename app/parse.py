@@ -45,13 +45,13 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
 
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
 
@@ -76,7 +76,7 @@ def parse_single_biography(biography_soup: BeautifulSoup) -> Biography:
     )
 
 
-def get_biographies() -> [Biography]:
+def get_biographies() -> list[Biography]:
     all_biographies = []
 
     for link in links_about_authors.values():
@@ -89,7 +89,7 @@ def get_biographies() -> [Biography]:
 
 
 def write_items_to_csv(
-    items: [Quote | Biography],
+    items: list[Quote | Biography],
     items_output_csv_path: str,
     item_fields: [str],
 ) -> None:
@@ -104,11 +104,11 @@ def write_items_to_csv(
         writer.writerows([astuple(item) for item in items])
 
 
-def main() -> None:
+def main(quotes_output_csv_path: str) -> None:
     quotes = get_quotes()
     write_items_to_csv(
         items=quotes,
-        items_output_csv_path=QUOTES_OUTPUT_CSV_PATH,
+        items_output_csv_path=quotes_output_csv_path,
         item_fields=QUOTE_FIELDS,
     )
     biographies = get_biographies()
@@ -120,4 +120,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    main(QUOTES_OUTPUT_CSV_PATH)

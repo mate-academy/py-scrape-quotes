@@ -3,6 +3,7 @@ import requests
 
 from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
 
 BASE_URL = "https://quotes.toscrape.com/"
@@ -23,7 +24,7 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
-        tags=quote_soup.select_one(".keywords")["content"].split(",")
+        tags=[tag.text for tag in quote_soup.select(".tag")]
     )
 
 
@@ -37,6 +38,14 @@ def get_quotes() -> [Quote]:
     first_page = requests.get(BASE_URL).content
     first_page_soup = BeautifulSoup(first_page, "html.parser")
     quotes = get_single_page_quotes(first_page_soup)
+    next_page = first_page_soup.select_one(".next > a")
+
+    while next_page is not None:
+        page = requests.get(urljoin(BASE_URL, next_page.get("href"))).content
+        soup = BeautifulSoup(page, "html.parser")
+
+        quotes.extend(get_single_page_quotes(soup))
+        next_page = soup.select_one(".next > a")
 
     return quotes
 

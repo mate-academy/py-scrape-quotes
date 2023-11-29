@@ -51,7 +51,9 @@ def get_quotes() -> [Quote]:
 
 
 def write_quotes_to_csv(quotes: [Quote]) -> None:
-    with open(QOUTES_OUTPUT_CSV_PATH, "w", encoding="utf-8", newline="") as file:
+    with open(
+            QOUTES_OUTPUT_CSV_PATH, "w", encoding="utf-8", newline=""
+    ) as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])

@@ -30,7 +30,7 @@ def parse_single_quote(quote_tag: Tag) -> Quote:
     )
 
 
-def parse_quotes_per_page(page_soup: BeautifulSoup) -> [Quote]:
+def parse_quotes_per_page(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
 
     return [parse_single_quote(quote) for quote in quotes]
@@ -54,15 +54,18 @@ def get_quotes() -> list[Quote]:
     return all_quotes
 
 
-def main(output_csv_path: str) -> None:
-    quotes = get_quotes()
-
-    data = [[quote.text, quote.author, quote.tags] for quote in quotes]
-
+def save_in_file(data: list[list], output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(headers)
         writer.writerows(data)
+
+
+def main(output_csv_path: str) -> None:
+    quotes = get_quotes()
+
+    data = [[quote.text, quote.author, quote.tags] for quote in quotes]
+    save_in_file(data, output_csv_path)
 
 
 if __name__ == "__main__":

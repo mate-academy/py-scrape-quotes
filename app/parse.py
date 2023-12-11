@@ -52,7 +52,7 @@ def parse_quotes() -> list[Quote]:
     return quotes
 
 
-def write_quotes_to_csv(output_csv_path: str, quotes: [Quote]) -> None:
+def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([field.name for field in fields(Quote)])

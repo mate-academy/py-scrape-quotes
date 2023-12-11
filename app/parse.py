@@ -33,7 +33,7 @@ def parse_single_page(page_quotes: BeautifulSoup) -> [Quote]:
     return [parse_single_quote(quote) for quote in page_quotes]
 
 
-def parse_quotes() -> [Quote]:
+def parse_quotes() -> list[Quote]:
     page_num = 1
     quotes = []
     while True:

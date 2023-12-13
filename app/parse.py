@@ -1,8 +1,11 @@
+from typing import Type, List
+
 import csv
 import requests
 from dataclasses import dataclass
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -11,31 +14,31 @@ BASE_URL = "https://quotes.toscrape.com/"
 class Quote:
     text: str
     author: str
-    tags: list[str]
+    tags: List[str]
+
+    @classmethod
+    def parse_single_quote(
+            cls: Type["Quote"],
+            quote_soup: BeautifulSoup
+    ) -> "Quote":
+        quote_text = quote_soup.select_one(".text").text
+        quote_author = quote_soup.select_one(".author").text
+        tags = quote_soup.select_one(".keywords")["content"]
+        quote_tags = tags.split(",") if tags else []
+
+        return cls(quote_text, quote_author, quote_tags)
 
 
-def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
-    quote_text = quote_soup.select_one(".text").text
-    quote_author = quote_soup.select_one(".author").text
-    tags = quote_soup.select_one(".keywords")["content"]
-    if tags:
-        quote_tags = tags.split(",")
-    else:
-        quote_tags = []
-
-    return Quote(quote_text, quote_author, quote_tags,)
-
-
-def get_single_page_quotes(quote_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(quote_soup: BeautifulSoup) -> List[Quote]:
     quotes = quote_soup.select(".quote")
-    return [parse_single_quote(quote_soup) for quote_soup in quotes]
+    return [Quote.parse_single_quote(quote) for quote in quotes]
 
 
 def get_page_url(page_number: str = "1") -> str:
     return urljoin(BASE_URL, f"page/{page_number}/")
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> List[Quote]:
     page_number = 1
     first_page = requests.get(get_page_url()).content
     first_page_soup = BeautifulSoup(first_page, "html.parser")
@@ -57,7 +60,6 @@ def get_quotes() -> [Quote]:
 
 
 def main(output_csv_path: str) -> None:
-    print(get_quotes())
     quotes = get_quotes()
     with open(
             output_csv_path,

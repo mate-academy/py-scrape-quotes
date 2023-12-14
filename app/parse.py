@@ -48,7 +48,7 @@ def parse_single_page(page_soup: BeautifulSoup) -> [Quote]:
 def get_quotes() -> [Quote]:
     quotes = []
     data_soup = content_to_soup(BASE_URL)
-    logging.info(f"Start parsing...")
+    logging.info("Start parsing...")
     quotes.extend(parse_single_page(data_soup))
     pagination = data_soup.select_one(".pager")
     if pagination is None:
@@ -61,7 +61,8 @@ def get_quotes() -> [Quote]:
         page_num += 1
         next_page = page_soup.select_one(".next")
         if not next_page:
-            logging.info(f"That's all, thanks), page {page_num} was the last one")
+            logging.info(f"That's all, thanks), "
+                         f"page {page_num} was the last one")
             return quotes
 
 

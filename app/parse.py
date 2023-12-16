@@ -53,7 +53,8 @@ def parse_quotes(soup: BeautifulSoup) -> [Quote]:
 
 def parse_authors(soup: BeautifulSoup) -> [Author]:
     quotes = soup.select("div.quote")
-    return [parse_single_author(quote) for quote in quotes if quote.select_one("small.author").text not in seen_athors]
+    return [parse_single_author(quote) for quote in quotes
+            if quote.select_one("small.author").text not in seen_athors]
 
 
 def to_csv(csv_file: str, instances: list[Quote | Author]) -> None:

@@ -11,9 +11,6 @@ class Quote:
     author: str
     tags: list[str]
 
-    def __repr__(self):
-        return f"{self.text},{self.author},{self.tags}"
-
 
 URL = "https://quotes.toscrape.com/"
 
@@ -26,23 +23,28 @@ def parse_single_quote(quate_soup: Tag) -> Quote:
     )
 
 
-def parse_quotes(url: str) -> [Quote]:
-    page = requests.get(url).content
-    soup = BeautifulSoup(page, "html.parser")
-
+def parse_quotes(soup: BeautifulSoup) -> [Quote]:
     quotes = soup.select("div.quote")
     return [parse_single_quote(quote) for quote in quotes]
 
 
 def to_csv(csv_file: str, quotes: list[Quote]) -> None:
-    with open(csv_file, "w+") as fh:
+    with open(csv_file, "a") as fh:
         writer = csv.writer(fh, delimiter=",", quoting=csv.QUOTE_NONNUMERIC)
         writer.writerows([astuple(quote) for quote in quotes])
 
 
 def main(output_csv_path: str) -> None:
-    page = URL
-    to_csv(output_csv_path, parse_quotes(page))
+    current_url = URL
+    while True:
+        page = requests.get(current_url).content
+        soup = BeautifulSoup(page, "html.parser")
+        to_csv(output_csv_path, parse_quotes(soup))
+
+        next_page = soup.select_one(".next a")
+        if not next_page:
+            break
+        current_url = URL + next_page["href"]
 
 
 if __name__ == "__main__":

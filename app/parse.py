@@ -31,6 +31,7 @@ def parse_quotes(soup: BeautifulSoup) -> [Quote]:
 def to_csv(csv_file: str, quotes: list[Quote]) -> None:
     with open(csv_file, "a") as fh:
         writer = csv.writer(fh, delimiter=",", quoting=csv.QUOTE_NONNUMERIC)
+        writer.writerow(["text", "author", "tags"])
         writer.writerows([astuple(quote) for quote in quotes])
 
 

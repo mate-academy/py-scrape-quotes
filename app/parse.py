@@ -11,6 +11,7 @@ class Quote:
     author: str
     tags: list[str]
 
+
 @dataclass
 class Author:
     name: str
@@ -55,7 +56,7 @@ def parse_quotes(soup: BeautifulSoup) -> [Quote]:
     return [parse_single_quote(quote) for quote in quotes]
 
 
-def to_csv(csv_file: str, instances: list[Quote|Author]) -> None:
+def to_csv(csv_file: str, instances: list[Quote | Author]) -> None:
     with open(csv_file, "a") as fh:
         writer = csv.writer(fh, delimiter=",", quoting=csv.QUOTE_NONNUMERIC)
         writer.writerows([astuple(instance) for instance in instances])

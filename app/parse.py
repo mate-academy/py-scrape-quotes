@@ -29,7 +29,7 @@ class Quote:
 
     @classmethod
     def content_to_soup(cls, url: str) -> BeautifulSoup:
-        cls.url = url
+        cls.base_url = url
         content = requests.get(url).content
         return BeautifulSoup(content, "html.parser")
 

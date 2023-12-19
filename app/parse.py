@@ -7,7 +7,9 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
+
 BASE_URL = "https://quotes.toscrape.com/"
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -23,14 +25,15 @@ class Quote:
     text: str
     author: str
     tags: list[str]
+    BASE_URL = "https://quotes.toscrape.com/"
+
+    @staticmethod
+    def content_to_soup(url: str) -> BeautifulSoup:
+        content = requests.get(url).content
+        return BeautifulSoup(content, "html.parser")
 
 
 QUOTES_FIELDS = [field.name for field in fields(Quote)]
-
-
-def content_to_soup(url: str, ) -> BeautifulSoup:
-    content = requests.get(url).content
-    return BeautifulSoup(content, "html.parser")
 
 
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
@@ -40,14 +43,14 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
                  )
 
 
-def parse_single_page(page_soup: BeautifulSoup) -> [Quote]:
+def parse_single_page(page_soup: BeautifulSoup) -> list[Quote]:
     quotes = page_soup.select(".quote")
     return [parse_single_quote(quote) for quote in quotes]
 
 
 def get_quotes() -> [Quote]:
     quotes = []
-    data_soup = content_to_soup(BASE_URL)
+    data_soup = Quote.content_to_soup(BASE_URL)
     logging.info("Start parsing...")
     quotes.extend(parse_single_page(data_soup))
     pagination = data_soup.select_one(".pager")
@@ -56,7 +59,7 @@ def get_quotes() -> [Quote]:
     page_num = 2
     while True:
         url = urljoin(BASE_URL, f"/page/{page_num}")
-        page_soup = content_to_soup(url)
+        page_soup = Quote.content_to_soup(url)
         quotes.extend(parse_single_page(page_soup))
         page_num += 1
         next_page = page_soup.select_one(".next")

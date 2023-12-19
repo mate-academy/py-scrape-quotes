@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-BASE_URL = "https://quotes.toscrape.com/"
+# BASE_URL = "https://quotes.toscrape.com/"
 
 
 logging.basicConfig(
@@ -25,10 +25,11 @@ class Quote:
     text: str
     author: str
     tags: list[str]
-    BASE_URL = "https://quotes.toscrape.com/"
+    base_url = "https://quotes.toscrape.com/"
 
-    @staticmethod
-    def content_to_soup(url: str) -> BeautifulSoup:
+    @classmethod
+    def content_to_soup(cls, url: str) -> BeautifulSoup:
+        cls.url = url
         content = requests.get(url).content
         return BeautifulSoup(content, "html.parser")
 
@@ -50,7 +51,7 @@ def parse_single_page(page_soup: BeautifulSoup) -> list[Quote]:
 
 def get_quotes() -> [Quote]:
     quotes = []
-    data_soup = Quote.content_to_soup(BASE_URL)
+    data_soup = Quote.content_to_soup(Quote.base_url)
     logging.info("Start parsing...")
     quotes.extend(parse_single_page(data_soup))
     pagination = data_soup.select_one(".pager")
@@ -58,7 +59,7 @@ def get_quotes() -> [Quote]:
         return quotes
     page_num = 2
     while True:
-        url = urljoin(BASE_URL, f"/page/{page_num}")
+        url = urljoin(Quote.base_url, f"/page/{page_num}")
         page_soup = Quote.content_to_soup(url)
         quotes.extend(parse_single_page(page_soup))
         page_num += 1

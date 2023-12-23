@@ -1,10 +1,17 @@
 import csv
+import logging
 import re
 from dataclasses import asdict, dataclass, fields
 from typing import Iterator
 
 from bs4 import BeautifulSoup, SoupStrainer
 from requests import Response, request
+
+logging.basicConfig(
+    format="[%(levelname)-8s] (%(asctime)s) (%(name)s) %(message)s",
+    datefmt="%d.%m.%Y %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -48,7 +55,9 @@ def request_quotes(limit: int = 30) -> list[Quote]:
     while page <= limit:
         response = request("GET", f"{BASE_URL}/page/{page}")
         if response.status_code != 200:
-            print(f"Parsing has been stopped. Page {page} does not exist.")
+            logger.warning(
+                f"Parsing has been stopped. Page {page} does not exist."
+            )
             break
         quotes.extend(_extract_quotes(response))
         page += 1

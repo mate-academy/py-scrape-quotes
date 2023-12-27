@@ -5,15 +5,14 @@ from dataclasses import dataclass
 import requests
 from bs4 import BeautifulSoup, element
 
+BASE_URL = "https://quotes.toscrape.com/"
+
 
 @dataclass
 class Quote:
     text: str
     author: str
     tags: list[str]
-
-
-BASE_URL = "https://quotes.toscrape.com/"
 
 
 def _parse_single_quote(quote: element.Tag) -> Quote:

@@ -2,6 +2,7 @@ import csv
 import logging
 import sys
 from dataclasses import dataclass, fields, astuple
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup
@@ -36,13 +37,13 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_single_page_quotes(soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(soup: BeautifulSoup) -> List[Quote]:
     quotes = soup.select(".quote")
 
     return [parse_single_quote(quote) for quote in quotes]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> List[Quote]:
     logging.info(f"Getting quotes from {BASE_URL}")
     response = requests.get(BASE_URL)
 
@@ -69,7 +70,7 @@ def get_quotes() -> [Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote], output_csv_path: str) -> None:
+def write_quotes_to_csv(quotes: List[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTES_FIELDS)

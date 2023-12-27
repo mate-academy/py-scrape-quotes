@@ -52,7 +52,8 @@ def main(output_csv_path: str) -> None:
         csv_writer.writerow(["Text", "Author", "Tags"])
         for quote in quotes:
             csv_writer.writerow(
-                [quote.text, quote.author, ", ".join(quote.tags)])
+                [quote.text, quote.author, ", ".join(quote.tags)]
+            )
 
 
 if __name__ == "__main__":

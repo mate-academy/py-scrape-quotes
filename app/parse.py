@@ -1,6 +1,5 @@
 import csv
-import re
-from dataclasses import dataclass
+from dataclasses import dataclass, astuple
 
 import requests
 from bs4 import BeautifulSoup, element
@@ -17,10 +16,9 @@ class Quote:
 
 def _parse_single_quote(quote: element.Tag) -> Quote:
     return Quote(
-        text=re.sub("[“”]", "",
-                    str(quote.select_one("span.text").text)),
+        text=quote.select_one("span.text").text,
         author=quote.select_one("span > small.author").text,
-        tags=[tag.text for tag in quote.select("div.tags > a.tag")],
+        tags=[tag.text.strip() for tag in quote.select("div.tags > a.tag")],
     )
 
 
@@ -45,15 +43,16 @@ def get_all_pages() -> list[Quote]:
     return all_page_quotes
 
 
-def main(output_csv_path: str) -> None:
-    quotes = get_all_pages()
+def write_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
         csv_writer = csv.writer(file)
-        csv_writer.writerow(["Text", "Author", "Tags"])
-        for quote in quotes:
-            csv_writer.writerow(
-                [quote.text, quote.author, ", ".join(quote.tags)]
-            )
+        csv_writer.writerow(["text", "author", "tags"])
+        csv_writer.writerows([astuple(quote) for quote in quotes])
+
+
+def main(output_csv_path: str) -> None:
+    quotes = get_all_pages()
+    write_to_csv(quotes=quotes, output_csv_path=output_csv_path)
 
 
 if __name__ == "__main__":

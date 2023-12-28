@@ -1,0 +1,33 @@
+[    INFO]: Start parsing page 1
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/1/ HTTP/1.1" 200 11054
+[    INFO]: Start parsing page 2
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/2/ HTTP/1.1" 200 13735
+[    INFO]: Start parsing page 3
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/3/ HTTP/1.1" 200 10019
+[    INFO]: Start parsing page 4
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/4/ HTTP/1.1" 200 10315
+[    INFO]: Start parsing page 5
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/5/ HTTP/1.1" 200 10002
+[    INFO]: Start parsing page 6
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/6/ HTTP/1.1" 200 10406
+[    INFO]: Start parsing page 7
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/7/ HTTP/1.1" 200 10712
+[    INFO]: Start parsing page 8
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/8/ HTTP/1.1" 200 11383
+[    INFO]: Start parsing page 9
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/9/ HTTP/1.1" 200 11012
+[    INFO]: Start parsing page 10
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/10/ HTTP/1.1" 200 9933
+[    INFO]: Start parsing page 11
+[   DEBUG]: Starting new HTTPS connection (1): quotes.toscrape.com:443
+[   DEBUG]: https://quotes.toscrape.com:443 "GET /page/11/ HTTP/1.1" 200 3040

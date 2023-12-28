@@ -31,7 +31,7 @@ class Quote:
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def get_quotes():
+def get_quotes() -> [Quote]:
     page_number = 0
     all_quotes = []
     while True:

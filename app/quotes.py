@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 
 from app.quotes_dto import Quote
 
-
 BASE_URL = "https://quotes.toscrape.com/"
 
 
@@ -31,7 +30,7 @@ def get_quotes() -> list[Quote]:
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
     all_quotes = get_page_quotes(soup)
-    page_num = 1
+    page_num = 2
 
     while next_page(soup):
         logging.info(f"Parsing #{page_num} page")

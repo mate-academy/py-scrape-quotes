@@ -7,7 +7,7 @@ dataclass-csv==1.4.0
 distutilazy==0.5.1
 flake8==6.1.0
 flake8-annotations==2.9.1
-flake8-quotes==3.3.1
+flake8-quotes==3.3.2
 flake8-variables-names==0.0.5
 idna==3.6
 iniconfig==2.0.0

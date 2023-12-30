@@ -52,7 +52,9 @@ def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     slugified_author_name = author_name[0] + "-" + author_name[1]
 
     if slugified_author_name not in cache:
-        author_page = requests.get(BASE_URL + f"/author/{slugified_author_name}").content
+        author_page = requests.get(
+            BASE_URL + f"/author/{slugified_author_name}"
+        ).content
         author_soup = BeautifulSoup(author_page, "html.parser")
         author = parse_author(author_soup)
         save_author_data_to_cache(slugified_author_name, author)
@@ -79,7 +81,7 @@ def get_quotes() -> [Quote]:
 
     next_page = check_existing_next_page(first_page_soup)
 
-    counter = 1
+    counter = 2
 
     while next_page:
         current_page = requests.get(BASE_URL + f"page/{counter}/").content
@@ -93,7 +95,7 @@ def get_quotes() -> [Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote], output_csv_path) -> None:
+def write_quotes_to_csv(quotes: [Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w") as file:
         writer = csv.writer(file)
         writer.writerow(["text", "author", "tags"])

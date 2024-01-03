@@ -1,4 +1,8 @@
+from __future__ import annotations
+
+import csv
 from dataclasses import dataclass
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -13,8 +17,11 @@ class Quote:
     tags: list[str]
 
 
-def get_next_page(page_soup: BeautifulSoup) -> BeautifulSoup | None:
-    return page_soup.select_one("ul.pager > li.next")
+def get_next_page(page_number: int) -> BeautifulSoup | None:
+    next_page_url = f"{BASE_URL}page/{page_number}/"
+    page = requests.get(next_page_url)
+
+    return BeautifulSoup(page.content, "html.parser")
 
 
 def parse_page_quotes() -> list[Quote]:
@@ -24,40 +31,39 @@ def parse_page_quotes() -> list[Quote]:
     page_count = 1
 
     while page_soup:
-
         page_quotes = page_soup.select("div.quote")
         for quote in page_quotes:
             quotes.append(
                 Quote(
-                    text=quote.select_one(".text").text[1:-1],
+                    text=quote.select_one(".text").text,
                     author=quote.select_one(".author").text,
                     tags=[tag.text for tag in quote.select(".tag")]
                 )
             )
 
-        next_page_exist = get_next_page(page_soup)
-        if page_soup:
-            page_count += 1
-            page = requests.get(BASE_URL, {"page": page_count}).content
-            page_soup = BeautifulSoup(page, "html.parser")
+        next_page_exist = page_soup.select_one("nav > ul.pager > li.next")
 
-    return quotes
+        if not next_page_exist:
+            return quotes
+
+        page_count += 1
+        page_soup = get_next_page(page_number=page_count)
 
 
-def write_quote_to_csv(file_path: str, quotes: list[Quote]):
-    with open(file_path, mode="w", newline="", encoding="utf-8") as file:
+def write_quote_to_csv(file_path: str, quotes: list[Quote]) -> None:
+    with open(file_path, mode="w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
 
-        writer.writerow(["Text", "Author", "Tags"])
+        header = ["text", "author", "tags"]
+        writer.writerow(header)
 
         for quote in quotes:
-            writer.writerow(quote.text, quote.author, quote.tags)
+            writer.writerow([getattr(quote, attr) for attr in header])
 
 
 def main(output_csv_path: str) -> None:
     quotes = parse_page_quotes()
 
-    print(quotes)
     write_quote_to_csv(output_csv_path, quotes)
 
 

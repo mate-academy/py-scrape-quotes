@@ -48,7 +48,9 @@ def get_all_quotes() -> [Quote]:
 
 def main(output_csv_path: str) -> None:
     quotes = get_all_quotes()
-    with open(output_csv_path, mode="w", newline="", encoding="utf-8") as csv_file:
+    with open(
+        output_csv_path, mode="w", newline="", encoding="utf-8"
+    ) as csv_file:
         fieldnames = ["text", "author", "tags"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()

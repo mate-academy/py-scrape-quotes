@@ -16,7 +16,7 @@ class Quote:
 
 def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
     return Quote(
-        text=quote_soup.select_one(".text").text[1:-1],
+        text=quote_soup.select_one(".text").contents[0].strip(),
         author=quote_soup.select_one(".author").text,
         tags=quote_soup.select_one(".tags > .keywords")["content"].split(","),
     )

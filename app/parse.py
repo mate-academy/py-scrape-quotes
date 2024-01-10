@@ -32,7 +32,8 @@ def get_single_page(page_soup: BeautifulSoup) -> [Quote]:
     information = page_soup.select(".quote")
 
     return [
-        parse_single_quote(information_soup) for information_soup in information
+        parse_single_quote(information_soup)
+        for information_soup in information
     ]
 
 

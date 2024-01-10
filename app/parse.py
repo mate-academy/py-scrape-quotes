@@ -31,7 +31,9 @@ def parse_single_quote(information_soup: BeautifulSoup) -> Quote:
 def get_single_page(page_soup: BeautifulSoup) -> [Quote]:
     information = page_soup.select(".quote")
 
-    return [parse_single_quote(information_soup) for information_soup in information]
+    return [
+        parse_single_quote(information_soup) for information_soup in information
+    ]
 
 
 def get_quotes() -> [Quote]:
@@ -49,8 +51,13 @@ def get_quotes() -> [Quote]:
     return quotes
 
 
-def save_in_csv(information: [Quote]):
-    with open(QUOTES_OUTPUT_CSV_PATH, "w", encoding="utf-8", newline="") as file:
+def save_in_csv(information: [Quote]) -> None:
+    with open(
+            QUOTES_OUTPUT_CSV_PATH,
+            "w",
+            encoding="utf-8",
+            newline=""
+    ) as file:
         write = csv.writer(file)
         write.writerow(QUOTE_FIELDS)
         write.writerows([astuple(inform) for inform in information])

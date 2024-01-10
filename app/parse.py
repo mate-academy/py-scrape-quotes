@@ -54,7 +54,7 @@ def get_quotes() -> tuple[list[Quote], list[list[str]]]:
 
 
 def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
-    with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
+    with open(output_csv_path, "w", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])
@@ -65,7 +65,7 @@ def write_biography_links_to_csv(biography_links: list[list[str]]) -> None:
             "author_biography_links.csv", "w", newline="", encoding="utf-8"
     ) as file:
         writer = csv.writer(file)
-        writer.writerow("Author biography link")
+        writer.writerow(["Author biography link"])
         writer.writerows(biography_links)
 
 

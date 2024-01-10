@@ -26,7 +26,7 @@ text,author,tags
 “Beauty is in the eye of the beholder and it may be necessary from time to time to give a stupid or misinformed beholder a black eye.”,Jim Henson,['humor']
 "“Today you are You, that is truer than true. There is no one alive who is Youer than You.”",Dr. Seuss,"['comedy', 'life', 'yourself']"
 "“If you want your children to be intelligent, read them fairy tales. If you want them to be more intelligent, read them more fairy tales.”",Albert Einstein,"['children', 'fairy-tales']"
-"“It is impossible to live without failing at something, unless you live so cautiously that you might as well not have lived at all - in which case, you fail by default.”",J.K. Rowling,['']
+"“It is impossible to live without failing at something, unless you live so cautiously that you might as well not have lived at all - in which case, you fail by default.”",J.K. Rowling,[]
 “Logic will get you from A to Z; imagination will get you everywhere.”,Albert Einstein,['imagination']
 "“One good thing about music, when it hits you, you feel no pain.”",Bob Marley,['music']
 "“The more that you read, the more things you will know. The more that you learn, the more places you'll go.”",Dr. Seuss,"['learning', 'reading', 'seuss']"
@@ -41,7 +41,7 @@ text,author,tags
 “It is never too late to be what you might have been.”,George Eliot,['inspirational']
 "“A reader lives a thousand lives before he dies, said Jojen. The man who never reads lives only one.”",George R.R. Martin,"['read', 'readers', 'reading', 'reading-books']"
 “You can never get a cup of tea large enough or a book long enough to suit me.”,C.S. Lewis,"['books', 'inspirational', 'reading', 'tea']"
-“You believe lies so you eventually learn to trust no one but yourself.”,Marilyn Monroe,['']
+“You believe lies so you eventually learn to trust no one but yourself.”,Marilyn Monroe,[]
 "“If you can make a woman laugh, you can make her do anything.”",Marilyn Monroe,"['girls', 'love']"
 "“Life is like riding a bicycle. To keep your balance, you must keep moving.”",Albert Einstein,"['life', 'simile']"
 “The real lover is the man who can thrill you by kissing your forehead or smiling into your eyes or just staring into space.”,Marilyn Monroe,['love']
@@ -77,7 +77,7 @@ text,author,tags
 “The reason I talk to myself is because I’m the only one whose answers I accept.”,George Carlin,"['humor', 'insanity', 'lies', 'lying', 'self-indulgence', 'truth']"
 "“You may say I'm a dreamer, but I'm not the only one. I hope someday you'll join us. And the world will live as one.”",John Lennon,"['beatles', 'connection', 'dreamers', 'dreaming', 'dreams', 'hope', 'inspirational', 'peace']"
 “I am free of all prejudice. I hate everyone equally. ”,W.C. Fields,"['humor', 'sinister']"
-“The question isn't who is going to let me; it's who is going to stop me.”,Ayn Rand,['']
+“The question isn't who is going to let me; it's who is going to stop me.”,Ayn Rand,[]
 “′Classic′ - a book which people praise and don't read.”,Mark Twain,"['books', 'classic', 'reading']"
 “Anyone who has never made a mistake has never tried anything new.”,Albert Einstein,['mistakes']
 "“A lady's imagination is very rapid; it jumps from admiration to love, from love to matrimony in a moment.”",Jane Austen,"['humor', 'love', 'romantic', 'women']"

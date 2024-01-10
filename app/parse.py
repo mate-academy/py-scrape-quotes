@@ -22,7 +22,7 @@ def parse_single_quote(quote_soup: Tag) -> Quote:
     return Quote(
         text=quote_soup.select_one(".text").text,
         author=quote_soup.select_one(".author").text,
-        tags=quote_soup.select_one(".keywords")["content"].split(","),
+        tags=[tag.text for tag in quote_soup.select(".tag")],
     )
 
 
@@ -54,7 +54,7 @@ def get_quotes() -> tuple[list[Quote], list[list[str]]]:
 
 
 def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
-    with open(output_csv_path, "w", encoding="utf-8") as file:
+    with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])

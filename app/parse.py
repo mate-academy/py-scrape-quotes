@@ -24,7 +24,7 @@ def parse_single_quote(information_soup: BeautifulSoup) -> Quote:
     return Quote(
         text=information_soup.select_one(".text").text,
         author=information_soup.select_one(".author").text,
-        tags=[information_soup.select_one(".keywords")["content"]]
+        tags=information_soup.select_one(".keywords")["content"].split(",")
     )
 
 

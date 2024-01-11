@@ -27,25 +27,34 @@ def parse_single_quote(quote_soup: Tag) -> Quote:
 
 
 def get_quotes() -> tuple[list[Quote], list[list[str]]]:
+    page_num = 1
     all_quotes = []
     biography_links = []
-    for i in range(1, 21):
 
-        page = requests.get(urljoin(BASE_URL, f"page/{i}/")).content
+    while True:
+
+        page = requests.get(urljoin(BASE_URL, f"page/{page_num}/")).content
         soup = BeautifulSoup(page, "html.parser")
 
         quotes = soup.select(".quote")
 
-        biography_links.extend(
-            [
-                quote_soup.select_one("a[href^='/author/']")["href"]
-                for quote_soup in quotes
-            ]
-        )
+        if quotes == []:
+            break
 
-        all_quotes.extend(
-            [parse_single_quote(quote_soup) for quote_soup in quotes]
-        )
+        if quotes != []:
+
+            biography_links.extend(
+                [
+                    quote_soup.select_one("a[href^='/author/']")["href"]
+                    for quote_soup in quotes
+                ]
+            )
+
+            all_quotes.extend(
+                [parse_single_quote(quote_soup) for quote_soup in quotes]
+            )
+
+            page_num += 1
 
     biography_links = [
         [urljoin(BASE_URL, link)] for link in list(set(biography_links))

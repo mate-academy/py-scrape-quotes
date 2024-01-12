@@ -38,23 +38,21 @@ def get_quotes() -> tuple[list[Quote], list[list[str]]]:
 
         quotes = soup.select(".quote")
 
-        if quotes == []:
+        if not quotes:
             break
 
-        if quotes != []:
+        biography_links.extend(
+            [
+                quote_soup.select_one("a[href^='/author/']")["href"]
+                for quote_soup in quotes
+            ]
+        )
 
-            biography_links.extend(
-                [
-                    quote_soup.select_one("a[href^='/author/']")["href"]
-                    for quote_soup in quotes
-                ]
-            )
+        all_quotes.extend(
+            [parse_single_quote(quote_soup) for quote_soup in quotes]
+        )
 
-            all_quotes.extend(
-                [parse_single_quote(quote_soup) for quote_soup in quotes]
-            )
-
-            page_num += 1
+        page_num += 1
 
     biography_links = [
         [urljoin(BASE_URL, link)] for link in list(set(biography_links))

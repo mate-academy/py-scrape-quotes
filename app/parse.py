@@ -1,5 +1,6 @@
 import csv
 from dataclasses import dataclass, fields, astuple
+from typing import Type
 
 import requests
 from bs4 import BeautifulSoup
@@ -14,7 +15,8 @@ class Quote:
     tags: list[str]
 
 
-QUOTE_FIELDS = [field.name for field in fields(Quote)]
+def get_quote_fields(quote_class: Quote = Quote) -> list:
+    return [field.name for field in fields(quote_class)]
 
 
 def get_tags(tags_soup: BeautifulSoup) -> [str]:
@@ -54,7 +56,7 @@ def get_quotes() -> [Quote]:
 def write_quotes_to_csv(quotes: [Quote], file_name: str) -> None:
     with open(file_name, "w") as file:
         writer = csv.writer(file)
-        writer.writerow(QUOTE_FIELDS)
+        writer.writerow(get_quote_fields())
         writer.writerows([astuple(quote) for quote in quotes])
 
 

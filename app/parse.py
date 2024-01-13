@@ -2,7 +2,7 @@ import csv
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 import requests
 
 URL = "https://quotes.toscrape.com/"

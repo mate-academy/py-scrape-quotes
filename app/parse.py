@@ -2,7 +2,7 @@ import csv
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import requests
 
 URL = "https://quotes.toscrape.com/"
@@ -15,8 +15,12 @@ class Quote:
     author: str
     tags: list[str]
 
+    @staticmethod
+    def quote_fields() -> list[str]:
+        return [field.name for field in fields(Quote)]
 
-QUOTE_FIELDS = [field.name for field in fields(Quote)]
+
+# QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
 def parse_single_quote(information_soup: BeautifulSoup) -> Quote:
@@ -28,7 +32,7 @@ def parse_single_quote(information_soup: BeautifulSoup) -> Quote:
     )
 
 
-def get_single_page(page_soup: BeautifulSoup) -> [Quote]:
+def get_single_page(page_soup: BeautifulSoup) -> list[Quote]:
     information = page_soup.select(".quote")
 
     return [
@@ -37,7 +41,7 @@ def get_single_page(page_soup: BeautifulSoup) -> [Quote]:
     ]
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> list[Quote]:
     first_page = requests.get(URL).content
     first_page_soup = BeautifulSoup(first_page, "html.parser")
     quotes = get_single_page(first_page_soup)
@@ -60,7 +64,7 @@ def save_in_csv(information: [Quote]) -> None:
             newline=""
     ) as file:
         write = csv.writer(file)
-        write.writerow(QUOTE_FIELDS)
+        write.writerow(Quote.quote_fields())
         write.writerows([astuple(inform) for inform in information])
 
 

@@ -45,7 +45,10 @@ def get_single_page_quotes(page_soup: BeautifulSoup) -> [(Quote, str)]:
     return [get_single_quote(quote_soup) for quote_soup in quotes]
 
 
-def get_author_bio(author_url: str, authors_cache: dict[str, Author]) -> Author:
+def get_author_bio(
+        author_url: str,
+        authors_cache: dict[str, Author]
+) -> Author:
     if author_url in authors_cache:
         return authors_cache[author_url]
 

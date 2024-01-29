@@ -25,7 +25,7 @@ class Quote:
 
 def parse_quote_list(quote_soup_list: list[BeautifulSoup]) -> [Quote]:
     return [Quote(
-        text=soup.select_one(".text").text.strip("“”"),
+        text=soup.select_one(".text").text,
         author=soup.select_one(".author").text,
         tags=[tag.text for tag in soup.select(".tag")]
     ) for soup in quote_soup_list]

@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent
 CORRECT_QUOTES_CSV_PATH = BASE_DIR / "correct_quotes.csv"
 
 
-def test_main():
+def test_main() -> None:
     path = "result.csv"
     main(path)
 

@@ -1,4 +1,14 @@
-from dataclasses import dataclass
+import csv
+from dataclasses import dataclass, fields, astuple
+from datetime import datetime
+from urllib.parse import urljoin
+
+import requests
+from bs4 import BeautifulSoup
+
+BASE_URL = "https://quotes.toscrape.com/"
+
+AUTHORS_OUTPUT_CSV_PATH = "authors.csv"
 
 
 @dataclass
@@ -8,8 +18,95 @@ class Quote:
     tags: list[str]
 
 
+@dataclass
+class Author:
+    name: str
+    born_date: datetime
+    born_location: str
+    description: str
+
+
+QUOTE_FIELDS = [field.name for field in fields(Quote)]
+AUTHOR_FIELDS = [field.name for field in fields(Author)]
+AUTHORS = {}
+
+
+def parse_single_author(soup: BeautifulSoup) -> Author:
+    author_url = urljoin(BASE_URL, soup.select_one("a")["href"])
+    author_page = requests.get(author_url).content
+    soup = BeautifulSoup(author_page, "html.parser")
+
+    return Author(
+        name=soup.select_one(".author-title").text,
+        born_date=datetime.strptime(
+            soup.select_one(".author-born-date").text, "%B %d, %Y"
+        ),
+        born_location=soup.select_one(".author-born-location").text[3:],
+        description=soup.select_one(".author-description").text.strip()
+    )
+
+
+def parse_single_quote_and_author(soup: BeautifulSoup) -> Quote:
+    tags = soup.select_one(".keywords")["content"].split(",")
+    quote = Quote(
+        text=soup.select_one(".text").text,
+        author=soup.select_one(".author").text,
+        tags=tags if tags != [""] else []
+    )
+
+    if quote.author not in AUTHORS.keys():
+        author = parse_single_author(soup)
+        AUTHORS[quote.author] = author
+
+    return quote
+
+
+def get_quotes_and_authors_from_single_page(
+        soup: BeautifulSoup
+) -> [Quote]:
+    quotes_data = soup.select(".quote")
+
+    all_quotes = [
+        parse_single_quote_and_author(quotes_soup)
+        for quotes_soup in quotes_data
+    ]
+
+    return all_quotes
+
+
+def get_all_quotes_and_authors() -> [Quote]:
+    session = requests.Session()
+    all_quotes = []
+    next_page_url = urljoin(BASE_URL, "")
+
+    while True:
+        page_content = session.get(next_page_url).content
+        soup = BeautifulSoup(page_content, "html.parser")
+
+        new_quotes = get_quotes_and_authors_from_single_page(soup)
+        all_quotes.extend(new_quotes)
+
+        try:
+            next_button = soup.select_one("li.next > a")["href"]
+            next_page_url = urljoin(BASE_URL, next_button)
+
+        except TypeError:
+            return all_quotes
+
+
 def main(output_csv_path: str) -> None:
-    pass
+
+    quotes = get_all_quotes_and_authors()
+
+    with open(output_csv_path, "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(QUOTE_FIELDS)
+        writer.writerows([astuple(quote) for quote in quotes])
+
+    with open(AUTHORS_OUTPUT_CSV_PATH, "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(AUTHOR_FIELDS)
+        writer.writerows([astuple(author) for author in AUTHORS.values()])
 
 
 if __name__ == "__main__":

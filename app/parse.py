@@ -94,19 +94,24 @@ def get_all_quotes_and_authors() -> [Quote]:
             return all_quotes
 
 
+def write_data_to_csv(
+        data: [Quote | Author],
+        output_csv_path: str,
+        col_names: list
+) -> None:
+    with open(output_csv_path, "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(col_names)
+        writer.writerows([astuple(item) for item in data])
+
+
 def main(output_csv_path: str) -> None:
 
     quotes = get_all_quotes_and_authors()
+    authors = AUTHORS.values()
 
-    with open(output_csv_path, "w") as file:
-        writer = csv.writer(file)
-        writer.writerow(QUOTE_FIELDS)
-        writer.writerows([astuple(quote) for quote in quotes])
-
-    with open(AUTHORS_OUTPUT_CSV_PATH, "w") as file:
-        writer = csv.writer(file)
-        writer.writerow(AUTHOR_FIELDS)
-        writer.writerows([astuple(author) for author in AUTHORS.values()])
+    write_data_to_csv(quotes, output_csv_path, QUOTE_FIELDS)
+    write_data_to_csv(authors, AUTHORS_OUTPUT_CSV_PATH, AUTHOR_FIELDS)
 
 
 if __name__ == "__main__":

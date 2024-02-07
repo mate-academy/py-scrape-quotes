@@ -13,9 +13,8 @@ class Quote:
     author: str
     tags: list[str]
 
-
     @classmethod
-    def parse_single_quote(cls, quote_soup: BeautifulSoup) -> 'Quote':
+    def parse_single_quote(cls, quote_soup: BeautifulSoup) -> "Quote":
         return cls(
             text=quote_soup.select_one(".text").text,
             author=quote_soup.select_one(".author").text,

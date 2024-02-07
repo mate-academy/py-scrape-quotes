@@ -1,14 +1,9 @@
 import csv
 from dataclasses import dataclass, fields, astuple
-
-
 import requests
 from bs4 import BeautifulSoup
 
-
 HOME_URL = "https://quotes.toscrape.com/"
-
-
 QUOTES_OUTPUT_CSV_PATH = "result.csv"
 
 
@@ -19,21 +14,21 @@ class Quote:
     tags: list[str]
 
 
+    @classmethod
+    def parse_single_quote(cls, quote_soup: BeautifulSoup) -> 'Quote':
+        return cls(
+            text=quote_soup.select_one(".text").text,
+            author=quote_soup.select_one(".author").text,
+            tags=list(element.text for element in quote_soup.select(".tag"))
+        )
+
+
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
-
-
-def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
-    return Quote(
-        text=quote_soup.select_one(".text").text,
-        author=quote_soup.select_one(".author").text,
-        tags=list(element.text for element in quote_soup.select(".tag"))
-    )
 
 
 def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
     quotes = page_soup.select(".quote")
-
-    return [parse_single_quote(quote_soup) for quote_soup in quotes]
+    return [Quote.parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
 def get_home_quote() -> [Quote]:

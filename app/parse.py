@@ -1,5 +1,7 @@
 import csv
 from dataclasses import dataclass, astuple, fields
+from typing import Type
+from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -23,9 +25,11 @@ class Author:
     description: str
 
 
-QUOTE_FIELDS = [field.name for field in fields(Quote)]
-AUTHOR_FIELDS = [field.name for field in fields(Author)]
 authors_of_quotes = []
+
+
+def get_fields_name(instance: Type[Quote | Author]) -> list[str]:
+    return [field.name for field in fields(instance)]
 
 
 def parse_single_quote(quote_soup: Tag) -> Quote:
@@ -93,10 +97,13 @@ def main(output_csv_path: str) -> None:
 
         if not next_page:
             break
-        actual_url = BASE_URL + next_page["href"]
+        actual_url = urljoin(BASE_URL, next_page["href"])
 
-    write_data_to_csv(output_csv_path, QUOTE_FIELDS, quotes)
-    write_data_to_csv("authors_of_quotes.csv", AUTHOR_FIELDS, authors)
+    quote_fields = get_fields_name(Quote)
+    author_fields = get_fields_name(Author)
+
+    write_data_to_csv(output_csv_path, quote_fields, quotes)
+    write_data_to_csv("authors_of_quotes.csv", author_fields, authors)
 
 
 if __name__ == "__main__":

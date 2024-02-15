@@ -9,3 +9,4 @@ venv/
 quotes.csv
 tests/result.csv
 authors.csv
+result.csv

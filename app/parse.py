@@ -2,6 +2,8 @@ import csv
 import logging
 import sys
 from dataclasses import dataclass, fields, astuple
+from typing import Optional
+
 import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
@@ -14,8 +16,8 @@ BASE_URL = "https://quotes.toscrape.com"
 class Quote:
     text: str
     author: str
-    bio: str
     tags: list[str]
+    bio: Optional[str] = None
 
 
 QUOTE_FIELD = [field.name for field in fields(Quote)]
@@ -52,7 +54,7 @@ def parse_single_quote(quote: BeautifulSoup) -> Quote:
     bio = cache[bio_url]
 
     tags = [tag.text.strip() for tag in quote.select("div.tags a")]
-    return Quote(text, author, bio, tags)
+    return Quote(text, author, tags, bio)
 
 
 def get_single_page_quote(page_soup: BeautifulSoup) -> [Quote]:

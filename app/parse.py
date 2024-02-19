@@ -31,7 +31,7 @@ logging.basicConfig(
 )
 
 
-def bio_parse(url: str):
+def bio_parse(url: str) -> str:
     bio_page = requests.get(url).content
     bio_soup = BeautifulSoup(bio_page, "html.parser")
 

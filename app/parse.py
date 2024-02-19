@@ -5,24 +5,44 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 
-BASE_URL = "https://quotes.toscrape.com/"
+BASE_URL = "https://quotes.toscrape.com"
 
 
 @dataclass
 class Quote:
     text: str
     author: str
+    bio: str
     tags: list[str]
 
 
 QUOTE_FIELD = [field.name for field in fields(Quote)]
 
+cache = dict()
+
+
+def bio_parse(url: str):
+    bio_page = requests.get(url).content
+    bio_soup = BeautifulSoup(bio_page, "html.parser")
+
+    bio = bio_soup.select_one(".author-description").text
+
+    return bio
+
 
 def parse_single_quote(quote: BeautifulSoup) -> Quote:
     text = quote.select_one("span.text").text.strip()
     author = quote.select_one("span > small.author").text.strip()
+
+    bio_url = urljoin(BASE_URL, quote.select_one("span > a")["href"])
+
+    if bio_url not in cache:
+        cache[bio_url] = bio_parse(bio_url)
+
+    bio = cache[bio_url]
+
     tags = [tag.text.strip() for tag in quote.select("div.tags a")]
-    return Quote(text, author, tags)
+    return Quote(text, author, bio, tags)
 
 
 def get_single_page_quote(page_soup: BeautifulSoup) -> [Quote]:

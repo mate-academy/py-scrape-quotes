@@ -1,4 +1,6 @@
 import csv
+import logging
+import sys
 from dataclasses import dataclass, fields, astuple
 import requests
 from urllib.parse import urljoin
@@ -19,6 +21,14 @@ class Quote:
 QUOTE_FIELD = [field.name for field in fields(Quote)]
 
 cache = dict()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(levelname)8s]: %(message)s",
+    handlers={
+        logging.StreamHandler(sys.stdout)
+    }
+)
 
 
 def bio_parse(url: str):
@@ -52,12 +62,14 @@ def get_single_page_quote(page_soup: BeautifulSoup) -> [Quote]:
 
 
 def get_home_quotes() -> [Quote]:
+    logging.info("Start parsing quotes")
     page = requests.get(BASE_URL).content
     first_page_quote = BeautifulSoup(page, "html.parser")
 
     all_quotes = get_single_page_quote(first_page_quote)
 
     for page_num in range(2, 100_000):
+        logging.info(f"Start parsing page: {page_num}")
         page_url = urljoin(BASE_URL, f"/page/{page_num}")
         page = requests.get(page_url).content
         soup = BeautifulSoup(page, "html.parser")

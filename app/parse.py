@@ -70,9 +70,12 @@ def get_home_quotes() -> [Quote]:
 
     all_quotes = get_single_page_quote(first_page_quote)
 
-    for page_num in range(2, 100_000):
-        logging.info(f"Start parsing page: {page_num}")
-        page_url = urljoin(BASE_URL, f"/page/{page_num}")
+    num_pages = 1
+
+    while True:
+        num_pages += 1
+        logging.info(f"Start parsing page: {num_pages}")
+        page_url = urljoin(BASE_URL, f"/page/{num_pages}")
         page = requests.get(page_url).content
         soup = BeautifulSoup(page, "html.parser")
         has_quote = soup.select_one(".quote")

@@ -57,7 +57,9 @@ def get_all_quotes() -> [Quote]:
     page_num = 2
 
     while is_there_next_page(soup):
-        page = requests.get(urljoin(BASE_URL, f"page/{str(page_num)}/")).content
+        page = requests.get(
+            urljoin(BASE_URL, f"page/{str(page_num)}/")
+        ).content
         soup = BeautifulSoup(page, "html.parser")
 
         all_quotes.extend(get_single_page_quotes(soup))

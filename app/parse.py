@@ -1,15 +1,13 @@
-from dataclasses import dataclass
-
-
-@dataclass
-class Quote:
-    text: str
-    author: str
-    tags: list[str]
+from app.scrapper import QuoteScrapper
 
 
 def main(output_csv_path: str) -> None:
-    pass
+    quote_scrapper = QuoteScrapper()
+    quotes = quote_scrapper.get_all_quotes()
+
+    quote_scrapper.write_quotes_to_csv(
+        csv_path=output_csv_path, quotes=quotes
+    )
 
 
 if __name__ == "__main__":

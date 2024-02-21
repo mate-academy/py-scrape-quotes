@@ -36,10 +36,7 @@ def parse_single_quote(quote_soup: Tag) -> Quote:
 def is_there_next_page(soup: BeautifulSoup) -> bool:
     pagination = soup.select_one(".pager > .next > a")
 
-    if pagination is None:
-        return False
-
-    return True
+    return bool(pagination)
 
 
 def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:

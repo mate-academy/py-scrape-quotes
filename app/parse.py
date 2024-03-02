@@ -1,5 +1,10 @@
-from dataclasses import dataclass
+import csv
+import os
+import sys
+from dataclasses import dataclass, fields
 
+import requests
+from bs4 import BeautifulSoup
 
 @dataclass
 class Quote:
@@ -7,6 +12,7 @@ class Quote:
     author: str
     tags: list[str]
 
+CSV_FIELDS = [field.name for field in fields(Quote)]
 
 def main(output_csv_path: str) -> None:
     pass

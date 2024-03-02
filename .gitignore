@@ -9,5 +9,6 @@ venv/
 pyproject.toml
 app/parser.log
 app/quotes.csv
+app/authors.csv
 result.csv
 parser.log

@@ -119,7 +119,8 @@ def get_quotes() -> [Quote]:
 
     while present_next:
         logging.info(
-            f"Requesting page {current_page_url} : status: {requests.get(current_page_url).status_code}"
+            f"Requesting page {current_page_url} : "
+            f"status: {requests.get(current_page_url).status_code}"
         )
         time.sleep(random.randint(1, 5))
 
@@ -137,16 +138,18 @@ def get_quotes() -> [Quote]:
     return all_quotes, set(all_authors_urls)
 
 
-def output_as_csv(path, objs: list, csv_fields: list) -> None:
+def output_as_csv(
+    path: str, obj_to_write: [Author | Quote], csv_fields: list
+) -> None:
     with open(
         path,
         "w",
     ) as file:
         writer = csv.writer(file)
         writer.writerow(csv_fields)
-        writer.writerows([astuple(obj) for obj in objs])
+        writer.writerows([astuple(obj) for obj in obj_to_write])
 
-    logging.info(f"Saved {len(objs)} objects to {path}.")
+    logging.info(f"Saved {len(obj_to_write)} objects to {path}.")
 
 
 def main(output_csv_path: str) -> None:

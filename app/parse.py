@@ -1,5 +1,6 @@
 import csv
 from dataclasses import dataclass, fields, astuple
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -13,28 +14,28 @@ class Quote:
     author: str
     tags: list[str]
 
+    @classmethod
+    def parse_one_quote(cls, quote_soup: Tag) -> "Quote":
+        all_tags = quote_soup.select(".tag")
+        list_of_tags = [tag.text for tag in all_tags]
+
+        return Quote(
+            text=quote_soup.select_one(".text").text,
+            author=quote_soup.select_one(".author").text,
+            tags=list_of_tags
+        )
+
 
 CLASS_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_one_quote(quote_soup: Tag) -> Quote:
-    all_tags = quote_soup.select(".tag")
-    list_of_tags = [tag.text for tag in all_tags]
-
-    return Quote(
-        text=quote_soup.select_one(".text").text,
-        author=quote_soup.select_one(".author").text,
-        tags=list_of_tags
-    )
-
-
-def parse_quotes_on_one_page(page_soup: BeautifulSoup) -> [Quote]:
+def parse_quotes_on_one_page(page_soup: BeautifulSoup) -> List[Quote]:
     quotes = page_soup.select(".quote")
 
-    return [parse_one_quote(quote) for quote in quotes]
+    return [Quote.parse_one_quote(quote) for quote in quotes]
 
 
-def parse_all_quotes() -> [Quote]:
+def parse_all_quotes() -> List[Quote]:
     page = requests.get(URL).content
     soup = BeautifulSoup(page, "html.parser")
 

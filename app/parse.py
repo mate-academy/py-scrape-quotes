@@ -10,7 +10,7 @@ class Quote:
     text: str
     author: str
     tags: list[str]
-    biography: dict[str: str]
+    # biography: dict[str: str]
 
 
 URL = 'https://quotes.toscrape.com/'
@@ -38,7 +38,7 @@ def get_single_quote(quote_soup: BeautifulSoup) -> Quote:
         text=text,
         author=author,
         tags=tags,
-        biography=get_author_biography(author_biography_url)
+        # biography=get_author_biography(author_biography_url)
     )
 
 

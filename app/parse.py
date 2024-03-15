@@ -15,21 +15,21 @@ class Quote:
     author: str
     tags: list[str]
 
+    @classmethod
+    def parse_single_quote(cls, quote_soup: BeautifulSoup) -> "Quote":
+        return Quote(
+            text=quote_soup.select_one(".text").text,
+            author=quote_soup.select_one(".author").text,
+            tags=[tag.text for tag in quote_soup.select(".tag")]
+        )
+
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
-def parse_single_quote(quote_soup: BeautifulSoup) -> Quote:
-    return Quote(
-        text=quote_soup.select_one(".text").text,
-        author=quote_soup.select_one(".author").text,
-        tags=[tag.text for tag in quote_soup.select(".tag")],
-    )
-
-
-def get_single_page_quotes(quote_soup: BeautifulSoup) -> [Quote]:
+def get_single_page_quotes(quote_soup: BeautifulSoup) -> list[Quote]:
     quotes = quote_soup.select(".quote")
-    return [parse_single_quote(quote_soup) for quote_soup in quotes]
+    return [Quote.parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
 def get_quotes() -> list[Quote]:
@@ -46,7 +46,7 @@ def get_quotes() -> list[Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote], output_csv_path: str) -> None:
+def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w", encoding="utf-8",) as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)

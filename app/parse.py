@@ -35,7 +35,6 @@ def get_single_page_quotes(quote_soup: BeautifulSoup) -> [Quote]:
 def get_quotes() -> list[Quote]:
     page = requests.get(BASE_URL).content
     soup = BeautifulSoup(page, "html.parser")
-
     all_quotes = get_single_page_quotes(soup)
     num_page = 2
     while soup.select_one(".next") is not None:

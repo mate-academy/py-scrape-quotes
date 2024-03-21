@@ -6,8 +6,8 @@ from dataclasses import dataclass
 import requests
 from bs4 import BeautifulSoup
 
-BASE_URL = 'https://quotes.toscrape.com/'
-OUTPUT_FILE = 'quotes.csv'
+BASE_URL = "https://quotes.toscrape.com/"
+OUTPUT_FILE = "quotes.csv"
 
 
 logging.basicConfig(
@@ -44,7 +44,7 @@ def get_list_quotes() -> list[Quote]:
     quotes = []
     page = 1
 
-    logging.info(f"Start parsing Quotes")
+    logging.info("Start parsing Quotes")
 
     while True:
         logging.info(f"Start parsing page #{page}")

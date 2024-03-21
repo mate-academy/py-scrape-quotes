@@ -1,6 +1,5 @@
 import csv
 from dataclasses import dataclass
-from logger_config import logging
 
 import requests
 from bs4 import BeautifulSoup
@@ -33,10 +32,7 @@ def get_list_quotes() -> list[Quote]:
     quotes = []
     page = 1
 
-    logging.info("Start parsing Quotes")
-
     while True:
-        logging.info(f"Start parsing page #{page}")
         url = f"{BASE_URL}/page/{page}/"
         parsed_page = requests.get(url).content
         page_soup = BeautifulSoup(parsed_page, "html.parser")

@@ -1,23 +1,13 @@
 import csv
 import logging
-import sys
 from dataclasses import dataclass
+from logger_config import logging
 
 import requests
 from bs4 import BeautifulSoup
 
 BASE_URL = "https://quotes.toscrape.com/"
 OUTPUT_FILE = "quotes.csv"
-
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(levelname)8s]: %(message)s",
-    handlers=[
-        logging.FileHandler("perser.log"),
-        logging.StreamHandler(sys.stdout),
-    ],
-)
 
 
 @dataclass

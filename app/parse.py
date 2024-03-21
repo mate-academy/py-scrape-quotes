@@ -1,5 +1,4 @@
 import csv
-import logging
 from dataclasses import dataclass
 from logger_config import logging
 

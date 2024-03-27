@@ -65,7 +65,11 @@ def get_authors_from_page(page_soup: BeautifulSoup) -> [Author]:
     unique_authors = {
         author_link["href"] for author_link in authors_link
     }.difference(authors_cash)
-    created_authors = [get_author(author_link) for author_link in unique_authors]
+
+    created_authors = [
+        get_author(author_link)
+        for author_link in unique_authors
+    ]
 
     # cash authors links
     authors_cash = authors_cash.union(unique_authors)

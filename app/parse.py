@@ -24,7 +24,11 @@ def next_quote_page_exist(soup: BeautifulSoup) -> BeautifulSoup:
     return soup.select_one("li.next > a")
 
 
-def write_in_cvs_file(column_fields: [str], data: [Quote], csv_file: str) -> None:
+def write_in_cvs_file(
+        column_fields: [str],
+        data: [Quote],
+        csv_file: str
+) -> None:
     with open(csv_file, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(column_fields)
@@ -35,7 +39,9 @@ def main(output_csv_path: str) -> None:
     """ Scrape quotes and authors of quote """
     page_num = 1
     while True:
-        page = requests.get(urljoin(BASE_QUOTES_URL, f"page/{page_num}/")).content
+        page = requests.get(
+            urljoin(BASE_QUOTES_URL, f"page/{page_num}/")
+        ).content
         page_soup = BeautifulSoup(page, "html.parser")
 
         # first parse quotes

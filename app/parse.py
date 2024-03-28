@@ -5,7 +5,6 @@ from urllib.parse import urljoin
 from dataclasses import astuple
 
 from .parse_quotes import (
-    Quote,
     get_quotes_from_page,
     QUOTE_FIELDS
 )
@@ -26,7 +25,7 @@ def next_quote_page_exist(soup: BeautifulSoup) -> BeautifulSoup:
 
 def write_in_cvs_file(
         column_fields: [str],
-        data: [Quote],
+        data: list,
         csv_file: str
 ) -> None:
     with open(csv_file, "w", encoding="utf-8", newline="") as file:

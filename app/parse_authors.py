@@ -21,58 +21,69 @@ class Author:
 AUTHORS_FIELDS = [field.name for field in fields(Author)]
 
 
-def load_authors_cash() -> set:
-    try:
-        with open(AUTHOR_CASH_FILE, "rb") as file:
-            return pickle.load(file)
-    except FileNotFoundError:
-        return set()
+@dataclass
+class AuthorParser:
+    # page_soup response page from BASE_QUOTES_URL
+    page_soup: BeautifulSoup
 
+    @classmethod
+    def load_authors_cash(cls) -> set:
+        try:
+            with open(AUTHOR_CASH_FILE, "rb") as file:
+                return pickle.load(file)
+        except FileNotFoundError:
+            return set()
 
-def save_authors_cash(author_cash: set) -> None:
-    with open(AUTHOR_CASH_FILE, "wb") as file:
-        pickle.dump(author_cash, file)
+    @classmethod
+    def save_authors_cash(cls, author_cash: set) -> None:
+        with open(AUTHOR_CASH_FILE, "wb") as file:
+            pickle.dump(author_cash, file)
 
+    def create_author(self, author_soup: BeautifulSoup) -> Author:
+        return Author(
+            full_name=author_soup.select_one(".author-title").string,
+            born_date=author_soup.select_one(".author-born-date").string,
+            born_location=author_soup.select_one(
+                ".author-born-location"
+            ).string,
+            biography=author_soup.select_one(".author-description").string
+        )
 
-def create_author(author_soup: BeautifulSoup) -> Author:
-    author = Author(
-        full_name=author_soup.select_one(".author-title").string,
-        born_date=author_soup.select_one(".author-born-date").string,
-        born_location=author_soup.select_one(".author-born-location").string,
-        biography=author_soup.select_one(".author-description").string
-    )
-    return author
+    def get_author(self, author_link: str) -> BeautifulSoup:
+        """Request author detail BeautifulSoup page"""
+        author_link = urljoin(BASE_QUOTES_URL, author_link)
+        author_page = requests.get(author_link).content
+        author_soup = BeautifulSoup(author_page, "html.parser")
+        return author_soup
 
+    def get_authors_link(self) -> set[str]:
+        """Return set of author detail URL"""
+        authors_link = self.page_soup.select(".author ~ a")
+        return {author_link["href"] for author_link in authors_link}
 
-def get_author(author_link: str) -> Author:
-    """Request and create new Author"""
-    author_link = urljoin(BASE_QUOTES_URL, author_link)
-    author_page = requests.get(author_link).content
-    author_soup = BeautifulSoup(author_page, "html.parser")
-    return create_author(author_soup)
+    def get_not_cashed_authors_link(self) -> set[str]:
+        """Return set of author links which are not in cash"""
+        authors_link = self.get_authors_link()
+        authors_cash = AuthorParser.load_authors_cash()
+
+        unique_authors = authors_link.difference(authors_cash)
+        authors_cash = authors_cash.union(unique_authors)
+
+        AuthorParser.save_authors_cash(authors_cash)
+
+        return unique_authors
 
 
 @scrape_data
 def get_authors_from_page(page_soup: BeautifulSoup) -> [Author]:
-    """
-        Request new authors that we don't have in cash and update
-        authors cash at the end.
-    """
-    authors_link = page_soup.select(".author ~ a")
-    authors_cash = load_authors_cash()
-
-    # request only not cashed/new authors
-    unique_authors = {
-        author_link["href"] for author_link in authors_link
-    }.difference(authors_cash)
+    parser = AuthorParser(page_soup)
+    unique_authors = parser.get_not_cashed_authors_link()
 
     created_authors = [
-        get_author(author_link)
+        parser.create_author(
+            parser.get_author(author_link)
+        )
         for author_link in unique_authors
     ]
-
-    # cash authors links
-    authors_cash = authors_cash.union(unique_authors)
-    save_authors_cash(authors_cash)
 
     return created_authors

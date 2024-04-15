@@ -1,16 +1,15 @@
-from dataclasses import dataclass
-
-
-@dataclass
-class Quote:
-    text: str
-    author: str
-    tags: list[str]
+from app.parse_quotes import (
+    parse_quotes,
+    QUOTES_FIELDS,
+    QUOTES_OUTPUT_CSV_PATH
+)
+from app.utils import write_data_to_csv
 
 
 def main(output_csv_path: str) -> None:
-    pass
+    quotes = parse_quotes()
+    write_data_to_csv(output_csv_path, quotes, QUOTES_FIELDS)
 
 
 if __name__ == "__main__":
-    main("quotes.csv")
+    main(QUOTES_OUTPUT_CSV_PATH)

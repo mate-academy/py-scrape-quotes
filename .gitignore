@@ -1,5 +1,7 @@
 .idea/
 .vscode/
+*.csv
+app/*.csv
 *.iml
 .env
 .DS_Store

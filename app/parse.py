@@ -18,7 +18,7 @@ class Quote:
 QUOTES_FIELD = [field for field in fields(Quote)]
 
 
-def get_num_page():
+def get_num_page() -> int:
     page = 1
 
     while True:

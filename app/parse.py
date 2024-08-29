@@ -56,7 +56,7 @@ def get_all_quotes(current_url: str) -> [Quote]:
 
 
 def write_quotes_to_csv(quotes: [Quote], output_path: str) -> None:
-    with open(output_path, "w", newline='', encoding='utf-8') as file:
+    with open(output_path, "w") as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])

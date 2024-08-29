@@ -1,8 +1,12 @@
-from dataclasses import dataclass, fields, astuple
+from dataclasses import (
+    dataclass,
+    fields,
+    astuple
+)
 from bs4 import BeautifulSoup
-
 import csv
 import requests
+
 
 BASE_URL = "https://quotes.toscrape.com/"
 TEXT_P = ".text"
@@ -16,8 +20,6 @@ class Quote:
     author: str
     tags: list[str]
 
-
-QUOTES_OUTPUT_PATH = "quotes.csv"
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
@@ -35,7 +37,7 @@ def get_single_page_quotes(page_soup: BeautifulSoup) -> [Quote]:
     return [parse_single_quote(quote) for quote in quotes]
 
 
-def get_all_quotes(current_url: BASE_URL) -> [Quote]:
+def get_all_quotes(current_url: str) -> [Quote]:
     all_quotes = []
 
     while current_url:
@@ -53,17 +55,17 @@ def get_all_quotes(current_url: BASE_URL) -> [Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote]) -> None:
-    with open(QUOTES_OUTPUT_PATH, "w") as file:
+def write_quotes_to_csv(quotes: [Quote], output_path: str) -> None:
+    with open(output_path, "w", newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in quotes])
 
 
-def main() -> None:
+def main(output_path: str) -> None:
     quotes = get_all_quotes(BASE_URL + "/page/1/")
-    write_quotes_to_csv(quotes)
+    write_quotes_to_csv(quotes, output_path)
 
 
 if __name__ == "__main__":
-    main()
+    main("quotes.csv")

@@ -12,16 +12,32 @@ class Quote:
     text: str
     author: str
     tags: list[str]
+    description: str
+
+
+def get_author_bio(author_link: str) -> str:
+    author_page = requests.get(BASE_URL + author_link)
+    author_soup = bs4.BeautifulSoup(author_page.text, 'html.parser')
+    return author_soup.select_one(".author-description").text.strip()
 
 
 def quotes_from_one_page(soup: bs4.BeautifulSoup) -> list[Quote]:
     result_list = []
+    authors_cached = {}
     all_quotes = soup.select(".quote")
     for quote in all_quotes:
+        author_link = quote.select_one("span > a")["href"]
+        author = quote.select_one(".author").text
+        if author in authors_cached:
+            description = authors_cached[author]
+        else:
+            description = get_author_bio(author_link)
+            authors_cached[author] = description
         result_list.append(Quote(
             text=quote.select_one(".text").text,
-            author=quote.select_one(".author").text,
-            tags=[tag.text for tag in quote.select(".tags > .tag")]
+            author=author,
+            tags=[tag.text for tag in quote.select(".tags > .tag")],
+            description=description
         )
         )
 
@@ -31,7 +47,7 @@ def quotes_from_one_page(soup: bs4.BeautifulSoup) -> list[Quote]:
 def write_products_to_csv(quotes: [Quote], output_csv_path: str) -> None:
     with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
         write = csv.writer(file)
-        write.writerow(["text", "author", "tags"])
+        write.writerow(["text", "author", "tags", "description"])
         write.writerows([astuple(quote) for quote in quotes])
 
 
@@ -53,4 +69,4 @@ def main(output_csv_path: str) -> None:
 
 
 if __name__ == "__main__":
-    print(main("quotes.csv"))
+    main("quotes.csv")

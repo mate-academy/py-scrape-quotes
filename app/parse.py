@@ -17,7 +17,7 @@ class Quote:
 
 def get_author_bio(author_link: str) -> str:
     author_page = requests.get(BASE_URL + author_link)
-    author_soup = bs4.BeautifulSoup(author_page.text, 'html.parser')
+    author_soup = bs4.BeautifulSoup(author_page.text, "html.parser")
     return author_soup.select_one(".author-description").text.strip()
 
 

@@ -14,16 +14,19 @@ class Quote:
     tags: list[str]
 
 
+def get_quote(html_quote: bs4.BeautifulSoup) -> Quote:
+    return Quote(
+        text=html_quote.select_one(".text").text,
+        author=html_quote.select_one(".author").text,
+        tags=[tag.text for tag in html_quote.select(".tags > .tag")],
+    )
+
+
 def quotes_from_one_page(soup: bs4.BeautifulSoup) -> list[Quote]:
     result_list = []
     all_quotes = soup.select(".quote")
     for quote in all_quotes:
-        result_list.append(Quote(
-            text=quote.select_one(".text").text,
-            author=quote.select_one(".author").text,
-            tags=[tag.text for tag in quote.select(".tags > .tag")],
-        )
-        )
+        result_list.append(get_quote(quote))
 
     return result_list
 

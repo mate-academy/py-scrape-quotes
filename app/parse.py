@@ -6,7 +6,6 @@ from dataclasses import (
 )
 import requests
 from bs4 import BeautifulSoup, Tag
-from tqdm import tqdm
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -46,9 +45,11 @@ def get_all_quotes():
     page_num = 1
 
     while True:
-        url = f"{BASE_URL}page/{page_num}"
         soup = get_page_quotes(page_num)
-        quotes = [parse_single_quote(quote_soup) for quote_soup in soup.select(".quote")]
+        quotes = [
+            parse_single_quote(quote_soup)
+            for quote_soup in soup.select(".quote")
+        ]
         all_quotes.extend(quotes)
 
         if not soup.select_one(".pager > .next"):

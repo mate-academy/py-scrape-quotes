@@ -1,6 +1,6 @@
 import csv
-import re
 from dataclasses import dataclass, fields, astuple
+from typing import List
 from urllib.parse import urljoin
 
 import requests
@@ -28,7 +28,7 @@ def parse_single_quote(quote: Tag) -> Quote:
     )
 
 
-def get_quotes() -> [Quote]:
+def get_quotes() -> List[Quote]:
     text = requests.get(BASE_URL).content
     page_soup = BeautifulSoup(text, "html.parser")
     quotes = page_soup.select(".quote")
@@ -48,8 +48,8 @@ def get_quotes() -> [Quote]:
     return all_quotes
 
 
-def write_quotes_to_csv(quotes: [Quote]) -> None:
-    with open("result.csv", "w") as f:
+def write_quotes_to_csv(quotes: List[Quote]) -> None:
+    with open("output_csv_path.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows(astuple(quote) for quote in quotes)

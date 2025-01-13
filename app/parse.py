@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup, Tag
 
 BASE_URL = "https://quotes.toscrape.com/"
 
+
 @dataclass
 class Quote:
     text: str
@@ -44,6 +45,7 @@ def get_quotes() -> [Quote]:
             next_page_url = None
 
     return quotes
+
 
 def write_quotes_to_csv(quotes: [Quote], file_name: str) -> None:
     with open(file_name, "w") as f:

@@ -49,7 +49,7 @@ def get_quotes() -> List[Quote]:
 
 
 def write_quotes_to_csv(quotes: List[Quote]) -> None:
-    with open("output_csv_path.csv", "w") as f:
+    with open("result.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows(astuple(quote) for quote in quotes)

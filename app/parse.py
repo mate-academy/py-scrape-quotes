@@ -14,7 +14,9 @@ class Quote:
     author: str
     tags: list[str]
 
+
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
+
 
 def parse_single_quote(quote: Tag) -> Quote:
     return Quote(
@@ -24,7 +26,7 @@ def parse_single_quote(quote: Tag) -> Quote:
     )
 
 
-def get_quotes(url: str):
+def get_quotes(url: str) -> tuple[list[Quote], str | None]:
     content = requests.get(url).content
     soup = BeautifulSoup(content, "html.parser")
 
@@ -38,7 +40,7 @@ def get_quotes(url: str):
     return [parse_single_quote(quote) for quote in quotes], next_page_url
 
 
-def get_all_quotes():
+def get_all_quotes() -> list[Quote]:
     all_quotes = []
     next_page_url = BASE_URL
 
@@ -58,6 +60,7 @@ def write_quotes_to_csv(quotes: [Quote], output_csv_path: str) -> None:
 
 def main(output_csv_path: str) -> None:
     write_quotes_to_csv(get_all_quotes(), output_csv_path)
+
 
 if __name__ == "__main__":
     main("quotes.csv")

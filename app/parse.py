@@ -45,7 +45,8 @@ def main(output_csv_path: str) -> None:
 
             if page_with_quotes(soup):
                 block_quote = page_with_quotes(soup)
-                parsed_quotes = [get_single_quote(info) for info in block_quote]
+                parsed_quotes = [get_single_quote(info)
+                                 for info in block_quote]
                 all_quotes.extend(quotes.__dict__ for quotes in parsed_quotes)
             url = next_page(soup)
         except requests.RequestException as e:

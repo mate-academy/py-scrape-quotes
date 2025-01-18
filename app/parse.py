@@ -18,12 +18,18 @@ def get_single_quote(single_quote: Tag) -> Quote:
     try:
         text = single_quote.find_all("span", class_="text")[0].text
     except IndexError:
-        raise IndexError("Error extracting 'text': No element with class 'text' found in the provided tag.")
+        raise IndexError(
+            "Error extracting 'text': "
+            "No element with class 'text' found in the provided tag."
+        )
 
     try:
         author = single_quote.find_all("small", class_="author")[0].text
     except IndexError:
-        raise IndexError("Error extracting 'author': No element with class 'author' found in the provided tag.")
+        raise IndexError(
+            "Error extracting 'author': "
+            "No element with class 'author' found in the provided tag."
+        )
 
     tags = [elem.text for elem in single_quote.find_all("a", class_="tag")]
 
@@ -51,7 +57,9 @@ def main(output_csv_path: str) -> None:
         try:
             response = requests.get(url)
             if response.status_code != 200:
-                raise requests.exceptions.HTTPError(f"HTTP request failed. Status code: {response.status_code} ")
+                raise requests.exceptions.HTTPError(
+                    f"HTTP request failed. Status code: {response.status_code}"
+                )
             response = response.content
             soup = BeautifulSoup(response, "html.parser")
 

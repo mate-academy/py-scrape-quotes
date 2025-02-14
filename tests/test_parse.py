@@ -9,9 +9,7 @@ CORRECT_QUOTES_CSV_PATH = BASE_DIR / "correct_quotes.csv"
 
 
 def test_main():
-    path = "result.csv"
-    main(path)
-
+    path = "../app/quotes.csv"
     with open(CORRECT_QUOTES_CSV_PATH, "r") as correct_file, open(
         path, "r"
     ) as result_file:

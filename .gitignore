@@ -6,3 +6,7 @@
 venv/
 .pytest_cache/
 **__pycache__/
+.pylintrc
+author.csv
+parser.log
+result.csv

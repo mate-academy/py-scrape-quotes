@@ -38,10 +38,8 @@ def parse_author(path_author: str) -> Author:
     url = urljoin(BASE_URL, path_author)
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
-    autor_title = soup.select_one(".author-title").text
-    AUTHORS_CACHE.add(autor_title)
     return Author(
-        name=autor_title,
+        name=soup.select_one(".author-title").text,
         born_date=soup.select_one(".author-born-date").text,
         born_location=soup.select_one(
             ".author-born-location").text.replace("in ", ""),
@@ -61,10 +59,11 @@ def parse_page(url: str) -> tuple[list[Quote], list[Author]]:
         article = parse_article(quote)
         all_article.append(article)
 
-        if article.author not in AUTHORS_CACHE:
-            path_author = quote.select_one("a")["href"]
+        path_author = quote.select_one("a")["href"]
+        if path_author not in AUTHORS_CACHE:
             author_bio = parse_author(path_author)
             all_authors.append(author_bio)
+            AUTHORS_CACHE.add(path_author)
 
     return all_article, all_authors
 

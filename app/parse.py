@@ -41,7 +41,7 @@ def parse_quotes(page: int = 1) -> list[Quote]:
 
 
 def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
-    with open(output_csv_path, "a", newline="", encoding="utf-8") as f:
+    with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([field.name for field in fields(Quote)])
         writer.writerows([astuple(q) for q in quotes])

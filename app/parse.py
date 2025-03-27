@@ -22,6 +22,7 @@ def create_quote_instance(quote: Tag) -> Quote:
         tags=[tag.text for tag in quote.select(".tag")]
     )
 
+
 def parse_quotes(page: int = 1) -> list[Quote]:
 
     result = []

@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup, Tag
 
 URL = "https://quotes.toscrape.com/"
 
+
 @dataclass
 class Quote:
     text: str
@@ -15,6 +16,7 @@ class Quote:
 
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
+
 
 def get_next_page(soup: BeautifulSoup) -> str | None:
     pagination = soup.select_one("li.next > a")
@@ -55,7 +57,7 @@ def write_quotes_to_csv(quotes: list[Quote], name: str) -> None:
         writer.writerow(QUOTE_FIELDS)
         for quote in quotes:
             writer.writerow(astuple(quote))
-    
+
 
 def main(output_csv_path: str) -> None:
     quotes = scrape_quotes()

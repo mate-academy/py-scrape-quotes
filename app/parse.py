@@ -2,6 +2,7 @@ import requests
 from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup, Tag
 import csv
+import time
 
 HOME_URL = "https://quotes.toscrape.com/"
 
@@ -34,6 +35,7 @@ def get_quotes() -> list[Quote]:
     next_page_url = HOME_URL
 
     while next_page_url:
+        time.sleep(1)
         response = requests.get(next_page_url)
         soup = BeautifulSoup(response.content, "lxml")
 

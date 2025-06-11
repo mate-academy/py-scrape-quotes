@@ -1,3 +1,5 @@
+import urllib
+
 import requests
 import csv
 from bs4 import BeautifulSoup, Tag
@@ -42,7 +44,7 @@ def get_all_quotes() -> [Quote]:
 
         next_page = soup.select_one(".next > a")
         if next_page:
-            current_page_url = BASE_URL + next_page["href"]
+            current_page_url = urllib.parse.urljoin(BASE_URL, next_page["href"])
         else:
             current_page_url = None
 

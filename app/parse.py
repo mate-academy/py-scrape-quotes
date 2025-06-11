@@ -28,7 +28,7 @@ def parse_single_quote(page_soup: Tag) -> Quote:
     quote = Quote(
         text=page_soup.select_one(".text").text,
         author=page_soup.select_one(".author").text,
-        tags=[tag.text for tag in page_soup.select(".tags a")]
+        tags=[tag.text for tag in page_soup.select(".tag")]
     )
     return quote
 

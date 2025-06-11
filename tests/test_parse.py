@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+import asyncio
 
 from app.parse import main, Quote
 
@@ -10,7 +11,7 @@ CORRECT_QUOTES_CSV_PATH = BASE_DIR / "correct_quotes.csv"
 
 def test_main():
     path = "result.csv"
-    main(path)
+    asyncio.run(main(path))
 
     with open(CORRECT_QUOTES_CSV_PATH, "r") as correct_file, open(
         path, "r"

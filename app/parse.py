@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-
+# ToDo:
 @dataclass
 class Quote:
     text: str

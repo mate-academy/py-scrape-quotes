@@ -1,3 +1,4 @@
+from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -35,7 +36,7 @@ def fetch_all_quotes(base_url: str) -> list[Quote]:
             requests.get(page_url).text,
             "html.parser"
         ).select_one(".next > a")
-        page_url = f"{base_url}{next_page['href']}" if next_page else None # noqa Q000
+        page_url = urljoin(base_url, next_page["href"]) if next_page else None
     return quotes
 
 

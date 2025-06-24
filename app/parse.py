@@ -57,6 +57,7 @@ def save_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
         )
         writer.writeheader()
         for quote in quotes:
+            quote.tags = ", ".join(quote.tags)
             writer.writerow(asdict(quote))
 
 

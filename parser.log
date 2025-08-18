@@ -10,3 +10,7 @@
 2025-08-18 18:22:44,617 - INFO - Parsed 9 page
 2025-08-18 18:22:45,313 - INFO - Parsed 10 page
 2025-08-18 18:22:46,017 - INFO - No quotes found in this page. Save data to csv
+2025-08-18 18:28:10,311 - INFO - Start parsing quotes from https://quotes.toscrape.com/ with pagination
+2025-08-18 18:28:11,605 - INFO - Parsed page 1
+2025-08-18 18:28:13,479 - INFO - Parsed page 2
+2025-08-18 18:28:15,248 - INFO - Parsed page 3

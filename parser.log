@@ -1,0 +1,16 @@
+2025-08-18 18:22:37,865 - INFO - We run fast parsing quotes from https://quotes.toscrape.com/ with pagination
+2025-08-18 18:22:38,748 - INFO - Parsed 1 page
+2025-08-18 18:22:39,604 - INFO - Parsed 2 page
+2025-08-18 18:22:40,293 - INFO - Parsed 3 page
+2025-08-18 18:22:40,984 - INFO - Parsed 4 page
+2025-08-18 18:22:41,673 - INFO - Parsed 5 page
+2025-08-18 18:22:42,399 - INFO - Parsed 6 page
+2025-08-18 18:22:43,134 - INFO - Parsed 7 page
+2025-08-18 18:22:43,835 - INFO - Parsed 8 page
+2025-08-18 18:22:44,617 - INFO - Parsed 9 page
+2025-08-18 18:22:45,313 - INFO - Parsed 10 page
+2025-08-18 18:22:46,017 - INFO - No quotes found in this page. Save data to csv
+2025-08-18 18:28:10,311 - INFO - Start parsing quotes from https://quotes.toscrape.com/ with pagination
+2025-08-18 18:28:11,605 - INFO - Parsed page 1
+2025-08-18 18:28:13,479 - INFO - Parsed page 2
+2025-08-18 18:28:15,248 - INFO - Parsed page 3

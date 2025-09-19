@@ -4,7 +4,8 @@ import csv
 import requests
 from bs4 import BeautifulSoup, Tag
 
-URL = "https://quotes.toscrape.com/page/"
+URL = "https://quotes.toscrape.com/page/1/"
+
 
 @dataclass
 class Quote:
@@ -42,7 +43,7 @@ def get_pages():
     text = requests.get(URL).content
     first_soup = BeautifulSoup(text, "html.parser")
     all_quotes = get_single_page_quotes(first_soup)
-    for x in range(1, get_num_pages() + 1):
+    for x in range(2, get_num_pages() + 1):
         url = "https://quotes.toscrape.com/page/" + str(x) + "/"
         response = requests.get(url).content
         next_page_soup = BeautifulSoup(response, "html.parser")
@@ -66,5 +67,4 @@ def main(output_csv_path: str) -> None:
 
 
 if __name__ == "__main__":
-    get_num_pages()
     main("quotes.csv")

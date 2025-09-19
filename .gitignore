@@ -6,3 +6,9 @@
 venv/
 .pytest_cache/
 **__pycache__/
+
+# Generated CSV after running the scraper; do not commit
+/result.csv
+
+# Generated CSV in the app folder; not tracked in version control
+/app/quotes.csv

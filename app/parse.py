@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields, astuple
 import csv
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -11,7 +12,7 @@ URL = "https://quotes.toscrape.com/page/1/"
 class Quote:
     text: str
     author: str
-    tags: list[str]
+    tags: List[str]
 
 
 QUOTES_NAME = [field.name for field in fields(Quote)]
@@ -25,10 +26,10 @@ def parse_single_quote(quote: Tag) -> Quote:
     )
 
 
-def get_num_pages():
+def get_num_pages() -> int:
     page = 1
     while True:
-        url = f"https://quotes.toscrape.com/page/{page}/"
+        url = "https://quotes.toscrape.com/page/{}/".format(page)
         response = requests.get(url)
         if "No quotes found!" in response.text:
             print(f"Пагинация закончилась на странице {page}")
@@ -38,23 +39,20 @@ def get_num_pages():
     return page - 1
 
 
-def get_pages():
-    page = 1
+def get_pages() -> List[Quote]:
     text = requests.get(URL).content
     first_soup = BeautifulSoup(text, "html.parser")
     all_quotes = get_single_page_quotes(first_soup)
-    for x in range(2, get_num_pages() + 1):
-        url = "https://quotes.toscrape.com/page/" + str(x) + "/"
+    for i in range(2, get_num_pages() + 1):
+        url = "https://quotes.toscrape.com/page/" + str(i) + "/"
         response = requests.get(url).content
         next_page_soup = BeautifulSoup(response, "html.parser")
         all_quotes.extend(get_single_page_quotes(next_page_soup))
-        print(url)
-        print(page)
-        page += 1
+
     return all_quotes
 
 
-def get_single_page_quotes(page_soup: Tag):
+def get_single_page_quotes(page_soup: Tag) -> List[Quote]:
     quotes = page_soup.select(".quote")
     return [parse_single_quote(quote) for quote in quotes]
 

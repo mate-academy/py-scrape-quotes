@@ -20,9 +20,9 @@ QUOTES_NAME = [field.name for field in fields(Quote)]
 
 def parse_single_quote(quote: Tag) -> Quote:
     return Quote(
-        text=quote.select_one(".text").text,
-        author=quote.select_one(".author").text,
-        tags=[tag.text for tag in quote.select(".tags .tag")]
+        text=str(quote.select_one(".text").text),
+        author=str(quote.select_one(".author").text),
+        tags=[tag.text for tag in quote.select(".tag")]
     )
 
 
@@ -32,7 +32,7 @@ def get_num_pages() -> int:
         url = "https://quotes.toscrape.com/page/{}/".format(page)
         response = requests.get(url)
         if "No quotes found!" in response.text:
-            print(f"Пагинация закончилась на странице {page}")
+            print(f"Pagination ENDED on page {page}")
             break
         else:
             page += 1
@@ -58,10 +58,10 @@ def get_single_page_quotes(page_soup: Tag) -> List[Quote]:
 
 
 def main(output_csv_path: str) -> None:
-    with open(output_csv_path, "w", encoding="utf-8") as f:
+    with open(output_csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(QUOTES_NAME)
-        writer.writerows([astuple(quote) for quote in get_pages()])
+        writer.writerows(astuple(quote) for quote in get_pages())
 
 
 if __name__ == "__main__":

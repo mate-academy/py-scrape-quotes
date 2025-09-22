@@ -15,7 +15,7 @@ class Quote:
     tags: list[str]
 
 
-QUOTE_FIELDS = [field.name.capitalize() for field in fields(Quote)]
+QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 
 def get_soup(url: str) -> BeautifulSoup:
@@ -80,7 +80,7 @@ def main(output_csv_path: str) -> None:
     # Save author bios
     with open("authors.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["Author", "Biography"])
+        writer.writerow(["author", "biography"])
         writer.writerows([[author, bio]
                           for author, bio in author_bios.items()])
 

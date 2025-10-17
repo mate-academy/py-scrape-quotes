@@ -32,18 +32,21 @@ def fetch_page(page_url: str) -> bytes | None:
 
 
 def page_generator() -> Generator[BeautifulSoup, None, None]:
-    page_number = 0
+    page_url = URL
 
-    for _ in range(10):
-        page_number += 1
-        page_url = urljoin(URL, f"page/{page_number}/")
-
+    while True:
         content = fetch_page(page_url)
         if not content:
             break
 
         soup = BeautifulSoup(content, "html.parser")
         yield soup
+
+        next_li = soup.select_one("li.next")
+        if not next_li:
+            break
+
+        page_url = urljoin(URL, next_li.select_one("a")["href"])
 
 
 def get_author(author_link: str) -> Author | None:

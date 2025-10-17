@@ -34,7 +34,7 @@ def fetch_page(page_url: str) -> bytes | None:
 def page_generator() -> Generator[BeautifulSoup, None, None]:
     page_number = 0
 
-    while True:
+    for _ in range(10):
         page_number += 1
         page_url = urljoin(URL, f"page/{page_number}/")
 
@@ -59,7 +59,7 @@ def get_author(author_link: str) -> Author | None:
     name = author_element.select_one("h3.author-title").text
     born_date = author_element.select_one("span.author-born-date").text
     born_location = author_element.select_one("span.author-born-location").text[3:]
-    description = author_element.select_one(".author-description").text[1:-1]
+    description = author_element.select_one(".author-description").text
     return Author(
         name=name,
         born_date=born_date,
@@ -70,7 +70,7 @@ def get_author(author_link: str) -> Author | None:
 def parse_page(page: BeautifulSoup, quotes: list, authors: dict) -> None:
 
     for element in page.select(".quote"):
-        quote_text = element.select_one("span.text").text[1:-1]
+        quote_text = element.select_one("span.text").text
         quote_author = element.select_one("small.author").text
         author_link = element.select_one("a[href]")["href"]
 
@@ -106,7 +106,7 @@ def write_quotes_to_file(output_csv_path: str, quotes: List[Quote]):
             writer.writerow({
                 "text": quote.text,
                 "author": quote.author,
-                "tags": ", ".join(quote.tags),
+                "tags": quote.tags,
             })
 
     print(f"Quotes saved to {output_csv_path}")
@@ -119,7 +119,8 @@ def write_authors_to_file(output_csv_path: str, authors: Dict[str, Author]):
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
-        for author in authors.values():
+        for author_name in sorted(authors.keys()):
+            author = authors[author_name]
             writer.writerow({
                 "name": author.name,
                 "born_date": author.born_date,

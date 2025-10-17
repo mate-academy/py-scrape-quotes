@@ -164,9 +164,10 @@ def write_authors_to_file(
     print(f"Authors saved to {output_csv_path}")
 
 
-def main(output_csv_path: str, authors_csv_path: str = "authors.csv") -> None:
+def main(output_csv_path: str) -> None:
     quotes, authors = get_quotes_and_authors()
     write_quotes_to_file(output_csv_path, quotes)
+    authors_csv_path = output_csv_path.replace(".csv", "_authors.csv")
     write_authors_to_file(authors_csv_path, authors)
 
 

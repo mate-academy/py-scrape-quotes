@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup, Tag
 
 BASE_URL = "https://quotes.toscrape.com"
 
+
 @dataclass
 class Quote:
     text: str
@@ -49,15 +50,11 @@ def get_all_quotes() -> list[Quote]:
 
 
 def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
-    with open(output_csv_path, "w", newline="", encoding="utf-8-sig") as file:
-        writer = csv.writer(file, delimiter=";")
-        writer.writerow(["Text", "Author", "Tags"])
+    with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(QUOTES_FIELDS)
         for quote in quotes:
-            writer.writerow([
-                quote.text,
-                quote.author,
-                ", ".join(quote.tags)
-            ])
+            writer.writerow([quote.text, quote.author, repr(quote.tags)])
 
 
 def main(output_csv_path: str) -> None:

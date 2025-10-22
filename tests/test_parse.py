@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 
-from app.parse import main, Quote
+from app.parse import Quote, main
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -12,7 +12,7 @@ def test_main():
     path = "result.csv"
     main(path)
 
-    with open(CORRECT_QUOTES_CSV_PATH, "r") as correct_file, open(
+    with open(CORRECT_QUOTES_CSV_PATH, "r", encoding="utf-8") as correct_file, open(
         path, "r"
     ) as result_file:
         correct_reader = csv.reader(correct_file)

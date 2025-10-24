@@ -3,14 +3,22 @@ from typing import Generator
 from functools import cache
 import datetime
 import csv
+import time
 
 import tqdm
 import requests
 from bs4 import BeautifulSoup
+from requests.exceptions import RequestException
 
 
 hostname = "https://quotes.toscrape.com"
 page_base_url = "/page/{page_number}/"
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/91.0.4472.124 Safari/537.36"
+)
+REQUEST_DELAY = 0.3
 
 
 @dataclass
@@ -28,33 +36,61 @@ class Author:
     description: str
 
 
-def get_pages() -> Generator[BeautifulSoup, None, None]:
+def get_pages(
+    session: requests.Session,
+) -> Generator[BeautifulSoup, None, None]:
     base_url = hostname + page_base_url
     page_number = 1
     while True:
-        response = requests.get(base_url.format(page_number=page_number))
-        if response.status_code != 200 or "No quotes found!" in response.text:
+        try:
+            response = session.get(base_url.format(page_number=page_number))
+            if response.status_code != 200:
+                print(
+                    f"Failed to fetch page {page_number}: "
+                    f"Status code {response.status_code}"
+                )
+                break
+            if "No quotes found!" in response.text:
+                break
+            yield BeautifulSoup(response.content, "html.parser")
+            page_number += 1
+            time.sleep(REQUEST_DELAY)
+        except RequestException as e:
+            print(f"Error fetching page {page_number}: {e}")
             break
-        yield BeautifulSoup(response.content, "html.parser")
-        page_number += 1
 
 
 @cache
-def get_author_about(author_url: str) -> Author | None:
+def get_author_about(
+    session: requests.Session,
+    author_url: str,
+) -> Author | None:
     author_url = hostname + author_url
-    response = requests.get(author_url)
-    if response.status_code != 200:
-        return None
-
-    soup = BeautifulSoup(response.content, "html.parser")
     try:
-        name = soup.select_one(".author-title").text.strip()
-        born_date = datetime.datetime.strptime(
-            soup.select_one(".author-born-date").text.strip(), "%B %d, %Y"
-        ).date()
-        born_location = soup.select_one(".author-born-location").text.strip()
-        description = soup.select_one(".author-description").text.strip()
-    except AttributeError:
+        response = session.get(author_url)
+        if response.status_code != 200:
+            print(
+                "Failed to fetch author data: "
+                f"Status code {response.status_code}"
+            )
+            return None
+
+        soup = BeautifulSoup(response.content, "html.parser")
+        try:
+            name = soup.select_one(".author-title").text.strip()
+            born_date = datetime.datetime.strptime(
+                soup.select_one(".author-born-date").text.strip(), "%B %d, %Y"
+            ).date()
+            born_location = soup.select_one(
+                ".author-born-location"
+            ).text.strip()
+            description = soup.select_one(".author-description").text.strip()
+        except AttributeError as e:
+            print(f"Error parsing author data: {e}")
+            return None
+        time.sleep(REQUEST_DELAY)
+    except RequestException as e:
+        print(f"Error fetching author data: {e}")
         return None
 
     return Author(
@@ -67,34 +103,40 @@ def get_author_about(author_url: str) -> Author | None:
 
 def parse_one_page(
     page: BeautifulSoup,
-    collect_authors: bool = False
-) -> tuple[list[Quote], list[Author]]:
+    session: requests.Session,
+    collect_authors: bool = False,
+) -> tuple[list[Quote], list[Author | None]]:
     quotes = []
     authors = []
     for quote in page.select(".quote"):
         # quotes
-        text = quote.select_one(".text").text
-        author = quote.select_one(".author").text
-        tags = [tag.text for tag in quote.select(".tag")]
+        text = quote.select_one(".text").text.strip()
+        author = quote.select_one(".author").text.strip()
+        tags = [tag.text.strip() for tag in quote.select(".tag")]
         quotes.append(Quote(text=text, author=author, tags=tags))
 
         # authors
         if collect_authors:
-            author_url = quote.select_one("a")["href"]
-            authors.append(get_author_about(author_url))
+            author_link = quote.select_one('a[href^="/author/"]')
+            if author_link:
+                author_url = author_link["href"]
+                authors.append(get_author_about(session, author_url))
     return quotes, authors
 
 
 def main(
     output_csv_path: str,
     authors_csv_path: str = "authors.csv",
-    collect_authors: bool = False
+    collect_authors: bool = False,
 ) -> None:
-    all_quotes = []
-    all_authors: dict[str, Author] = {}
+    session = requests.Session()
+    session.headers.update({"User-Agent": USER_AGENT})
 
-    for page in tqdm.tqdm(get_pages(), "Collect data about all quotes"):
-        quotes, authors = parse_one_page(page, collect_authors)
+    all_quotes = []
+    all_authors: dict[str, Author | None] = {}
+
+    for page in tqdm.tqdm(get_pages(session), "Collect data about all quotes"):
+        quotes, authors = parse_one_page(page, session, collect_authors)
         all_quotes.extend(quotes)
 
         for author in authors:

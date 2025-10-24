@@ -19,6 +19,7 @@ USER_AGENT = (
     "Chrome/91.0.4472.124 Safari/537.36"
 )
 REQUEST_DELAY = 0.3
+SESSION: requests.Session | None = None
 
 
 @dataclass
@@ -61,13 +62,16 @@ def get_pages(
 
 
 @cache
-def get_author_about(
-    session: requests.Session,
-    author_url: str,
-) -> Author | None:
-    author_url = hostname + author_url
+def get_author_about(author_url: str) -> Author | None:
+    global SESSION
+    session = SESSION
+    if session is None:
+        print("No session available to fetch author data; skipping.")
+        return None
+
+    full_url = hostname + author_url
     try:
-        response = session.get(author_url)
+        response = session.get(full_url)
         if response.status_code != 200:
             print(
                 "Failed to fetch author data: "
@@ -120,7 +124,7 @@ def parse_one_page(
             author_link = quote.select_one('a[href^="/author/"]')
             if author_link:
                 author_url = author_link["href"]
-                authors.append(get_author_about(session, author_url))
+                authors.append(get_author_about(author_url))
     return quotes, authors
 
 
@@ -131,6 +135,8 @@ def main(
 ) -> None:
     session = requests.Session()
     session.headers.update({"User-Agent": USER_AGENT})
+    global SESSION
+    SESSION = session
 
     all_quotes = []
     all_authors: dict[str, Author | None] = {}

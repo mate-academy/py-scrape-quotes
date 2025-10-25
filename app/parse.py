@@ -1,8 +1,10 @@
 import csv
 from dataclasses import dataclass, astuple, fields
-import requests
-from bs4 import BeautifulSoup, Tag
+import time
 
+import requests
+
+from bs4 import BeautifulSoup, Tag
 
 HOME_URL = "https://quotes.toscrape.com/"
 
@@ -15,6 +17,7 @@ class Quote:
 
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
+
 
 def parse_single_quote(quote: Tag) -> Quote:
     return Quote(
@@ -30,15 +33,11 @@ def parse_page(page: Tag) -> list[Quote]:
 
 
 def get_next(page: Tag) -> bool:
-    if page.select_one(".next"):
-        return True
-    return False
+    return bool(page.select_one(".next"))
+
 
 def get_all_quotes() -> list[Quote]:
     page = 1
-    url = HOME_URL + f"/page/{page}/"
-    first_page = requests.get(url).content
-    soup = BeautifulSoup(first_page, "html.parser")
     all_quotes = []
     have_next = True
     while have_next:
@@ -48,6 +47,7 @@ def get_all_quotes() -> list[Quote]:
         have_next = get_next(soup)
         all_quotes.extend(parse_page(soup))
         page += 1
+        time.sleep(1)
     return all_quotes
 
 
@@ -56,6 +56,7 @@ def write_to_file(all_quotes: list[Quote], output_csv_path) -> None:
         writer = csv.writer(f)
         writer.writerow(QUOTE_FIELDS)
         writer.writerows([astuple(quote) for quote in all_quotes])
+
 
 def main(output_csv_path: str) -> None:
     write_to_file(get_all_quotes(), output_csv_path)

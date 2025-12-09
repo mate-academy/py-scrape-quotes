@@ -1,11 +1,12 @@
+from __future__ import annotations
 import csv
-import requests
-from urllib.parse import urljoin
 from dataclasses import dataclass, fields, astuple
+from urllib.parse import urljoin
+
+import requests
 from bs4 import BeautifulSoup, Tag
 
 BASE_URL = "https://quotes.toscrape.com/"
-URLS = [BASE_URL]
 
 
 @dataclass
@@ -27,39 +28,32 @@ def parse_single_quote(quote: Tag) -> Quote:
     )
 
 
-def all_pages() -> None:
-    text = requests.get(URLS[-1]).content
-    soup = BeautifulSoup(text, "html.parser")
-    pagination = soup.select_one(".next")
-
-    if pagination:
-        next_page_href = pagination.select_one("a")["href"]
-        url_next_page = urljoin(BASE_URL, next_page_href)
-        URLS.append(url_next_page)
-
-        all_pages()
-
-
-def parse_single_page(url: "str") -> [Quote]:
+def parse_single_page(url: str) -> list[Quote]:
     text = requests.get(url).content
     soup = BeautifulSoup(text, "html.parser")
-    quotes = soup.select(".quote")
-    result = [parse_single_quote(quote) for quote in quotes]
-
-    return result
+    quotes = [parse_single_quote(quote_tag) for quote_tag in soup.select(".quote")]
+    return quotes
 
 
-def parse_all_pages() -> list:
-    results = []
-    all_pages()
-    for url in URLS:
-        results.extend(parse_single_page(url))
+def parse_all_pages() -> list[Quote]:
+    results: list[Quote] = []
+    url: str | None = BASE_URL
+
+    while url:
+        text = requests.get(url).content
+        soup = BeautifulSoup(text, "html.parser")
+
+        quotes = [parse_single_quote(quote_tag) for quote_tag in soup.select(".quote")]
+        results.extend(quotes)
+
+        next_page_tag = soup.select_one(".next a")
+        url = urljoin(BASE_URL, next_page_tag["href"]) if next_page_tag else None
 
     return results
 
 
 def main(output_csv_path: str) -> None:
-    with open(output_csv_path, "w") as f:
+    with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(QUOTE_FIELDS)
         quotes = parse_all_pages()

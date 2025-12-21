@@ -52,6 +52,7 @@ def write_csv_file(quotes: list[Quote], output_csv_path: str) -> None:
         writer.writerows([astuple(quote) for quote in quotes])
 
 
+
 def main(output_csv_path: str) -> None:
     write_csv_file(parse_quotes(), output_csv_path)
 

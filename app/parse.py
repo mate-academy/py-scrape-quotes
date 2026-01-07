@@ -1,7 +1,7 @@
-import csv, time
-from typing import List, Optional
-
+import csv
+import time
 import requests
+from typing import List, Optional
 
 from dataclasses import dataclass
 from bs4 import BeautifulSoup, Tag

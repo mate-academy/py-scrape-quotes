@@ -1,4 +1,4 @@
-import csv
+import csv, time
 from typing import List, Optional
 
 import requests
@@ -48,6 +48,7 @@ def get_quotes(page_url: str = BASE_URL) -> List[Quote]:
         soup = BeautifulSoup(text, "html.parser")
         all_quotes.extend(get_single_page_quotes(soup))
         current_page_url = get_next_page_url(soup)
+        time.sleep(1)
 
     return all_quotes
 

@@ -2,7 +2,7 @@ import csv
 from dataclasses import dataclass, astuple
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 BASE_URL = "https://quotes.toscrape.com/"
 
@@ -14,7 +14,7 @@ class Quote:
     tags: list[str]
 
 
-def scrape_single_quote(quote):
+def scrape_single_quote(quote: Tag) -> Quote:
     return Quote(
         text=quote.select_one(".text").text,
         author=quote.select_one(".author").text,
@@ -22,7 +22,7 @@ def scrape_single_quote(quote):
     )
 
 
-def scrape_page():
+def scrape_page() -> list[Quote]:
     current_url = BASE_URL
     all_quotes = []
     while current_url:
@@ -41,7 +41,7 @@ def scrape_page():
     return [scrape_single_quote(quote) for quote in all_quotes]
 
 
-def write_to_csv(quotes, output_csv_path):
+def write_to_csv(quotes: list, output_csv_path: str) -> None:
     with open(output_csv_path, "w", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["text", "author", "tags"])

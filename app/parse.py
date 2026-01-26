@@ -41,15 +41,15 @@ def scrape_page():
     return [scrape_single_quote(quote) for quote in all_quotes]
 
 
-def write_to_csv(quotes):
-    with open("quotes.csv", "w", encoding="utf-8") as f:
+def write_to_csv(quotes, output_csv_path):
+    with open(output_csv_path, "w", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["text", "author", "tags"])
         writer.writerows([astuple(quote) for quote in quotes])
 
 
 def main(output_csv_path: str) -> None:
-    write_to_csv(scrape_page())
+    write_to_csv(scrape_page(), output_csv_path)
 
 
 if __name__ == "__main__":

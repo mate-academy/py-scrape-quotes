@@ -5,9 +5,8 @@ import requests
 from bs4 import ResultSet, Tag, BeautifulSoup
 
 from app.config import URL, Author
+from app.logger import configure_logger
 from app.parser import parse_single_author
-from logger import configure_logger
-
 
 configure_logger()
 

@@ -1,13 +1,11 @@
 import csv
 import logging
-
 from dataclasses import astuple
 
+from app.config import Quote, Author, URL, QUOTE_FIELDS, AUTHOR_FIELDS
+from app.logger import configure_logger
 from app.parser import parse_single_quote
-from config import Quote, Author, QUOTE_FIELDS, AUTHOR_FIELDS
-from scrapper import scrape_all_raw_quotes, scrape_and_parse_all_authors, URL
-from logger import configure_logger
-
+from app.scrapper import scrape_all_raw_quotes, scrape_and_parse_all_authors
 
 configure_logger()
 

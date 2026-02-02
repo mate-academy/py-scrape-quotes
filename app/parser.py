@@ -15,6 +15,6 @@ def parse_single_author(author: BeautifulSoup) -> Author:
     return Author(
         name=author.select_one(".author-title").text,
         birth_date=author.select_one(".author-born-date").text,
-        birt_location=author.select_one(".author-born-location").text[3:],
+        birth_location=author.select_one(".author-born-location").text[3:],
         biography=author.select_one(".author-description").text.strip(),
     )

@@ -18,7 +18,7 @@ QUOTE_FIELDS = [field.name for field in fields(Quote)]
 class Author:
     name: str
     birth_date: str
-    birt_location: str
+    birth_location: str
     biography: str
 
 

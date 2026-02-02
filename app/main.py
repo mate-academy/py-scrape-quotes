@@ -23,14 +23,14 @@ def write_to_csv(
         writer.writerows([astuple(entry) for entry in data])
 
 
-def main(output_csv_quotes_path: str, output_csv_authors_path: str) -> None:
+def main(output_csv_path: str) -> None:
     raw_quotes = scrape_all_raw_quotes(URL)
 
     quotes = [parse_single_quote(quote) for quote in raw_quotes]
     authors = scrape_and_parse_all_authors(raw_quotes)
 
-    write_to_csv(quotes, QUOTE_FIELDS, output_csv_quotes_path)
-    write_to_csv(authors, AUTHOR_FIELDS, output_csv_authors_path)
+    write_to_csv(quotes, QUOTE_FIELDS, output_csv_path)
+    write_to_csv(authors, AUTHOR_FIELDS, output_csv_path)
 
 
 if __name__ == "__main__":

@@ -57,7 +57,7 @@ def write_quotes_to_csv(quotes: list[Quote], output_path: str) -> None:
         writer.writerow(["text", "author", "tags"])
 
         for quote in quotes:
-            tags_str = ", ".join(quote.tags)
+            tags_str = str(quote.tags)
             writer.writerow([quote.text, quote.author, tags_str])
 
 

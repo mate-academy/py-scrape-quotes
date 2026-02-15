@@ -1,6 +1,7 @@
 import asyncio
 import csv
-from dataclasses import astuple, dataclass, fields
+import json
+from dataclasses import dataclass, fields
 
 import aiohttp
 from bs4 import BeautifulSoup, Tag
@@ -98,7 +99,13 @@ def write_quotes_to_csv(quotes: list[Quote], path: str) -> None:
     with open(path, "w", encoding="utf-8", newline="") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(QUOTE_FIELDS)
-        writer.writerows([astuple(quote) for quote in quotes])
+        for quote in quotes:
+            writer.writerow([
+                quote.text,
+                quote.author,
+                json.dumps(quote.tags),
+                quote.author_bio,
+            ])
 
 
 async def async_main(output_csv_path: str) -> None:
@@ -106,9 +113,9 @@ async def async_main(output_csv_path: str) -> None:
     write_quotes_to_csv(quotes, output_csv_path)
 
 
-def main() -> None:
-    asyncio.run(async_main("quotes.csv"))
+def main(output_csv_path: str) -> None:
+    asyncio.run(async_main(output_csv_path))
 
 
 if __name__ == "__main__":
-    main()
+    main("quotes.csv")

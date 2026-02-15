@@ -22,5 +22,5 @@ Hints:
 
 ### Optional task
 
-Also collect author's biography for each quote (or even separate it to another csv file). 
-Of course here you should not load the same page for the same author several times (cache it).
+Также собирайте биографию автора для каждой цитаты (или даже разделяйте её в другой CSV-файл). 
+Конечно, здесь не стоит несколько раз загружать одну и ту же страницу для одного и того же автора (кэшировать).

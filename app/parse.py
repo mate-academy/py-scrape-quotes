@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import csv
 import json
@@ -118,4 +119,14 @@ def main(output_csv_path: str) -> None:
 
 
 if __name__ == "__main__":
-    main("quotes.csv")
+    parser = argparse.ArgumentParser(
+        description="Scrape quotes from quotes.toscrape.com")
+    parser.add_argument(
+        "output_csv_path",
+        nargs="?",
+        default="quotes.csv",
+        help="Path to the output CSV file (default: quotes.csv)"
+    )
+    args = parser.parse_args()
+
+    main(args.output_csv_path)

@@ -15,7 +15,6 @@ class Quote:
     tags: list[str]
 
 
-
 BASE_URL = "https://quotes.toscrape.com/page/"
 
 
@@ -50,8 +49,6 @@ def main(output_csv_path: str) -> None:
 
     for soup in page_generator():
         all_quotes.extend(parse_page(soup))
-
-
 
     with open(output_csv_path, "w", ) as f:
         writer = csv.writer(f)

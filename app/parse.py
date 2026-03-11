@@ -1,6 +1,7 @@
 import csv
 
 from dataclasses import dataclass
+import time
 
 from bs4 import BeautifulSoup, Tag
 
@@ -56,6 +57,8 @@ def get_all_quotes() -> list[Quote]:
             parse_single_quote(q) for q in soup.select(".quote")
         )
         url = get_next_page(soup)
+
+        time.sleep(1)
 
     return quotes
 

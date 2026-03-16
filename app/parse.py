@@ -24,11 +24,18 @@ def login(session: Session):
     response = session.get(LOGIN_URL, headers=HEADERS)
     soup = BeautifulSoup(response.text, 'lxml')
     token_input = soup.find("input", {"name": "csrf_token"})
-    if token_input:
+    if not token_input:
         return
     token = token_input.get("value")
-    data = {"csrf_token": token, "username": "noname", "password": "password"}
-    session.post(LOGIN_URL, headers=HEADERS, data=data, allow_redirects=True)
+    data = {
+        "csrf_token": token,
+        "username": "noname",
+        "password": "password"}
+    session.post(
+        LOGIN_URL,
+        headers=HEADERS,
+        data=data,
+        allow_redirects=True)
 
 def parse_single_quote(quote_html: Tag) -> Quote:
     tags = [tag.get_text(strip=True) for tag in quote_html.select(".tags .tag")]

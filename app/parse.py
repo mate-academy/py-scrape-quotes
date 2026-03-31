@@ -49,7 +49,7 @@ def get_quotes_from_all_pages() -> list[Quote]:
     return quotes
 
 
-def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]):
+def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(QUOTE_FIELDS)
@@ -57,7 +57,8 @@ def write_quotes_to_csv(output_csv_path: str, quotes: list[Quote]):
 
 
 def main(output_csv_path: str) -> None:
-    write_quotes_to_csv(output_csv_path, get_quotes_from_all_pages())
+    quotes = get_quotes_from_all_pages()
+    write_quotes_to_csv(output_csv_path, quotes)
 
 
 if __name__ == "__main__":

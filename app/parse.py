@@ -1,4 +1,5 @@
 import csv
+import time
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
 
@@ -39,7 +40,8 @@ def get_quotes_from_all_pages() -> list[Quote]:
     next_page_link = first_page_soup.select_one(".pager li.next")
     num_page = 2
     while next_page_link:
-        url = urljoin(BASE_URL, f"page/{num_page}/")
+        time.sleep(1)
+        url = urljoin(BASE_URL, next_page_link.select_one("a")["href"])
         num_page += 1
         text = requests.get(url).content
         next_page_soup = BeautifulSoup(text, "html.parser")

@@ -27,7 +27,6 @@ authors_urls = set()
 authors_bios: list[AuthorBio] = []
 
 HOME_PAGE = "https://quotes.toscrape.com"
-AUTHOR_PAGE = "https://quotes.toscrape.com/author/Albert-Einstein/"
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 AUTHOR_BIO_FIELDS = [field.name for field in fields(AuthorBio)]
 
@@ -49,7 +48,7 @@ def parse_single_author_bio(bio_soup: Tag) -> AuthorBio:
         name=name,
         surname=surname,
         date_of_birth=date_obj,
-        location=location.replace("in ", ""),
+        location=location.removeprefix("in "),
         description=description,
     )
 
@@ -138,4 +137,4 @@ def main(
 
 
 if __name__ == "__main__":
-    main("quotes.csv")
+    main("quotes.csv", "authors_bios.csv")

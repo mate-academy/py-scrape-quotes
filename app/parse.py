@@ -1,4 +1,6 @@
 import csv
+import time
+
 import requests
 
 from dataclasses import dataclass, fields, astuple
@@ -38,6 +40,7 @@ def get_all_quotes() -> list[Quote]:
     current_url = START_URL
 
     while True:
+        time.sleep(1)
         text = requests.get(current_url).content
         page_soup = BeautifulSoup(text, features="html.parser")
 

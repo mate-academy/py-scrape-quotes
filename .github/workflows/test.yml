@@ -25,9 +25,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run flake8
-        run: flake8 app/
+        run: python -m flake8 app/
 
       - name: Run tests
         timeout-minutes: 5
-        run: pytest tests/
+        run: python -m pytest tests/
 

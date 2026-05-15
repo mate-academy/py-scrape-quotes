@@ -34,7 +34,7 @@ def parsing_tags_in_quote(tags_quote_list: ResultSet[Tag]) -> list:
     return [tag_quote.text for tag_quote in tags_quote_list]
 
 
-def writing_csv_file(output_csv_path: str, quotes_model: [Quote]) -> None:
+def writing_csv_file(output_csv_path: str, quotes_model: list[Quote]) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(quote_fields)
@@ -67,7 +67,7 @@ def parsing_all_quotes() -> list:
         soup = BeautifulSoup(response, "html.parser")
         all_quotes_on_page_soup = soup.select(".quote")
         if len(all_quotes_on_page_soup) == 0:
-            print("Writing completed")
+            print("Parsing completed")
             break
         parsing_on_page_result = (
             parsing_quotes_on_page(all_quotes_on_page_soup)

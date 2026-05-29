@@ -16,10 +16,11 @@ class Quote:
 
 
 def parse_single_quote(quote: Tag) -> Quote:
+    tags_raw = quote.select_one(".keywords")["content"]
     return Quote(
         text=quote.select_one(".text").text,
         author=quote.select_one(".author").text,
-        tags=quote.select_one(".keywords")["content"].split(","),
+        tags=tags_raw.split(",") if tags_raw else [],
     )
 
 

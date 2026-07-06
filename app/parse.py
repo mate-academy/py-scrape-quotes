@@ -19,7 +19,7 @@ QUOTE_FIELDS = [field.name for field in fields(Quote)]
 
 def parse_single_quote(quote: Tag) -> Quote:
     return Quote(
-        text=quote.select_one(".text").text.replace("”", "").replace("“", ""),
+        text=quote.select_one(".text").text,
         author=quote.select_one(".author").text,
         tags=[tag.text for tag in quote.select(".tag")]
     )

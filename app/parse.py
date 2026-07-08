@@ -26,7 +26,7 @@ class Quote:
     tags: list[str]
 
 
-QUOTES_COLUMNS = [field.text for field in fields(Quote)]
+QUOTES_COLUMNS = [field.name for field in fields(Quote)]
 
 
 def write_to_csv(

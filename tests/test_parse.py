@@ -1,3 +1,4 @@
+import os
 import csv
 from pathlib import Path
 
@@ -27,3 +28,4 @@ def test_main():
             assert correct_quote.text == result_row.text
             assert correct_quote.author == result_row.author
             assert correct_quote.tags == result_row.tags
+    os.remove(path)

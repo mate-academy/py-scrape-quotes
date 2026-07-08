@@ -18,6 +18,7 @@ logging.basicConfig(
     ]
 )
 
+
 @dataclass
 class Quote:
     text: str
@@ -29,7 +30,7 @@ QUOTES_COLUMNS = [field.text for field in fields(Quote)]
 
 
 def write_to_csv(
-        filename: str, columns: list[str],  items: list[Any]
+        filename: str, columns: list[str], items: list[Any]
 ) -> None:
     with open(filename, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)

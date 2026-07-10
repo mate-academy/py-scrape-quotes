@@ -51,9 +51,9 @@ def get_single_author_biography(
     date = author_biography.select_one(".author-born-date").text.split()
     return AuthorBiography(
         full_name=author_biography.select_one(".author-title").text,
-        day=date[1].rstrip(","),
+        day=int(date[1].rstrip(",")),
         month=date[0],
-        year=date[2],
+        year=int(date[2]),
         location=author_biography.select_one(".author-born-location").text,
         description=author_biography.select_one(".author-description").text,
     )

@@ -28,8 +28,9 @@ def get_num_pages() -> int:
 
 
 def parse_page(url_page: str) -> BeautifulSoup:
-    text = requests.get(url_page).content
-    page_soup = BeautifulSoup(text, "html.parser")
+    response = requests.get(url_page)
+    response.raise_for_status()
+    page_soup = BeautifulSoup(response.content, "html.parser")
     return page_soup
 
 

@@ -1,6 +1,5 @@
 import csv
 from dataclasses import dataclass, fields, astuple
-
 import requests
 from bs4 import BeautifulSoup
 

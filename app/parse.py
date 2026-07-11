@@ -12,7 +12,6 @@ class Quote:
 
 
 quotes_site_url = "https://quotes.toscrape.com/"
-
 quotes_fields = [field.name for field in fields(Quote)]
 
 

@@ -2,7 +2,7 @@ import csv
 from dataclasses import dataclass, fields, astuple
 
 import requests
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 
 @dataclass
@@ -13,7 +13,6 @@ class Quote:
 
 
 quotes_site_url = "https://quotes.toscrape.com/"
-
 
 quotes_fields = [field.name for field in fields(Quote)]
 
@@ -30,7 +29,7 @@ def get_num_pages() -> int:
     return pages_count
 
 
-def parse_page(url_page) -> BeautifulSoup:
+def parse_page(url_page: str) -> BeautifulSoup:
     text = requests.get(url_page).content
     page_soup = BeautifulSoup(text, "html.parser")
     return page_soup
@@ -58,7 +57,10 @@ def parse_all_pages() -> list[list[Quote]]:
     return elements
 
 
-def write_quotes_list_to_csv_file(output_csv_path: str ,all_quotes: list[list[Quote]]) -> None:
+def write_quotes_list_to_csv_file(
+        output_csv_path: str,
+        all_quotes: list[list[Quote]]
+) -> None:
     with open(output_csv_path, "w", encoding="utf-8", newline="") as file:
         csv_file = csv.writer(file)
         csv_file.writerow(quotes_fields)
@@ -68,7 +70,8 @@ def write_quotes_list_to_csv_file(output_csv_path: str ,all_quotes: list[list[Qu
 
 def main(output_csv_path: str) -> None:
     all_quotes = parse_all_pages()
-    write_quotes_list_to_csv_file(all_quotes=all_quotes, output_csv_path=output_csv_path)
+    write_quotes_list_to_csv_file(all_quotes=all_quotes,
+                                  output_csv_path=output_csv_path)
 
 
 if __name__ == "__main__":

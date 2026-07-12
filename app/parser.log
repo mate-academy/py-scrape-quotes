@@ -1,0 +1,36 @@
+[    INFO]: Start parsing quotes...
+[    INFO]: Parse page: https://quotes.toscrape.com/
+[    INFO]: Parse page: https: //quotes.toscrape.com/page/2/
+[   ERROR]: Network error: Invalid URL 'https: //quotes.toscrape.com/page/2/': No host supplied
+[ WARNING]: Failed to load page: https: //quotes.toscrape.com/page/2/
+[    INFO]: Data successfully saved to quotes.csv
+[    INFO]: Finished parsing quotes...
+[    INFO]: Total collected quotes: 10
+[    INFO]: Start parsing quotes...
+[    INFO]: Parse page: https://quotes.toscrape.com/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/2/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/3/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/4/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/5/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/6/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/7/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/8/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/9/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/10/
+[    INFO]: Data successfully saved to quotes.csv
+[    INFO]: Finished parsing quotes...
+[    INFO]: Total collected quotes: 100
+[    INFO]: Start parsing quotes...
+[    INFO]: Parse page: https://quotes.toscrape.com/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/2/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/3/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/4/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/5/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/6/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/7/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/8/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/9/
+[    INFO]: Parse page: https://quotes.toscrape.com/page/10/
+[    INFO]: Data successfully saved to quotes.csv
+[    INFO]: Finished parsing quotes...
+[    INFO]: Total collected quotes: 100

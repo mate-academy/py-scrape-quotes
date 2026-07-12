@@ -4,7 +4,6 @@ import sys
 from dataclasses import asdict, dataclass
 import requests
 from bs4 import BeautifulSoup
-from bs4.element import AttributeValueList
 
 
 @dataclass
@@ -61,7 +60,7 @@ def parse_page_quotes(html_content: str) -> list[Quote] | None:
     return quotes_list
 
 
-def get_next_page_url(html_content: str) -> None | str | AttributeValueList:
+def get_next_page_url(html_content: str) -> None | str:
     soup = BeautifulSoup(html_content, "html.parser")
 
     pagination = soup.select_one(".next a")

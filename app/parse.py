@@ -54,7 +54,7 @@ def main(output_csv_path: str) -> None:
                 [
                     quote.text,
                     quote.author,
-                    ";".join(quote.tags),
+                    str(quote.tags),
                 ]
             )
 

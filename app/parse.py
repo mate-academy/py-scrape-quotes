@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import time
 import csv
 
 import requests
@@ -41,6 +42,7 @@ def main(output_csv_path: str) -> None:
         if next_page is None:
             break
 
+        time.sleep(1)
         url = BASE_URL + next_page["href"]
 
     with open(output_csv_path, "w", newline="", encoding="utf-8") as file:

@@ -1,6 +1,11 @@
-flake8==5.0.4
-flake8-annotations==2.9.1
-flake8-quotes==3.3.1
-flake8-variables-names==0.0.5
-pep8-naming==0.13.2
+beautifulsoup4==4.15.0
+bs4==0.0.2
+certifi==2026.7.22
+charset-normalizer==3.5.1
+idna==3.19
+requests==2.34.2
+soupsieve==2.9.2
+typing_extensions==4.16.0
+urllib3==2.7.0
+flake8==7.3.0
 pytest==7.1.3

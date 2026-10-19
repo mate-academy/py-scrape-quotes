@@ -78,7 +78,9 @@ def write_authors_to_file(output_csv_path: str) -> None:
         writer.writerows(authors_bio.items())
 
 
-def main(output_csv_path: str, output_authors_path: str = "authors.csv") -> None:
+def main(
+        output_csv_path: str,
+        output_authors_path: str = "authors.csv") -> None:
     write_quotes_to_file(parse_all_quotes(), output_csv_path)
     write_authors_to_file(output_authors_path)
 

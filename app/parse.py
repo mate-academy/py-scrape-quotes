@@ -5,7 +5,6 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup, Tag
 
-
 BASE_URL = "https://quotes.toscrape.com/"
 
 
@@ -27,8 +26,11 @@ def parse_author_bio(quote: Tag) -> None:
         return  # сторінку цього автора вже завантажували
 
     author_url = urljoin(BASE_URL, quote.select_one(".author + a")["href"])
-    author_page = BeautifulSoup(requests.get(author_url).content, "html.parser")
-    authors_bio[author] = author_page.select_one(".author-description").text.strip()
+    author_page = BeautifulSoup(
+        requests.get(author_url).content,
+        "html.parser")
+    authors_bio[author] = author_page.select_one(
+        ".author-description").text.strip()
 
 
 def parse_single_quote(quote: Tag) -> Quote:
@@ -56,7 +58,8 @@ def parse_all_quotes() -> list[Quote]:
 
         # Шукаємо посилання на наступну сторінку
         next_page = page.select_one("li.next a")
-        current_page = urljoin(BASE_URL, next_page["href"]) if next_page else None
+        current_page = urljoin(
+            BASE_URL, next_page["href"]) if next_page else None
 
     return all_quotes
 

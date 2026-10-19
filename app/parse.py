@@ -78,10 +78,10 @@ def write_authors_to_file(output_csv_path: str) -> None:
         writer.writerows(authors_bio.items())
 
 
-def main(output_csv_path: str) -> None:
+def main(output_csv_path: str, output_authors_path: str = "authors.csv") -> None:
     write_quotes_to_file(parse_all_quotes(), output_csv_path)
-    write_authors_to_file("authors.csv")
+    write_authors_to_file(output_authors_path)
 
 
 if __name__ == "__main__":
-    main("quotes.csv")
+    main("quotes.csv", "bios.csv")

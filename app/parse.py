@@ -1,4 +1,5 @@
 import csv
+import time
 from dataclasses import astuple, dataclass, fields
 from urllib.parse import urljoin
 
@@ -6,6 +7,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 BASE_URL = "https://quotes.toscrape.com/"
+REQUEST_DELAY_SECONDS = 1
 
 
 @dataclass
@@ -46,6 +48,9 @@ def get_all_quotes() -> list[Quote]:
 
             next_link = page_soup.select_one("li.next > a")
             url = urljoin(BASE_URL, next_link["href"]) if next_link else None
+
+            if url:
+                time.sleep(REQUEST_DELAY_SECONDS)
 
     return quotes
 

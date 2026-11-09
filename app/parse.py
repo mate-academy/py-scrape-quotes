@@ -1,7 +1,9 @@
 import csv
-from dataclasses import dataclass, fields, astuple
-import requests
+from dataclasses import dataclass, fields
+import time
 from urllib.parse import urljoin
+
+import requests
 
 from bs4 import BeautifulSoup, Tag
 
@@ -57,6 +59,9 @@ def main(output_csv_path: str) -> None:
     while url:
         page_quotes, url = get_page_quotes(url)
         quotes.extend(page_quotes)
+
+        if url:
+            time.sleep(1)
 
     write_quotes_to_csv(output_csv_path, quotes)
 

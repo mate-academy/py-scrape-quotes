@@ -26,22 +26,22 @@ def get_single_page_quotes(page_soup: BeautifulSoup) -> list[Quote]:
     return [parse_single_quote(quote_soup) for quote_soup in quotes]
 
 
+def get_page_soup(page_number: int) -> BeautifulSoup:
+    response = requests.get(f"{BASE_URL}page/{page_number}/")
+    response.raise_for_status()
+    return BeautifulSoup(response.text, "html.parser")
+
+
 def get_all_quotes() -> list[Quote]:
     all_quotes = []
     page_number = 1
-
     while True:
-        page_url = f"{BASE_URL}page/{page_number}/"
-        page = requests.get(page_url).content
-        page_soup = BeautifulSoup(page, "html.parser")
-
-        quotes = get_single_page_quotes(page_soup)
-        if not quotes:
+        page_soup = get_page_soup(page_number)
+        page_quotes = get_single_page_quotes(page_soup)
+        if not page_quotes:
             break
-
-        all_quotes.extend(quotes)
+        all_quotes.extend(page_quotes)
         page_number += 1
-
     return all_quotes
 
 

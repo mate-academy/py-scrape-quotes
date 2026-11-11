@@ -1,4 +1,6 @@
 import csv
+import time
+
 import requests
 
 from bs4 import BeautifulSoup
@@ -58,6 +60,7 @@ def get_all_quotes() -> list[Quote]:
         soup = get_soup(url)
         all_quotes.extend(parse_quotes(soup))
         url = get_next_page(soup, url)
+        time.sleep(1)
 
     return all_quotes
 
@@ -81,7 +84,8 @@ def main(output_csv_path: str) -> None:
     save_to_csv(quotes, output_csv_path)
 
     author_bios = get_all_author_bios()
-    save_author_bios_to_csv(author_bios, "authors.csv")
+    authors_csv_path = output_csv_path.replace(".csv", "_authors.csv")
+    save_author_bios_to_csv(author_bios, authors_csv_path)
 
 
 def parse_author_urls(soup: BeautifulSoup, current_url: str) -> dict:
@@ -107,6 +111,7 @@ def get_all_author_urls() -> dict:
         soup = get_soup(url)
         all_author_urls.update(parse_author_urls(soup, url))
         url = get_next_page(soup, url)
+        time.sleep(1)
 
     return all_author_urls
 

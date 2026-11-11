@@ -1,8 +1,8 @@
 import csv
+import time
 from dataclasses import dataclass
 import requests
 from bs4 import BeautifulSoup
-
 
 BASE_URL = "https://quotes.toscrape.com"
 
@@ -42,7 +42,11 @@ def get_all_quotes() -> list[Quote]:
         page_quotes, next_page = parse_single_page(response.text)
         all_quotes.extend(page_quotes)
 
-        current_url = f"{BASE_URL}{next_page}" if next_page else None
+        if next_page:
+            current_url = f"{BASE_URL}{next_page}"
+            time.sleep(1)
+        else:
+            current_url = None
 
     return all_quotes
 
@@ -52,7 +56,6 @@ def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
         writer = csv.writer(file)
         writer.writerow(["text", "author", "tags"])
         for quote in quotes:
-            # Теги зберігаємо як строку через кому
             writer.writerow([quote.text, quote.author, ", ".join(quote.tags)])
 
 

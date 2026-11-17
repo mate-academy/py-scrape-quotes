@@ -1,3 +1,4 @@
+import time
 from dataclasses import dataclass, fields, astuple
 from bs4 import BeautifulSoup, Tag
 import requests
@@ -41,6 +42,7 @@ def get_all_quotes() -> list[Quote]:
 
     while True:
         url = f"{BASE_URl}{page}/"
+        time.sleep(2)
         quotes = get_quotes(url)
 
         if not quotes:

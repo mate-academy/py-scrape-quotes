@@ -17,8 +17,14 @@ class Quote:
     tags: list[str]
 
 
+@dataclass
+class Author:
+    name: str
+    bio: str
+
+
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
-AUTHOR_FIELDS = ["author", "bio"]
+AUTHOR_FIELDS = [field.name for field in fields(Author)]
 
 authors_bio: dict[str, str] = {}
 

@@ -12,9 +12,7 @@ def test_main():
     path = "result.csv"
     main(path)
 
-    with open(CORRECT_QUOTES_CSV_PATH, "r") as correct_file, open(
-        path, "r"
-    ) as result_file:
+    with open(CORRECT_QUOTES_CSV_PATH, "r") as correct_file, open(path, "r") as result_file:
         correct_reader = csv.reader(correct_file)
         result_reader = csv.reader(result_file)
 
@@ -27,3 +25,5 @@ def test_main():
             assert correct_quote.text == result_row.text
             assert correct_quote.author == result_row.author
             assert correct_quote.tags == result_row.tags
+
+        assert next(result_reader, None) is None

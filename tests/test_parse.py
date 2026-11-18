@@ -25,3 +25,4 @@ def test_main():
             assert correct_quote.text == result_row.text
             assert correct_quote.author == result_row.author
             assert correct_quote.tags == result_row.tags
+            assert next(result_reader, None) is None

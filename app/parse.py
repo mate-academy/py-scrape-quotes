@@ -12,7 +12,7 @@ class Quote:
     tags: list[str]
 
 
-BASE_URL = "https://quotes.toscrape.com/"
+BASE_URL = "https://quotes.toscrape.com"
 
 QUOTE_FIELDS = [field.name for field in fields(Quote)]
 

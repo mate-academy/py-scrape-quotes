@@ -83,12 +83,10 @@ def write_to_csv_author_bio(name: str) -> None:
         writer.writerows(AUTHORS_BIO.items())
 
 
-def main(
-        output_csv_path_quotes: str, output_csv_path_bio: str
-) -> None:
-    write_to_csv(output_csv_path_quotes)
-    write_to_csv_author_bio(output_csv_path_bio)
+def main(output_csv_path: str) -> None:
+    write_to_csv(output_csv_path)
+    write_to_csv_author_bio("authors_bio.csv")
 
 
 if __name__ == "__main__":
-    main("quotes.csv", "authors_bio.csv")
+    main("quotes.csv")
